@@ -1,0 +1,453 @@
+@import "tailwindcss";
+
+/* ═══════════════════════════════════════════════════════════════
+   TARIANAOXIN — design tokens
+   Palette derived from the corporate wordmark: a deep industrial
+   navy resolving into a clean process teal.
+   ═══════════════════════════════════════════════════════════════ */
+
+@theme {
+  /* Ink — the navy end of the wordmark gradient */
+  --color-ink-50: #eef4f9;
+  --color-ink-100: #d6e4ef;
+  --color-ink-200: #adc7db;
+  --color-ink-300: #7ba3bf;
+  --color-ink-400: #47738f;
+  --color-ink-500: #22506e;
+  --color-ink-600: #14496f;
+  --color-ink-700: #0f3b5c;
+  --color-ink-800: #0b2e4a;
+  --color-ink-900: #08243b;
+  --color-ink-950: #041624;
+
+  /* Aqua — the teal end */
+  --color-aqua-50: #eefbfe;
+  --color-aqua-100: #d3f4fb;
+  --color-aqua-200: #a6e6f0;
+  --color-aqua-300: #6bd3e5;
+  --color-aqua-400: #35bad5;
+  --color-aqua-500: #17a2bf;
+  --color-aqua-600: #0e8fae;
+  --color-aqua-700: #0b7a96;
+  --color-aqua-800: #0d6178;
+  --color-aqua-900: #0f5063;
+
+  /* Mist — cool neutrals for surfaces and body copy */
+  --color-mist-50: #f7fafc;
+  --color-mist-100: #eef3f7;
+  --color-mist-200: #dfe8ef;
+  --color-mist-300: #c6d5e0;
+  --color-mist-400: #97aebe;
+  --color-mist-500: #6b8497;
+  --color-mist-600: #4e6577;
+
+  /* Sand — a single warm accent, used sparingly (eco, highlights) */
+  --color-sand-300: #f3d3a8;
+  --color-sand-400: #eaba7c;
+  --color-sand-500: #dc9d51;
+
+  /* Leaf — eco line only */
+  --color-leaf-400: #5cc9a7;
+  --color-leaf-600: #1f8f74;
+
+  --font-display: var(--font-outfit), "Segoe UI", sans-serif;
+  --font-sans: var(--font-outfit), "Segoe UI", sans-serif;
+
+  --radius-4xl: 2rem;
+  --radius-5xl: 2.75rem;
+
+  --shadow-glow: 0 0 0 1px rgb(23 162 191 / 0.25), 0 18px 60px -20px rgb(11 122 150 / 0.55);
+  --shadow-card: 0 1px 2px rgb(8 36 59 / 0.04), 0 12px 32px -12px rgb(8 36 59 / 0.16);
+  --shadow-lift: 0 2px 4px rgb(8 36 59 / 0.06), 0 28px 60px -20px rgb(8 36 59 / 0.28);
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Script-aware typography: the Latin display face never renders Arabic
+   glyphs, so each locale swaps its own family in at the :root level. */
+/* Farsi is the site default, so the root values are the Persian ones —
+   anything rendered outside a locale segment (404, error shells) inherits
+   the right face without extra wiring. */
+:root {
+  --font-locale: var(--font-vazirmatn);
+  --tracking-display: 0em;
+  --leading-display: 1.45;
+  --nav-h: 4.5rem;
+}
+
+/* The locale layout stamps [data-locale] on <html> server-side, alongside
+   the matching dir/lang. */
+[data-locale="fa"] {
+  --font-locale: var(--font-vazirmatn);
+  --tracking-display: 0em;
+  --leading-display: 1.45;
+}
+
+[data-locale="en"] {
+  --font-locale: var(--font-outfit);
+  --tracking-display: -0.03em;
+  --leading-display: 1.02;
+}
+
+[data-locale="ar"] {
+  --font-locale: var(--font-cairo);
+  --tracking-display: 0em;
+  --leading-display: 1.4;
+}
+
+[data-locale] {
+  font-family: var(--font-locale), var(--font-outfit), "Segoe UI", sans-serif;
+}
+
+@layer base {
+  * {
+    border-color: var(--color-mist-200);
+  }
+
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 6rem;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background: var(--color-mist-50);
+    color: var(--color-ink-800);
+    font-family: var(--font-locale), var(--font-outfit), "Segoe UI", sans-serif;
+    font-feature-settings: "ss01", "cv01";
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: clip;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-locale), var(--font-outfit), sans-serif;
+    letter-spacing: var(--tracking-display);
+    line-height: var(--leading-display);
+    text-wrap: balance;
+  }
+
+  p { text-wrap: pretty; }
+
+  ::selection {
+    background: var(--color-aqua-500);
+    color: white;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-aqua-500);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  /* Latin numerals inside RTL prose stay LTR so SKUs/sizes read correctly */
+  .num {
+    unicode-bidi: isolate;
+    direction: ltr;
+    display: inline-block;
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+/* ── Scrollbar ─────────────────────────────────────────────────── */
+@layer base {
+  ::-webkit-scrollbar { width: 11px; height: 11px; }
+  ::-webkit-scrollbar-track { background: var(--color-mist-100); }
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(var(--color-ink-700), var(--color-aqua-700));
+    border-radius: 99px;
+    border: 3px solid var(--color-mist-100);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(var(--color-ink-800), var(--color-aqua-600));
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Signature surfaces
+   ═══════════════════════════════════════════════════════════════ */
+
+@utility brand-gradient {
+  background-image: linear-gradient(
+    100deg,
+    var(--color-ink-900) 0%,
+    var(--color-ink-700) 32%,
+    var(--color-aqua-700) 68%,
+    var(--color-aqua-500) 100%
+  );
+}
+
+@utility text-brand-gradient {
+  background-image: linear-gradient(
+    100deg,
+    var(--color-ink-900) 0%,
+    var(--color-ink-600) 38%,
+    var(--color-aqua-600) 72%,
+    var(--color-aqua-400) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@utility text-brand-gradient-light {
+  background-image: linear-gradient(
+    100deg,
+    #ffffff 0%,
+    var(--color-aqua-200) 45%,
+    var(--color-aqua-400) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Living mesh used behind dark sections */
+@utility mesh-dark {
+  background-color: var(--color-ink-950);
+  background-image:
+    radial-gradient(58rem 42rem at 12% -8%, rgb(23 162 191 / 0.28), transparent 62%),
+    radial-gradient(46rem 34rem at 92% 8%, rgb(15 59 92 / 0.85), transparent 58%),
+    radial-gradient(38rem 38rem at 78% 96%, rgb(11 122 150 / 0.32), transparent 60%);
+}
+
+@utility mesh-light {
+  background-color: var(--color-mist-50);
+  background-image:
+    radial-gradient(48rem 36rem at 88% -12%, rgb(53 186 213 / 0.13), transparent 60%),
+    radial-gradient(42rem 32rem at 4% 4%, rgb(15 59 92 / 0.07), transparent 58%);
+}
+
+/* Fine engineered grid — reads as a technical drawing, not a gimmick */
+@utility grid-lines {
+  background-image:
+    linear-gradient(to right, rgb(255 255 255 / 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(255 255 255 / 0.05) 1px, transparent 1px);
+  background-size: 4.5rem 4.5rem;
+}
+
+@utility grid-lines-ink {
+  background-image:
+    linear-gradient(to right, rgb(8 36 59 / 0.045) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(8 36 59 / 0.045) 1px, transparent 1px);
+  background-size: 3.5rem 3.5rem;
+}
+
+/* Film grain — kills gradient banding on large washes */
+@utility grain-layer {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+  mix-blend-mode: overlay;
+}
+
+@utility glass {
+  background: rgb(255 255 255 / 0.72);
+  backdrop-filter: blur(18px) saturate(180%);
+  -webkit-backdrop-filter: blur(18px) saturate(180%);
+}
+
+@utility glass-dark {
+  background: rgb(4 22 36 / 0.55);
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+}
+
+/* Gradient hairline border that survives border-radius */
+@utility ring-gradient {
+  position: relative;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(
+      140deg,
+      rgb(255 255 255 / 0.9),
+      rgb(53 186 213 / 0.5) 45%,
+      rgb(15 59 92 / 0.1)
+    );
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+    z-index: 1;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Motion
+   ═══════════════════════════════════════════════════════════════ */
+
+@keyframes tx-rise {
+  from { opacity: 0; transform: translateY(28px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes tx-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes tx-scale-in {
+  from { opacity: 0; transform: scale(0.94); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes tx-float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-16px) rotate(1.5deg); }
+}
+
+@keyframes tx-drift {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  33% { transform: translate3d(3%, -4%, 0) scale(1.06); }
+  66% { transform: translate3d(-3%, 3%, 0) scale(0.96); }
+}
+
+@keyframes tx-marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+@keyframes tx-marquee-rtl {
+  from { transform: translateX(0); }
+  to { transform: translateX(50%); }
+}
+
+@keyframes tx-sheen {
+  0% { transform: translateX(-140%) skewX(-18deg); }
+  100% { transform: translateX(320%) skewX(-18deg); }
+}
+
+@keyframes tx-pulse-ring {
+  0% { transform: scale(0.85); opacity: 0.6; }
+  100% { transform: scale(1.9); opacity: 0; }
+}
+
+@keyframes tx-shimmer {
+  0% { background-position: 200% 50%; }
+  100% { background-position: -200% 50%; }
+}
+
+@keyframes tx-scroll-hint {
+  0%, 100% { transform: translateY(0); opacity: 0.35; }
+  50% { transform: translateY(8px); opacity: 1; }
+}
+
+@utility animate-float { animation: tx-float 7s ease-in-out infinite; }
+@utility animate-drift { animation: tx-drift 22s ease-in-out infinite; }
+@utility animate-scroll-hint { animation: tx-scroll-hint 2.2s ease-in-out infinite; }
+
+@utility animate-shimmer {
+  background: linear-gradient(
+    100deg,
+    transparent 20%,
+    rgb(255 255 255 / 0.55) 50%,
+    transparent 80%
+  );
+  background-size: 200% 100%;
+  animation: tx-shimmer 2.4s linear infinite;
+}
+
+/* Marquee track — direction-aware so RTL locales scroll the natural way */
+.marquee-track {
+  animation: tx-marquee 34s linear infinite;
+}
+[dir="rtl"] .marquee-track {
+  animation-name: tx-marquee-rtl;
+}
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+/* Scroll reveal — elements start hidden, the observer flips data-shown */
+.reveal {
+  opacity: 0;
+  transform: translateY(26px);
+  transition:
+    opacity 0.85s var(--ease-out-expo),
+    transform 0.85s var(--ease-out-expo);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+.reveal[data-shown="true"] {
+  opacity: 1;
+  transform: none;
+}
+
+/* Button sheen sweep */
+.sheen { position: relative; overflow: hidden; isolation: isolate; }
+.sheen::after {
+  content: "";
+  position: absolute;
+  inset-block: -50%;
+  inset-inline-start: 0;
+  width: 45%;
+  background: linear-gradient(90deg, transparent, rgb(255 255 255 / 0.32), transparent);
+  opacity: 0;
+  pointer-events: none;
+}
+.sheen:hover::after {
+  opacity: 1;
+  animation: tx-sheen 0.9s var(--ease-out-expo);
+}
+
+/* Interactive lift shared by every card in the system */
+.lift {
+  transition:
+    transform 0.5s var(--ease-out-expo),
+    box-shadow 0.5s var(--ease-out-expo),
+    border-color 0.5s var(--ease-out-expo);
+}
+.lift:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-lift);
+}
+
+/* Underline that grows from the leading edge — works in both directions */
+.link-underline {
+  position: relative;
+}
+.link-underline::after {
+  content: "";
+  position: absolute;
+  inset-inline-start: 0;
+  bottom: -2px;
+  height: 2px;
+  width: 100%;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: var(--underline-origin, left);
+  transition: transform 0.45s var(--ease-out-expo);
+}
+[dir="rtl"] .link-underline::after { --underline-origin: right; }
+.link-underline:hover::after { transform: scaleX(1); }
+
+/* Icons that carry a directional meaning must flip in RTL */
+[dir="rtl"] .flip-rtl { transform: scaleX(-1); }
+
+/* Hide scrollbar on horizontal rails while keeping the scroll */
+.rail {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.rail::-webkit-scrollbar { display: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .reveal { opacity: 1; transform: none; }
+}
