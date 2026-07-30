@@ -20,7 +20,7 @@ export function Testimonials() {
   const NextIcon = isRtl ? HiChevronLeft : HiChevronRight;
 
   return (
-    <section className="mesh-light relative overflow-hidden py-24 lg:py-32">
+    <section className="mesh-light relative overflow-hidden section-y">
       <Container>
         <div className="mb-12 flex flex-col justify-between gap-8 sm:flex-row sm:items-end">
           <SectionHeading
@@ -61,7 +61,7 @@ export function Testimonials() {
               {items.map((item) => (
                 <figure
                   key={item.name}
-                  className="brand-gradient relative w-full shrink-0 overflow-hidden p-8 sm:p-14"
+                  className="brand-gradient relative w-full shrink-0 overflow-hidden p-[clamp(1.5rem,4.5vw,3.5rem)]"
                 >
                   <div className="grid-lines pointer-events-none absolute inset-0 opacity-60" />
                   <ImQuotesLeft className="absolute end-8 top-8 h-20 w-20 text-white/[0.07] flip-rtl" />
@@ -73,7 +73,7 @@ export function Testimonials() {
                       ))}
                     </div>
 
-                    <blockquote className="max-w-3xl text-[1.15rem] leading-relaxed font-medium text-white sm:text-[1.45rem]">
+                    <blockquote className="max-w-3xl text-[clamp(1.05rem,0.85rem+0.9vw,1.45rem)] leading-relaxed font-medium text-white">
                       “{item.quote}”
                     </blockquote>
 
@@ -97,7 +97,7 @@ export function Testimonials() {
           </div>
         </Reveal>
 
-        {/* progress dots */}
+        {/* progress dots — the bar is 6px tall but the hit area is 44px */}
         <div className="mt-7 flex justify-center gap-2">
           {items.map((item, i) => (
             <button
@@ -105,7 +105,8 @@ export function Testimonials() {
               type="button"
               onClick={() => setIndex(i)}
               aria-label={`${i + 1}`}
-              className={`h-1.5 rounded-full transition-all duration-500 ${
+              aria-current={i === index}
+              className={`tap-target h-1.5 rounded-full transition-all duration-500 ${
                 i === index
                   ? "brand-gradient w-10"
                   : "w-4 bg-mist-300 hover:bg-mist-400"

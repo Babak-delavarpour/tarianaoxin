@@ -12,7 +12,7 @@ export function AboutPreview() {
   const a = t.home.about;
 
   return (
-    <section className="mesh-light relative overflow-hidden py-24 lg:py-32">
+    <section className="mesh-light relative overflow-hidden section-y">
       <Container>
         <div className="grid gap-14 lg:grid-cols-2 lg:items-center lg:gap-20">
           {/* Visual */}
@@ -50,7 +50,7 @@ export function AboutPreview() {
               <Eyebrow>{a.eyebrow}</Eyebrow>
             </Reveal>
             <Reveal delay={60}>
-              <h2 className="text-[2rem] font-extrabold text-ink-900 sm:text-[2.6rem] lg:text-[2.9rem]">
+              <h2 className="fs-h2 font-extrabold text-ink-900">
                 {a.title}
               </h2>
             </Reveal>

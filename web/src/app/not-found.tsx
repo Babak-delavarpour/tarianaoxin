@@ -22,20 +22,20 @@ export default function NotFound() {
       lang={localeMeta[defaultLocale].htmlLang}
       dir={localeDirection[defaultLocale]}
       data-locale={defaultLocale}
-      className={`${fontVariables} mesh-dark relative min-h-screen antialiased`}
+      className={`${fontVariables} mesh-dark relative min-h-dvh antialiased`}
     >
       <div className="grid-lines pointer-events-none absolute inset-0" />
       <div className="grain-layer pointer-events-none absolute inset-0 opacity-[0.14]" />
 
-      <div className="relative grid min-h-screen place-items-center px-6 py-20">
+      <div className="relative grid min-h-dvh place-items-center px-6 py-20">
         <div className="flex max-w-xl flex-col items-center gap-7 text-center">
           <LogoMark tone="light" className="h-16 w-16" />
 
-          <span className="text-brand-gradient-light num text-[6rem] leading-none font-extrabold sm:text-[8rem]">
+          <span className="text-brand-gradient-light num text-[clamp(4.5rem,12vw,8rem)] leading-none font-extrabold">
             ۴۰۴
           </span>
 
-          <h1 className="text-[1.75rem] font-extrabold text-white sm:text-[2.25rem]">
+          <h1 className="fs-h3 font-extrabold text-white">
             این صفحه روی قفسه نیست.
           </h1>
           <p className="text-[1rem] leading-relaxed text-ink-100/60">

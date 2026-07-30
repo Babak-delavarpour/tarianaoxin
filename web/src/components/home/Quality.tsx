@@ -11,7 +11,7 @@ export function Quality() {
   const q = t.home.quality;
 
   return (
-    <section id="quality" className="relative bg-white py-24 lg:py-32">
+    <section id="quality" className="relative bg-white section-y">
       <Container>
         <div className="grid gap-14 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:gap-20">
           <div className="flex flex-col gap-6">

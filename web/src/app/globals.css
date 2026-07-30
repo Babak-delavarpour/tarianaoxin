@@ -74,6 +74,37 @@
   --tracking-display: 0em;
   --leading-display: 1.45;
   --nav-h: 4.5rem;
+
+  /* ── Fluid shell ──────────────────────────────────────────────
+     One source of truth for page width and gutters, so the header,
+     hero, sections and footer stay on the same vertical rhythm at
+     every viewport instead of each hard-coding its own padding. */
+  --shell-max: 80rem;
+  --shell-pad: clamp(1.15rem, 4vw, 2.5rem);
+
+  /* ── Fluid type scale ─────────────────────────────────────────
+     clamp() interpolates between the small-phone and desktop ends,
+     so type keeps growing between breakpoints rather than jumping
+     at them. Tuned so 320px stays readable and 4K never balloons. */
+  --fs-hero: clamp(2.3rem, 1.28rem + 4.7vw, 4.15rem);
+  --fs-h1: clamp(2.05rem, 1.35rem + 3.2vw, 3.6rem);
+  --fs-h2: clamp(1.8rem, 1.28rem + 2.4vw, 3.05rem);
+  --fs-h3: clamp(1.45rem, 1.2rem + 1.15vw, 2rem);
+  --fs-h4: clamp(1.02rem, 0.97rem + 0.24vw, 1.14rem);
+  --fs-lead: clamp(0.98rem, 0.93rem + 0.3vw, 1.12rem);
+  --fs-body: clamp(0.88rem, 0.855rem + 0.13vw, 0.94rem);
+
+  /* ── Fluid vertical rhythm ────────────────────────────────── */
+  --section-y: clamp(3.75rem, 7.5vw, 8rem);
+  --section-y-tight: clamp(3rem, 5.5vw, 6rem);
+}
+
+/* Large monitors get a wider shell — 80rem leaves a 27" display
+   looking like a phone layout stretched down the middle. */
+@media (min-width: 1536px) {
+  :root {
+    --shell-max: 88rem;
+  }
 }
 
 /* The locale layout stamps [data-locale] on <html> server-side, alongside
@@ -109,6 +140,9 @@
     scroll-behavior: smooth;
     scroll-padding-top: 6rem;
     -webkit-text-size-adjust: 100%;
+    /* Reserve the scrollbar track permanently: without it, locking the
+       body for the cart drawer or mobile menu shifts the whole page. */
+    scrollbar-gutter: stable;
   }
 
   body {
@@ -119,6 +153,27 @@
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
     overflow-x: clip;
+    /* Kill the grey flash iOS/Android paint over tapped controls — the
+       components already ship their own :active and hover states. */
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Media should never be the reason a layout scrolls sideways. */
+  img,
+  svg,
+  video,
+  canvas {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Form controls do not inherit the document face by default. */
+  input,
+  textarea,
+  select,
+  button {
+    font: inherit;
+    color: inherit;
   }
 
   h1, h2, h3, h4 {
@@ -161,6 +216,97 @@
   }
   ::-webkit-scrollbar-thumb:hover {
     background: linear-gradient(var(--color-ink-800), var(--color-aqua-600));
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Layout primitives — fluid shell, rhythm and type scale
+   ═══════════════════════════════════════════════════════════════ */
+
+/* The page shell. `env()` keeps content clear of the notch when a
+   phone is held in landscape; it is applied symmetrically because
+   the insets are physical and the layout is direction-aware. */
+@utility shell {
+  margin-inline: auto;
+  width: 100%;
+  max-width: var(--shell-max);
+  padding-inline: max(
+    var(--shell-pad),
+    env(safe-area-inset-left),
+    env(safe-area-inset-right)
+  );
+}
+
+@utility section-y {
+  padding-block: var(--section-y);
+}
+
+@utility section-y-tight {
+  padding-block: var(--section-y-tight);
+}
+
+@utility fs-hero {
+  font-size: var(--fs-hero);
+}
+@utility fs-h1 {
+  font-size: var(--fs-h1);
+}
+@utility fs-h2 {
+  font-size: var(--fs-h2);
+}
+@utility fs-h3 {
+  font-size: var(--fs-h3);
+}
+@utility fs-h4 {
+  font-size: var(--fs-h4);
+}
+@utility fs-lead {
+  font-size: var(--fs-lead);
+  line-height: 1.65;
+}
+@utility fs-body {
+  font-size: var(--fs-body);
+  line-height: 1.7;
+}
+
+/* Bottom padding that clears the iOS home indicator on sheets and
+   drawers docked to the bottom edge. */
+@utility pb-safe {
+  padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
+}
+
+/* Expands a visually small control to a 44px hit area without
+   changing how it looks — used by carousel dots and icon buttons. */
+@utility tap-target {
+  position: relative;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
+    min-width: 44px;
+    min-height: 44px;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+/* Native selects render inconsistently across platforms; this gives
+   them the same pill as every other control, with a drawn chevron
+   that sits on the trailing edge in both directions. */
+@utility select-pill {
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='%234e6577' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 8l4 4 4-4'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-size: 1.05rem;
+  background-position: right 0.85rem center;
+  padding-inline-end: 2.35rem;
+
+  [dir="rtl"] & {
+    background-position: left 0.85rem center;
   }
 }
 
@@ -363,8 +509,10 @@
 [dir="rtl"] .marquee-track {
   animation-name: tx-marquee-rtl;
 }
-.marquee:hover .marquee-track {
-  animation-play-state: paused;
+@media (hover: hover) {
+  .marquee:hover .marquee-track {
+    animation-play-state: paused;
+  }
 }
 
 /* Scroll reveal — elements start hidden, the observer flips data-shown */
@@ -394,9 +542,13 @@
   opacity: 0;
   pointer-events: none;
 }
-.sheen:hover::after {
-  opacity: 1;
-  animation: tx-sheen 0.9s var(--ease-out-expo);
+/* Hover-driven flourishes are gated on a real pointer: on a touch
+   screen `:hover` latches after a tap and the effect sticks. */
+@media (hover: hover) and (pointer: fine) {
+  .sheen:hover::after {
+    opacity: 1;
+    animation: tx-sheen 0.9s var(--ease-out-expo);
+  }
 }
 
 /* Interactive lift shared by every card in the system */
@@ -406,9 +558,17 @@
     box-shadow 0.5s var(--ease-out-expo),
     border-color 0.5s var(--ease-out-expo);
 }
-.lift:hover {
-  transform: translateY(-6px);
-  box-shadow: var(--shadow-lift);
+@media (hover: hover) and (pointer: fine) {
+  .lift:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-lift);
+  }
+}
+/* Touch gets a press state instead, so taps still feel responsive. */
+@media (hover: none) {
+  .lift:active {
+    transform: scale(0.985);
+  }
 }
 
 /* Underline that grows from the leading edge — works in both directions */
@@ -428,7 +588,10 @@
   transition: transform 0.45s var(--ease-out-expo);
 }
 [dir="rtl"] .link-underline::after { --underline-origin: right; }
-.link-underline:hover::after { transform: scaleX(1); }
+@media (hover: hover) and (pointer: fine) {
+  .link-underline:hover::after { transform: scaleX(1); }
+}
+.link-underline:focus-visible::after { transform: scaleX(1); }
 
 /* Icons that carry a directional meaning must flip in RTL */
 [dir="rtl"] .flip-rtl { transform: scaleX(-1); }
@@ -437,8 +600,39 @@
 .rail {
   scrollbar-width: none;
   -ms-overflow-style: none;
+  overscroll-behavior-inline: contain;
 }
 .rail::-webkit-scrollbar { display: none; }
+
+/* Panels that scroll on top of the page must not chain their scroll
+   back to the document once they hit their own end. */
+.scroll-pane {
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Reading-progress hairline under the header. Driven entirely by the
+   scroll timeline where it exists — no listener, no reflow. Browsers
+   without it simply never paint the bar. */
+@keyframes tx-progress {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+.scroll-progress {
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+[dir="rtl"] .scroll-progress {
+  transform-origin: right center;
+}
+
+@supports (animation-timeline: scroll()) {
+  .scroll-progress {
+    animation: tx-progress linear both;
+    animation-timeline: scroll(root block);
+  }
+}
 
 @media (prefers-reduced-motion: reduce) {
   *,
@@ -450,4 +644,7 @@
     scroll-behavior: auto !important;
   }
   .reveal { opacity: 1; transform: none; }
+  /* The blanket duration override above would freeze the scroll-driven
+     bar at full width, so drop it rather than show it stuck. */
+  .scroll-progress { display: none; }
 }

@@ -32,9 +32,13 @@ export function Header() {
   useEffect(() => setMenuOpen(false), [pathname]);
 
   useEffect(() => {
-    document.body.style.overflow = menuOpen ? "hidden" : "";
+    if (!menuOpen) return;
+    document.body.style.overflow = "hidden";
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setMenuOpen(false);
+    document.addEventListener("keydown", onKey);
     return () => {
       document.body.style.overflow = "";
+      document.removeEventListener("keydown", onKey);
     };
   }, [menuOpen]);
 
@@ -71,16 +75,16 @@ export function Header() {
           }`}
         >
           <div className="brand-gradient">
-            <div className="mx-auto flex max-w-[80rem] items-center justify-center gap-3 px-5 py-2 text-[0.72rem] font-semibold tracking-wide text-white/90 sm:px-8">
-              <span className="relative flex h-1.5 w-1.5">
+            <div className="shell flex items-center justify-center gap-3 py-2 text-center text-[0.72rem] font-semibold tracking-wide text-white/90">
+              <span className="relative flex h-1.5 w-1.5 shrink-0">
                 <span className="absolute inline-flex h-full w-full rounded-full bg-aqua-300 opacity-75 [animation:tx-pulse-ring_1.8s_ease-out_infinite]" />
                 <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-white" />
               </span>
-              <span>{t.home.hero.eyebrow}</span>
+              <span className="truncate">{t.home.hero.eyebrow}</span>
               <span className="hidden opacity-50 sm:inline">·</span>
               <Link
                 href={href("/contact")}
-                className="link-underline hidden items-center gap-1 sm:inline-flex"
+                className="link-underline hidden shrink-0 items-center gap-1 sm:inline-flex"
               >
                 {t.common.getQuote}
                 <HiArrowUpRight className="h-3 w-3 flip-rtl" />
@@ -89,7 +93,11 @@ export function Header() {
           </div>
         </div>
 
-        <div className="mx-auto flex h-[4.5rem] max-w-[80rem] items-center justify-between gap-4 px-5 sm:px-8">
+        <div
+          className={`shell flex items-center justify-between gap-3 transition-[height] duration-500 sm:gap-4 ${
+            solid ? "h-16 lg:h-[4.25rem]" : "h-[4.5rem]"
+          }`}
+        >
           <Link
             href={href("/")}
             aria-label={t.brand.name}
@@ -179,6 +187,16 @@ export function Header() {
             </button>
           </div>
         </div>
+
+        {/* Reading progress — CSS scroll timeline, no listener */}
+        <span
+          aria-hidden
+          className={`pointer-events-none absolute inset-x-0 bottom-0 h-0.5 origin-left transition-opacity duration-500 ${
+            solid ? "opacity-100" : "opacity-0"
+          }`}
+        >
+          <span className="scroll-progress brand-gradient block h-full w-full" />
+        </span>
       </header>
 
       {/* Mobile sheet */}
@@ -194,7 +212,7 @@ export function Header() {
           }`}
         />
         <div
-          className={`absolute inset-x-0 top-[4.5rem] mx-3 rounded-3xl border border-white/70 bg-white/95 p-3 shadow-[0_30px_80px_-30px_rgba(8,36,59,0.6)] backdrop-blur-2xl transition-all duration-500 ${
+          className={`scroll-pane absolute inset-x-0 top-16 mx-3 max-h-[calc(100dvh-5.5rem)] overflow-y-auto rounded-3xl border border-white/70 bg-white/95 p-3 shadow-[0_30px_80px_-30px_rgba(8,36,59,0.6)] backdrop-blur-2xl transition-all duration-500 ${
             menuOpen
               ? "translate-y-0 opacity-100"
               : "-translate-y-4 opacity-0"

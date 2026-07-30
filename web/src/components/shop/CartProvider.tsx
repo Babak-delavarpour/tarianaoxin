@@ -76,16 +76,20 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     }
   }, [lines, hydrated]);
 
-  // Lock the page behind the drawer without the layout jumping.
+  // Lock the page behind the drawer and let Escape dismiss it. The layout
+  // does not jump here because `scrollbar-gutter: stable` on <html> keeps
+  // the scrollbar track reserved whether or not the body can scroll.
   useEffect(() => {
     if (!isOpen) return;
-    const { overflow, paddingInlineEnd } = document.body.style;
-    const gap = window.innerWidth - document.documentElement.clientWidth;
+    const { overflow } = document.body.style;
     document.body.style.overflow = "hidden";
-    if (gap > 0) document.body.style.paddingInlineEnd = `${gap}px`;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setIsOpen(false);
+    };
+    document.addEventListener("keydown", onKey);
     return () => {
       document.body.style.overflow = overflow;
-      document.body.style.paddingInlineEnd = paddingInlineEnd;
+      document.removeEventListener("keydown", onKey);
     };
   }, [isOpen]);
 

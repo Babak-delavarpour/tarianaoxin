@@ -76,7 +76,7 @@ export function CartDrawer() {
           </div>
         ) : (
           <>
-            <ul className="flex-1 divide-y divide-mist-200 overflow-y-auto px-6">
+            <ul className="scroll-pane flex-1 divide-y divide-mist-200 overflow-y-auto px-6">
               {detailed.map(({ product, qty, lineTotal }) => (
                 <li key={product.id} className="flex gap-4 py-5">
                   <Link
@@ -137,7 +137,7 @@ export function CartDrawer() {
               ))}
             </ul>
 
-            <footer className="border-t border-mist-200 bg-white px-6 py-5">
+            <footer className="pb-safe border-t border-mist-200 bg-white px-6 pt-5">
               <dl className="flex flex-col gap-2 text-[0.88rem]">
                 <div className="flex items-center justify-between">
                   <dt className="text-mist-500">{t.common.subtotal}</dt>

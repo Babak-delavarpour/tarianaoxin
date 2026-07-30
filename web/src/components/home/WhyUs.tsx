@@ -26,7 +26,7 @@ export function WhyUs() {
   const w = t.home.why;
 
   return (
-    <section className="mesh-light relative overflow-hidden py-24 lg:py-32">
+    <section className="mesh-light relative overflow-hidden section-y">
       <Container>
         <SectionHeading
           eyebrow={w.eyebrow}

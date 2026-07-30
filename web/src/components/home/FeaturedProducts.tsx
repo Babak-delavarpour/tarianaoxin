@@ -12,7 +12,7 @@ export function FeaturedProducts() {
   const { t, href } = useI18n();
 
   return (
-    <section className="relative overflow-hidden bg-white py-24 lg:py-32">
+    <section className="relative overflow-hidden bg-white section-y">
       <div className="grid-lines-ink pointer-events-none absolute inset-0" />
       <div
         aria-hidden

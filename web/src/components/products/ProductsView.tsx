@@ -45,7 +45,7 @@ export function ProductsView() {
           <section
             key={cat.id}
             id={cat.slug}
-            className={`relative scroll-mt-28 overflow-hidden py-20 lg:py-24 ${
+            className={`relative scroll-mt-28 overflow-hidden section-y-tight ${
               alt ? "bg-white" : "mesh-light"
             }`}
           >
@@ -80,7 +80,7 @@ export function ProductsView() {
                         <ProductArt art={cat.art} className="h-32 w-32" />
                       </div>
 
-                      <h2 className="text-[1.6rem] font-extrabold text-white sm:text-[1.9rem]">
+                      <h2 className="fs-h3 font-extrabold text-white">
                         {cat.name[locale]}
                       </h2>
                       <p className="text-[0.92rem] leading-relaxed text-white/70">
@@ -121,7 +121,7 @@ export function ProductsView() {
       })}
 
       {/* ── Custom tooling ─────────────────────────────────── */}
-      <section className="relative bg-white py-20 lg:py-24">
+      <section className="relative bg-white section-y-tight">
         <Container>
           <Reveal>
             <div className="flex flex-col items-start gap-7 rounded-[2rem] border border-mist-200 bg-mist-50 p-8 sm:p-12 lg:flex-row lg:items-center lg:justify-between">
@@ -130,7 +130,7 @@ export function ProductsView() {
                   <HiOutlineWrenchScrewdriver className="h-6 w-6" />
                 </span>
                 <div className="flex flex-col gap-2.5">
-                  <h2 className="text-[1.5rem] font-extrabold text-ink-900 sm:text-[1.9rem]">
+                  <h2 className="fs-h3 font-extrabold text-ink-900">
                     {t.products.customTitle}
                   </h2>
                   <p className="max-w-2xl text-[0.95rem] leading-relaxed text-mist-600">

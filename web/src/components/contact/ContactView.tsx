@@ -75,14 +75,14 @@ export function ContactView() {
         crumb={t.nav.contact}
       />
 
-      <section className="mesh-light relative py-20 lg:py-28">
+      <section className="mesh-light relative section-y">
         <Container>
           <div className="grid gap-8 lg:grid-cols-[1.15fr_0.85fr] lg:gap-12">
             {/* ── Form ─────────────────────────────────────── */}
             <Reveal>
               <div className="ring-gradient relative overflow-hidden rounded-[2rem] border border-mist-200 bg-white p-7 shadow-[var(--shadow-card)] sm:p-10">
                 <div className="mb-8 flex flex-col gap-2">
-                  <h2 className="text-[1.5rem] font-extrabold text-ink-900 sm:text-[1.8rem]">
+                  <h2 className="fs-h3 font-extrabold text-ink-900">
                     {c.form.title}
                   </h2>
                   <p className="text-[0.92rem] text-mist-500">{c.form.subtitle}</p>

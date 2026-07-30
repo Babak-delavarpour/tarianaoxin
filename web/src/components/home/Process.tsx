@@ -22,7 +22,7 @@ export function Process() {
   const p = t.home.process;
 
   return (
-    <section className="mesh-dark relative overflow-hidden py-24 lg:py-32">
+    <section className="mesh-dark relative overflow-hidden section-y">
       <div className="grid-lines pointer-events-none absolute inset-0 opacity-70" />
       <div className="grain-layer pointer-events-none absolute inset-0 opacity-[0.14]" />
       <div

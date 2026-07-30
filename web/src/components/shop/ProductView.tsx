@@ -58,7 +58,7 @@ export function ProductView({ slug }: { slug: string }) {
 
   return (
     <>
-      <section className="mesh-light relative pt-32 pb-20 lg:pt-40 lg:pb-24">
+      <section className="mesh-light relative pt-[clamp(7rem,12vw,10rem)] pb-[clamp(3.5rem,6vw,6rem)]">
         <Container>
           {/* Breadcrumb */}
           <nav
@@ -139,7 +139,7 @@ export function ProductView({ slug }: { slug: string }) {
                     </Link>
                   ) : null}
 
-                  <h1 className="text-[2rem] font-extrabold text-ink-900 sm:text-[2.6rem]">
+                  <h1 className="fs-h2 font-extrabold text-ink-900">
                     {product.name[locale]}
                   </h1>
 
@@ -316,11 +316,11 @@ export function ProductView({ slug }: { slug: string }) {
       </section>
 
       {/* ── Related ───────────────────────────────────────── */}
-      <section className="relative bg-white py-20 lg:py-24">
+      <section className="relative bg-white section-y-tight">
         <div className="grid-lines-ink pointer-events-none absolute inset-0" />
         <Container className="relative">
           <Reveal>
-            <h2 className="mb-10 text-[1.6rem] font-extrabold text-ink-900 sm:text-[2rem]">
+            <h2 className="fs-h3 mb-10 font-extrabold text-ink-900">
               {t.common.relatedProducts}
             </h2>
           </Reveal>

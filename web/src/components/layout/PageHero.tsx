@@ -22,7 +22,7 @@ export function PageHero({
   const { t, href } = useI18n();
 
   return (
-    <section className="mesh-dark relative isolate overflow-hidden pt-36 pb-20 lg:pt-44 lg:pb-28">
+    <section className="mesh-dark relative isolate overflow-hidden pt-[clamp(7.5rem,14vw,11rem)] pb-[clamp(3.5rem,7vw,7rem)]">
       <div className="grid-lines pointer-events-none absolute inset-0" />
       <div className="grain-layer pointer-events-none absolute inset-0 opacity-[0.13]" />
       <div
@@ -48,14 +48,14 @@ export function PageHero({
             <Eyebrow tone="light">{eyebrow}</Eyebrow>
           </span>
           <h1
-            className="max-w-4xl text-[2.4rem] font-extrabold text-white sm:text-[3.2rem] lg:text-[3.9rem]"
+            className="fs-h1 max-w-4xl font-extrabold text-white"
             style={{ animation: "tx-rise .85s var(--ease-out-expo) .08s both" }}
           >
             {title}
           </h1>
           {subtitle ? (
             <p
-              className="max-w-2xl text-[1.02rem] leading-relaxed text-ink-100/60 sm:text-[1.1rem]"
+              className="fs-lead max-w-2xl text-ink-100/60"
               style={{ animation: "tx-rise .85s var(--ease-out-expo) .18s both" }}
             >
               {subtitle}

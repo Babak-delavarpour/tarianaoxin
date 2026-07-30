@@ -31,9 +31,9 @@ export function Hero() {
       />
       <LogoWatermark className="absolute inset-x-0 top-1/2 -z-10 text-center text-[22vw] leading-none text-white/[0.022]" />
 
-      <div className="relative mx-auto grid max-w-[80rem] gap-14 px-5 pt-40 pb-24 sm:px-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:gap-10 lg:pt-48 lg:pb-32">
+      <div className="shell relative grid gap-12 pt-[clamp(8.5rem,16vw,12rem)] pb-[clamp(4rem,8vw,8rem)] sm:gap-14 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:gap-10">
         {/* ── Copy ─────────────────────────────────────────── */}
-        <div className="flex flex-col items-start gap-7">
+        <div className="flex flex-col items-start gap-6 sm:gap-7">
           <span
             className="inline-flex items-center gap-2.5 rounded-full border border-white/15 bg-white/5 py-2 ps-2 pe-4 text-[0.74rem] font-semibold text-ink-100/85 backdrop-blur-sm"
             style={{ animation: "tx-fade .8s var(--ease-out-expo) both" }}
@@ -45,7 +45,7 @@ export function Hero() {
           </span>
 
           <h1
-            className="text-[2.6rem] font-extrabold text-white sm:text-[3.6rem] lg:text-[4.15rem]"
+            className="fs-hero font-extrabold text-white"
             style={{ animation: "tx-rise .9s var(--ease-out-expo) .08s both" }}
           >
             {h.titleTop}{" "}
@@ -71,14 +71,14 @@ export function Hero() {
           </h1>
 
           <p
-            className="max-w-xl text-[1.02rem] leading-relaxed text-ink-100/65 sm:text-[1.1rem]"
+            className="fs-lead max-w-xl text-ink-100/65"
             style={{ animation: "tx-rise .9s var(--ease-out-expo) .18s both" }}
           >
             {h.subtitle}
           </p>
 
           <div
-            className="flex flex-wrap items-center gap-3"
+            className="flex w-full flex-col gap-3 min-[26rem]:w-auto min-[26rem]:flex-row min-[26rem]:flex-wrap min-[26rem]:items-center"
             style={{ animation: "tx-rise .9s var(--ease-out-expo) .28s both" }}
           >
             <ButtonLink href={href("/shop")} size="lg">
@@ -102,7 +102,7 @@ export function Hero() {
           >
             {t.home.stats.map((s) => (
               <div key={s.label} className="flex flex-col gap-1">
-                <dt className="text-brand-gradient-light num text-[1.6rem] font-extrabold sm:text-[1.85rem]">
+                <dt className="text-brand-gradient-light num text-[clamp(1.4rem,1.1rem+1vw,1.85rem)] font-extrabold">
                   {s.value}
                 </dt>
                 <dd className="text-[0.74rem] leading-snug font-medium text-ink-100/45">
@@ -155,8 +155,9 @@ export function Hero() {
             ))}
           </div>
 
-          {/* Floating credential chips */}
-          <div className="absolute -bottom-2 start-1/2 flex -translate-x-1/2 gap-2 rtl:translate-x-1/2">
+          {/* Floating credential chips — wrap rather than overflow on
+              the narrowest phones. */}
+          <div className="absolute inset-x-0 -bottom-2 flex flex-wrap justify-center gap-2">
             {[
               { Icon: HiOutlineTruck, label: `24${"h"}` },
               { Icon: HiShieldCheck, label: "ISO 9001" },
@@ -164,7 +165,7 @@ export function Hero() {
             ].map(({ Icon, label }) => (
               <span
                 key={label}
-                className="flex items-center gap-1.5 rounded-full border border-white/12 bg-ink-950/70 px-3.5 py-2 text-[0.72rem] font-bold whitespace-nowrap text-ink-100/80 backdrop-blur-md"
+                className="flex items-center gap-1.5 rounded-full border border-white/12 bg-ink-950/70 px-3 py-2 text-[0.72rem] font-bold whitespace-nowrap text-ink-100/80 backdrop-blur-md sm:px-3.5"
                 dir="ltr"
               >
                 <Icon className="h-3.5 w-3.5 text-aqua-400" />

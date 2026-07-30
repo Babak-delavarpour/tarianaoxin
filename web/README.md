@@ -113,6 +113,40 @@ Custom utilities live in `globals.css` rather than being repeated inline:
 All of them are direction-aware, and everything is suppressed under
 `prefers-reduced-motion`.
 
+### Responsive model
+
+The layout is **fluid first, breakpoints second** — everything structural
+interpolates with `clamp()`, so the design keeps adapting *between* the
+Tailwind breakpoints instead of snapping at them.
+
+| Primitive                        | What it does                                        |
+| -------------------------------- | --------------------------------------------------- |
+| `shell`                          | the one page container: `--shell-max` wide, `--shell-pad` gutters, clear of the notch |
+| `section-y` / `section-y-tight`  | the vertical rhythm every section shares            |
+| `fs-hero` … `fs-h4`, `fs-lead`   | fluid type ramp; use these instead of `text-[2rem] sm:text-[2.6rem]` |
+| `pb-safe`                        | bottom padding that clears the iOS home indicator   |
+| `tap-target`                     | grows a small control to a 44 px hit area, invisibly |
+| `select-pill`, `scroll-pane`     | consistent native `<select>`; scroll containers that don't chain |
+
+The tokens behind them sit in `:root` — `--shell-max` widens to 88rem above
+1536px so large monitors aren't left with a narrow column, and the type ramp
+is tuned to stay readable at 320px without ballooning on 4K.
+
+Two behavioural rules worth knowing:
+
+- **Hover is gated on a real pointer.** Tailwind v4 already wraps `hover:` in
+  `@media (hover: hover)`; the hand-written `.lift` / `.sheen` /
+  `.link-underline` rules do the same, so effects don't latch after a tap.
+  Touch gets a press state instead.
+- **`scrollbar-gutter: stable` on `<html>`** keeps the scrollbar track
+  reserved, so locking the body for the cart drawer, mobile menu or filter
+  sheet doesn't shift the page. Anything that locks scroll also answers
+  <kbd>Esc</kbd>.
+
+The header carries a reading-progress hairline driven by
+`animation-timeline: scroll()` — no scroll listener, and browsers without
+support simply never paint it.
+
 Product imagery is drawn, not photographed — `components/brand/ProductArt.tsx`
 renders an SVG per product family, so the shop stays visually consistent and the
 page weight stays near zero.

@@ -37,7 +37,7 @@ export function AboutView() {
       />
 
       {/* ── Story ──────────────────────────────────────────── */}
-      <section className="mesh-light relative overflow-hidden py-24 lg:py-32">
+      <section className="mesh-light relative overflow-hidden section-y">
         <Container>
           <div className="grid gap-14 lg:grid-cols-[1fr_0.85fr] lg:items-start lg:gap-20">
             <div className="flex flex-col gap-6">
@@ -45,7 +45,7 @@ export function AboutView() {
                 <Eyebrow>{a.story.eyebrow}</Eyebrow>
               </Reveal>
               <Reveal delay={60}>
-                <h2 className="text-[2rem] font-extrabold text-ink-900 sm:text-[2.7rem]">
+                <h2 className="fs-h2 font-extrabold text-ink-900">
                   {a.story.title}
                 </h2>
               </Reveal>
@@ -89,7 +89,7 @@ export function AboutView() {
       </section>
 
       {/* ── Timeline ───────────────────────────────────────── */}
-      <section className="relative bg-white py-24 lg:py-32">
+      <section className="relative bg-white section-y">
         <div className="grid-lines-ink pointer-events-none absolute inset-0" />
         <Container className="relative">
           <SectionHeading
@@ -141,7 +141,7 @@ export function AboutView() {
       </section>
 
       {/* ── Values ─────────────────────────────────────────── */}
-      <section className="mesh-dark relative overflow-hidden py-24 lg:py-32">
+      <section className="mesh-dark relative overflow-hidden section-y">
         <div className="grid-lines pointer-events-none absolute inset-0 opacity-70" />
         <div className="grain-layer pointer-events-none absolute inset-0 opacity-[0.13]" />
         <div
@@ -182,7 +182,7 @@ export function AboutView() {
       </section>
 
       {/* ── Facility ───────────────────────────────────────── */}
-      <section className="mesh-light relative overflow-hidden py-24 lg:py-32">
+      <section className="mesh-light relative overflow-hidden section-y">
         <Container>
           <div className="grid gap-14 lg:grid-cols-2 lg:items-center lg:gap-20">
             <Reveal className="order-2 lg:order-1">

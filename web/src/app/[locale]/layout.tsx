@@ -5,7 +5,7 @@ import "../globals.css";
 import { locales, localeDirection, localeMeta, isLocale } from "@/i18n/config";
 import { getDictionary } from "@/i18n";
 import { I18nProvider } from "@/i18n/I18nProvider";
-import { fontVariables } from "@/app/fonts";
+import { fontVariables, localeFontClassName } from "@/app/fonts";
 import { CartProvider } from "@/components/shop/CartProvider";
 import { CartDrawer } from "@/components/shop/CartDrawer";
 import { Header } from "@/components/layout/Header";
@@ -77,9 +77,10 @@ export default async function LocaleLayout({
       lang={localeMeta[locale].htmlLang}
       dir={localeDirection[locale]}
       data-locale={locale}
+      className={fontVariables}
       suppressHydrationWarning
     >
-      <body className={`${fontVariables} antialiased`}>
+      <body className={`${localeFontClassName[locale]} antialiased`}>
         <I18nProvider locale={locale} dictionary={dictionary}>
           <CartProvider>
             <a

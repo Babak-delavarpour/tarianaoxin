@@ -22,10 +22,10 @@ export function CartView() {
   const { detailed, count, subtotal, discount, total, setQty, remove } = useCart();
 
   return (
-    <section className="mesh-light relative min-h-[70vh] pt-32 pb-24 lg:pt-40">
+    <section className="mesh-light relative min-h-[70dvh] pt-[clamp(7rem,12vw,10rem)] pb-[clamp(3.5rem,7vw,6.5rem)]">
       <Container>
         <Reveal className="mb-10 flex flex-col gap-3">
-          <h1 className="text-[2.2rem] font-extrabold text-ink-900 sm:text-[2.8rem]">
+          <h1 className="fs-h2 font-extrabold text-ink-900">
             {t.cart.title}
           </h1>
           <p className="text-[1rem] text-mist-600">{t.cart.subtitle}</p>

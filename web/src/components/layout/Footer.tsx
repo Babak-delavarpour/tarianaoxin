@@ -66,11 +66,11 @@ export function Footer() {
       {/* Watermark bleeding off the bottom edge */}
       <LogoWatermark className="absolute inset-x-0 -bottom-6 text-center text-[19vw] leading-none text-white/[0.028]" />
 
-      <div className="relative mx-auto max-w-[80rem] px-5 sm:px-8">
+      <div className="shell relative">
         {/* Newsletter */}
         <div className="grid gap-8 border-b border-white/10 py-14 lg:grid-cols-[1.1fr_1fr] lg:items-center lg:gap-16">
           <div className="flex flex-col gap-3">
-            <h3 className="text-[1.6rem] font-extrabold text-white sm:text-[2rem]">
+            <h3 className="fs-h3 font-extrabold text-white">
               {t.footer.newsletter.title}
             </h3>
             <p className="max-w-md text-[0.95rem] leading-relaxed text-ink-100/60">
@@ -112,8 +112,8 @@ export function Footer() {
         </div>
 
         {/* Main */}
-        <div className="grid gap-12 py-16 lg:grid-cols-[1.4fr_repeat(3,1fr)] lg:gap-10">
-          <div className="flex flex-col gap-6">
+        <div className="grid gap-10 py-14 sm:grid-cols-2 sm:gap-12 md:grid-cols-3 lg:grid-cols-[1.4fr_repeat(3,1fr)] lg:gap-10 lg:py-16">
+          <div className="flex flex-col gap-6 sm:col-span-2 md:col-span-3 lg:col-span-1">
             <Logo locale={locale} tone="light" />
             <p className="max-w-xs text-[0.9rem] leading-relaxed text-ink-100/55">
               {t.footer.blurb}
@@ -185,11 +185,11 @@ export function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="flex flex-col items-center justify-between gap-4 border-t border-white/10 py-7 text-[0.8rem] text-ink-100/45 sm:flex-row">
+        <div className="flex flex-col items-center justify-between gap-4 border-t border-white/10 py-7 pb-[max(1.75rem,env(safe-area-inset-bottom))] text-center text-[0.8rem] text-ink-100/45 sm:flex-row sm:text-start">
           <p>
             © <span className="num">2026</span> {t.brand.legal}. {t.footer.rights}
           </p>
-          <div className="flex items-center gap-5">
+          <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
             <Link href={href("/contact")} className="transition-colors hover:text-aqua-300">
               {t.footer.links.privacy}
             </Link>

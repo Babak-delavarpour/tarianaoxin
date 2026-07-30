@@ -7,11 +7,7 @@ export function Container({
   children: React.ReactNode;
   className?: string;
 }) {
-  return (
-    <div className={`mx-auto w-full max-w-[80rem] px-5 sm:px-8 ${className}`}>
-      {children}
-    </div>
-  );
+  return <div className={`shell ${className}`}>{children}</div>;
 }
 
 export function Eyebrow({
@@ -64,7 +60,7 @@ export function SectionHeading({
     >
       {eyebrow ? <Eyebrow tone={tone}>{eyebrow}</Eyebrow> : null}
       <h2
-        className={`max-w-3xl text-[2rem] font-extrabold sm:text-[2.6rem] lg:text-[3.1rem] ${
+        className={`fs-h2 max-w-3xl font-extrabold ${
           tone === "light" ? "text-white" : "text-ink-900"
         }`}
       >
@@ -72,7 +68,7 @@ export function SectionHeading({
       </h2>
       {subtitle ? (
         <p
-          className={`max-w-2xl text-[1.02rem] leading-relaxed ${
+          className={`fs-lead max-w-2xl ${
             tone === "light" ? "text-ink-100/75" : "text-mist-600"
           }`}
         >

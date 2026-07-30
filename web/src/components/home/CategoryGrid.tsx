@@ -12,7 +12,7 @@ export function CategoryGrid() {
   const { t, locale, href, num } = useI18n();
 
   return (
-    <section className="relative py-24 lg:py-32">
+    <section className="relative section-y">
       <Container>
         <SectionHeading
           eyebrow={t.home.categories.eyebrow}

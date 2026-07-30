@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   HiMagnifyingGlass,
   HiOutlineAdjustmentsHorizontal,
@@ -33,6 +33,19 @@ export function ShopView() {
   const [maxPrice, setMaxPrice] = useState(priceBounds.max);
   const [sort, setSort] = useState<Sort>("featured");
   const [panelOpen, setPanelOpen] = useState(false);
+
+  // The filter sheet covers the viewport on phones, so the page behind it
+  // must not scroll, and Escape has to dismiss it.
+  useEffect(() => {
+    if (!panelOpen) return;
+    document.body.style.overflow = "hidden";
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setPanelOpen(false);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = "";
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [panelOpen]);
 
   const toggleBadge = (b: Badge) =>
     setBadges((prev) =>
@@ -230,12 +243,12 @@ export function ShopView() {
         </div>
       </PageHero>
 
-      <section className="mesh-light relative py-16 lg:py-20">
+      <section className="mesh-light relative section-y-tight">
         <Container>
           <div className="grid gap-10 lg:grid-cols-[16rem_1fr] lg:gap-12">
             {/* Desktop filters */}
             <aside className="hidden lg:block">
-              <div className="sticky top-28 rounded-[1.75rem] border border-mist-200 bg-white p-6 shadow-[var(--shadow-card)]">
+              <div className="scroll-pane sticky top-24 max-h-[calc(100dvh-7rem)] overflow-y-auto rounded-[1.75rem] border border-mist-200 bg-white p-6 shadow-[var(--shadow-card)]">
                 {filterPanel}
               </div>
             </aside>
@@ -252,7 +265,7 @@ export function ShopView() {
                   <button
                     type="button"
                     onClick={() => setPanelOpen(true)}
-                    className="flex items-center gap-2 rounded-full border border-mist-200 px-4 py-2 text-[0.83rem] font-bold text-ink-700 transition-colors hover:border-aqua-300 hover:text-aqua-700 lg:hidden"
+                    className="flex h-10 items-center gap-2 rounded-full border border-mist-200 px-4 text-[0.83rem] font-bold text-ink-700 transition-colors hover:border-aqua-300 hover:text-aqua-700 lg:hidden"
                   >
                     <HiOutlineAdjustmentsHorizontal className="h-4 w-4" />
                     {t.common.filters}
@@ -268,7 +281,7 @@ export function ShopView() {
                     <select
                       value={sort}
                       onChange={(e) => setSort(e.target.value as Sort)}
-                      className="cursor-pointer rounded-full border border-mist-200 bg-white px-4 py-2 text-[0.83rem] font-bold text-ink-800 transition-colors hover:border-aqua-300 focus:outline-none"
+                      className="select-pill h-10 cursor-pointer rounded-full border border-mist-200 bg-white px-4 text-[0.83rem] font-bold text-ink-800 transition-colors hover:border-aqua-300 focus:outline-none"
                     >
                       <option value="featured">{t.common.sortFeatured}</option>
                       <option value="asc">{t.common.sortPriceAsc}</option>
@@ -319,10 +332,15 @@ export function ShopView() {
           }`}
         />
         <div
-          className={`absolute inset-x-0 bottom-0 max-h-[85vh] overflow-y-auto rounded-t-[2rem] bg-white p-6 pb-10 shadow-[0_-20px_60px_rgba(8,36,59,0.3)] transition-transform duration-500 [transition-timing-function:var(--ease-out-expo)] ${
+          className={`scroll-pane pb-safe absolute inset-x-0 bottom-0 max-h-[85dvh] overflow-y-auto rounded-t-[2rem] bg-white p-6 shadow-[0_-20px_60px_rgba(8,36,59,0.3)] transition-transform duration-500 [transition-timing-function:var(--ease-out-expo)] ${
             panelOpen ? "translate-y-0" : "translate-y-full"
           }`}
         >
+          {/* grab handle — signals the sheet is dismissible */}
+          <span
+            aria-hidden
+            className="mx-auto mb-5 block h-1 w-10 rounded-full bg-mist-300"
+          />
           <div className="mb-6 flex items-center justify-between">
             <h2 className="text-[1.1rem] font-extrabold text-ink-900">
               {t.common.filters}
