@@ -6,7 +6,6 @@ import {
   HiOutlineMapPin,
   HiOutlinePhone,
   HiOutlineEnvelope,
-  HiArrowUpRight,
   HiCheckCircle,
 } from "react-icons/hi2";
 import {
@@ -15,12 +14,26 @@ import {
   FaWhatsapp,
   FaTelegramPlane,
 } from "react-icons/fa";
-import { Logo, LogoWatermark } from "@/components/brand/Logo";
+import { Logo } from "@/components/brand/Logo";
+import { Container } from "@/components/ui/Section";
+import { Button } from "@/components/ui/Button";
 import { useI18n } from "@/i18n/I18nProvider";
 import { categories } from "@/lib/catalog";
 
+/** One number, one format — matched to the header and the contact page. */
+const PHONE_DISPLAY = "+98 61 3221 5923";
+const PHONE_TEL = "+986132215923";
+const EMAIL = "sales@tarianaoxin.com";
+
+/**
+ * The footer is an INK chapter read as a colophon: a masthead column that
+ * carries the brand and every way to reach a human, a newsletter block
+ * built as a real labelled form rather than an input wedged into a row,
+ * three tightly-set link columns, and a legal bar that recedes to the
+ * quietest legible step on ink.
+ */
 export function Footer() {
-  const { t, locale, href } = useI18n();
+  const { t, locale, href, num } = useI18n();
   const [subscribed, setSubscribed] = useState(false);
 
   const columns = [
@@ -53,100 +66,86 @@ export function Footer() {
 
   const socials = [
     { Icon: FaInstagram, label: "Instagram", url: "https://instagram.com" },
-    { Icon: FaWhatsapp, label: "WhatsApp", url: "https://wa.me/989160611093" },
+    { Icon: FaWhatsapp, label: "WhatsApp", url: `https://wa.me/989160611093` },
     { Icon: FaTelegramPlane, label: "Telegram", url: "https://telegram.org" },
     { Icon: FaLinkedinIn, label: "LinkedIn", url: "https://linkedin.com" },
   ];
 
+  const contact = [
+    {
+      Icon: HiOutlineMapPin,
+      label: t.contact.info.addressLabel,
+      value: <span className="fs-caption">{t.contact.info.address}</span>,
+    },
+    {
+      Icon: HiOutlinePhone,
+      label: t.contact.info.phoneLabel,
+      value: (
+        <a
+          href={`tel:${PHONE_TEL}`}
+          className="hover-rule fs-caption num inline-block py-0.5 hover:text-aqua-300"
+        >
+          {PHONE_DISPLAY}
+        </a>
+      ),
+    },
+    {
+      Icon: HiOutlineEnvelope,
+      label: t.contact.info.emailLabel,
+      value: (
+        <a
+          href={`mailto:${EMAIL}`}
+          dir="ltr"
+          className="hover-rule fs-caption inline-block py-0.5 hover:text-aqua-300"
+        >
+          {EMAIL}
+        </a>
+      ),
+    },
+  ];
+
   return (
-    <footer className="mesh-dark relative overflow-hidden text-ink-100">
-      <div className="grid-lines pointer-events-none absolute inset-0 opacity-60" />
-      <div className="grain-layer pointer-events-none absolute inset-0 opacity-[0.16]" />
+    <footer className="mesh-dark relative isolate border-t border-hairline-inverse text-onink-200">
+      <div
+        aria-hidden
+        className="grid-lines pointer-events-none absolute inset-0 -z-10 opacity-50"
+      />
+      <div
+        aria-hidden
+        className="grain-layer pointer-events-none absolute inset-0 -z-10 opacity-[0.07]"
+      />
 
-      {/* Watermark bleeding off the bottom edge */}
-      <LogoWatermark className="absolute inset-x-0 -bottom-6 text-center text-[19vw] leading-none text-white/[0.028]" />
-
-      <div className="shell relative">
-        {/* Newsletter */}
-        <div className="grid gap-8 border-b border-white/10 py-14 lg:grid-cols-[1.1fr_1fr] lg:items-center lg:gap-16">
-          <div className="flex flex-col gap-3">
-            <h3 className="fs-h3 font-extrabold text-white">
-              {t.footer.newsletter.title}
-            </h3>
-            <p className="max-w-md text-[0.95rem] leading-relaxed text-ink-100/60">
-              {t.footer.newsletter.body}
-            </p>
-          </div>
-
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              setSubscribed(true);
-            }}
-            className="flex flex-col gap-3"
-          >
-            <div className="flex flex-col gap-2 sm:flex-row">
-              <input
-                type="email"
-                required
-                disabled={subscribed}
-                placeholder={t.footer.newsletter.placeholder}
-                aria-label={t.footer.newsletter.placeholder}
-                className="h-13 min-w-0 flex-1 rounded-full border border-white/15 bg-white/5 px-6 py-3.5 text-[0.92rem] text-white placeholder:text-ink-100/35 transition-colors focus:border-aqua-400 focus:bg-white/10 focus:outline-none disabled:opacity-60"
-              />
-              <button
-                type="submit"
-                disabled={subscribed}
-                className="sheen brand-gradient h-13 shrink-0 rounded-full px-8 py-3.5 text-[0.9rem] font-bold text-white transition-transform duration-300 hover:-translate-y-0.5 disabled:translate-y-0"
-              >
-                {t.footer.newsletter.submit}
-              </button>
-            </div>
-            {subscribed ? (
-              <p className="flex items-center gap-2 text-[0.84rem] font-semibold text-aqua-300">
-                <HiCheckCircle className="h-4 w-4" />
-                {t.footer.newsletter.success}
-              </p>
-            ) : null}
-          </form>
-        </div>
-
-        {/* Main */}
-        <div className="grid gap-10 py-14 sm:grid-cols-2 sm:gap-12 md:grid-cols-3 lg:grid-cols-[1.4fr_repeat(3,1fr)] lg:gap-10 lg:py-16">
-          <div className="flex flex-col gap-6 sm:col-span-2 md:col-span-3 lg:col-span-1">
+      <Container>
+        {/* ── Masthead + newsletter ─────────────────────────────── */}
+        <div className="grid gap-12 border-b border-hairline-inverse py-[clamp(3rem,6vw,4.75rem)] lg:grid-cols-[1.2fr_1fr] lg:gap-20">
+          {/* Capped measure: at 4K the shell is 88rem and an uncapped
+              ledger would stretch three short values across 690px. */}
+          <div className="flex max-w-[38rem] flex-col items-start gap-7">
             <Logo locale={locale} tone="light" />
-            <p className="max-w-xs text-[0.9rem] leading-relaxed text-ink-100/55">
+
+            <p className="fs-body max-w-[44ch] text-onink-200">
               {t.footer.blurb}
             </p>
 
-            <ul className="flex flex-col gap-3 text-[0.88rem]">
-              <li className="flex items-start gap-3 text-ink-100/70">
-                <HiOutlineMapPin className="mt-0.5 h-4 w-4 shrink-0 text-aqua-400" />
-                <span>{t.contact.info.address}</span>
-              </li>
-              <li>
-                <a
-                  href="tel:+986132215923"
-                  dir="ltr"
-                  className="flex items-center gap-3 text-ink-100/70 transition-colors hover:text-aqua-300"
+            <ul className="w-full divide-y divide-hairline-inverse border-y border-hairline-inverse">
+              {contact.map(({ Icon, label, value }) => (
+                <li
+                  key={label}
+                  className="grid grid-cols-[1.25rem_1fr] items-start gap-x-3.5 py-3.5"
                 >
-                  <HiOutlinePhone className="h-4 w-4 shrink-0 text-aqua-400" />
-                  +98 61 3221 5923
-                </a>
-              </li>
-              <li>
-                <a
-                  href="mailto:sales@tarianaoxin.com"
-                  dir="ltr"
-                  className="flex items-center gap-3 text-ink-100/70 transition-colors hover:text-aqua-300"
-                >
-                  <HiOutlineEnvelope className="h-4 w-4 shrink-0 text-aqua-400" />
-                  sales@tarianaoxin.com
-                </a>
-              </li>
+                  <Icon
+                    aria-hidden
+                    className="mt-0.5 h-4 w-4 shrink-0 text-aqua-400"
+                  />
+                  <div className="min-w-0">
+                    <span className="eyebrow block text-onink-300">{label}</span>
+                    <span className="mt-1.5 block text-onink-100">{value}</span>
+                  </div>
+                </li>
+              ))}
             </ul>
 
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
               {socials.map(({ Icon, label, url }) => (
                 <a
                   key={label}
@@ -154,7 +153,7 @@ export function Footer() {
                   target="_blank"
                   rel="noreferrer noopener"
                   aria-label={label}
-                  className="flex h-10 w-10 items-center justify-center rounded-full border border-white/12 bg-white/5 text-ink-100/70 transition-all duration-300 hover:-translate-y-1 hover:border-aqua-400/50 hover:bg-aqua-500/15 hover:text-aqua-300"
+                  className="hover-rule flex h-11 w-11 items-center justify-center rounded-ctrl border border-hairline-inverse text-onink-200 hover:border-aqua-400 hover:text-aqua-300"
                 >
                   <Icon className="h-[1.05rem] w-[1.05rem]" />
                 </a>
@@ -162,47 +161,119 @@ export function Footer() {
             </div>
           </div>
 
+          {/* The one filled tile in the footer — CARD/INK, no shadow. */}
+          <div className="rounded-card border border-hairline-inverse bg-inverse-2 p-6 sm:p-8">
+            <h3 className="fs-h4 font-semibold text-white">
+              {t.footer.newsletter.title}
+            </h3>
+            <p className="fs-body mt-2.5 text-onink-200">
+              {t.footer.newsletter.body}
+            </p>
+
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                setSubscribed(true);
+              }}
+              className="mt-7 flex flex-col gap-3"
+            >
+              <label
+                htmlFor="footer-newsletter-email"
+                className="eyebrow text-onink-300"
+              >
+                {t.footer.newsletter.placeholder}
+              </label>
+              <input
+                id="footer-newsletter-email"
+                name="email"
+                type="email"
+                required
+                autoComplete="email"
+                disabled={subscribed}
+                dir="ltr"
+                className="fs-body h-12 w-full rounded-ctrl border border-hairline-inverse-strong bg-white/[0.05] px-4 text-white transition-colors duration-200 placeholder:text-onink-300 focus:border-aqua-400 disabled:opacity-60"
+              />
+              <Button
+                type="submit"
+                variant="light"
+                size="md"
+                disabled={subscribed}
+                className="w-full"
+              >
+                {t.footer.newsletter.submit}
+              </Button>
+
+              <p
+                role="status"
+                aria-live="polite"
+                className="fs-caption flex items-center gap-2 font-semibold text-aqua-300 empty:hidden"
+              >
+                {subscribed ? (
+                  <>
+                    <HiCheckCircle aria-hidden className="h-4 w-4 shrink-0" />
+                    {t.footer.newsletter.success}
+                  </>
+                ) : null}
+              </p>
+            </form>
+          </div>
+        </div>
+
+        {/* ── Link columns ─────────────────────────────────────────
+            Plain <div>s on purpose: three more navigation landmarks in
+            the footer is noise in a landmark list, not structure. */}
+        <div className="grid gap-x-10 gap-y-9 border-b border-hairline-inverse py-[clamp(2.5rem,5vw,4rem)] sm:grid-cols-2 lg:grid-cols-3">
           {columns.map((col) => (
-            <nav key={col.title} className="flex flex-col gap-5">
-              <h4 className="text-[0.72rem] font-bold tracking-[0.2em] text-aqua-300 uppercase">
-                {col.title}
-              </h4>
-              <ul className="flex flex-col gap-3">
+            <div key={col.title} className="flex flex-col gap-4">
+              <h4 className="eyebrow text-aqua-300">{col.title}</h4>
+              <ul className="flex flex-col">
                 {col.links.map((link) => (
                   <li key={link.label}>
                     <Link
                       href={href(link.path)}
-                      className="group inline-flex items-center gap-1.5 text-[0.9rem] text-ink-100/60 transition-colors hover:text-white"
+                      className="hover-rule fs-body inline-flex py-1.5 text-onink-200 hover:text-white"
                     >
                       {link.label}
-                      <HiArrowUpRight className="h-3 w-3 opacity-0 transition-all duration-300 group-hover:opacity-70 flip-rtl" />
                     </Link>
                   </li>
                 ))}
               </ul>
-            </nav>
+            </div>
           ))}
         </div>
 
-        {/* Bottom bar */}
-        <div className="flex flex-col items-center justify-between gap-4 border-t border-white/10 py-7 pb-[max(1.75rem,env(safe-area-inset-bottom))] text-center text-[0.8rem] text-ink-100/45 sm:flex-row sm:text-start">
+        {/* ── Legal bar ────────────────────────────────────────── */}
+        <div className="pb-safe fs-micro flex flex-col gap-4 py-6 text-center text-onink-300 sm:flex-row sm:items-center sm:justify-between sm:text-start">
           <p>
-            © <span className="num">2026</span> {t.brand.legal}. {t.footer.rights}
+            {/* Split so the year never picks up a thousands separator in
+                fa-IR / ar-EG while still rendering native digits. */}
+            © <span className="num">{`${num(20)}${num(26)}`}</span>{" "}
+            {t.brand.legal}. {t.footer.rights}
           </p>
+
           <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
-            <Link href={href("/contact")} className="transition-colors hover:text-aqua-300">
+            <Link
+              href={href("/contact")}
+              className="hover-rule py-1 hover:text-white"
+            >
               {t.footer.links.privacy}
             </Link>
-            <Link href={href("/contact")} className="transition-colors hover:text-aqua-300">
+            <Link
+              href={href("/contact")}
+              className="hover-rule py-1 hover:text-white"
+            >
               {t.footer.links.terms}
             </Link>
-            <span className="flex items-center gap-1.5">
-              <span className="h-1.5 w-1.5 rounded-full bg-aqua-400" />
+            <span className="inline-flex items-center gap-2">
+              <span
+                aria-hidden
+                className="h-1 w-1 shrink-0 rounded-chip bg-aqua-400"
+              />
               {t.footer.madeIn}
             </span>
           </div>
         </div>
-      </div>
+      </Container>
     </footer>
   );
 }

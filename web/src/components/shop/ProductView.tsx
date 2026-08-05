@@ -1,31 +1,31 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   HiChevronRight,
-  HiStar,
   HiMinus,
   HiPlus,
   HiOutlineShoppingBag,
   HiCheck,
   HiOutlineTruck,
-  HiOutlineShieldCheck,
-  HiOutlineArrowPath,
+  HiArrowUpRight,
 } from "react-icons/hi2";
 import { FaWhatsapp } from "react-icons/fa";
-import { Container } from "@/components/ui/Section";
-import { Reveal } from "@/components/ui/Reveal";
+import { Chapter, Container, Eyebrow } from "@/components/ui/Section";
+import { Reveal, RevealGroup } from "@/components/ui/Reveal";
+import { ButtonLink } from "@/components/ui/Button";
 import { ProductArt } from "@/components/brand/ProductArt";
 import { ProductCard } from "./ProductCard";
 import { useCart } from "./CartProvider";
 import { useI18n } from "@/i18n/I18nProvider";
 import { getProduct, getCategory, relatedProducts } from "@/lib/catalog";
 
+/** Solid marks, matching ProductCard. Never a gradient. */
 const badgeStyles: Record<string, string> = {
-  new: "bg-aqua-500 text-white",
+  new: "bg-aqua-700 text-white",
   bestseller: "bg-ink-900 text-white",
-  eco: "bg-leaf-600 text-white",
+  eco: "bg-leaf-700 text-white",
 };
 
 export function ProductView({ slug }: { slug: string }) {
@@ -33,12 +33,20 @@ export function ProductView({ slug }: { slug: string }) {
   const { add } = useCart();
   const [qty, setQty] = useState(1);
   const [added, setAdded] = useState(false);
+  const timer = useRef<number | null>(null);
+
+  useEffect(
+    () => () => {
+      if (timer.current) window.clearTimeout(timer.current);
+    },
+    [],
+  );
 
   const product = getProduct(slug);
   if (!product) return null;
 
   const category = getCategory(product.category);
-  const related = relatedProducts(product, 4);
+  const related = relatedProducts(product, 6);
   const soldOut = product.stock === "out";
 
   const specs = [
@@ -49,290 +57,384 @@ export function ProductView({ slug }: { slug: string }) {
     { label: t.common.moq, value: product.moq[locale] },
   ];
 
+  const stockLabel = soldOut
+    ? t.common.outOfStock
+    : product.stock === "low"
+      ? t.common.lowStock
+      : t.common.inStock;
+
+  /* On ink, the light-ground stock palette collapses to ~2:1 — these are
+     the on-dark equivalents, all ≥9:1 on ink-950. */
+  const stockInk = soldOut
+    ? "text-onink-300"
+    : product.stock === "low"
+      ? "text-sand-400"
+      : "text-leaf-400";
+
+  const off = product.compareAt
+    ? Math.round((1 - product.price / product.compareAt) * 100)
+    : 0;
+
   const onAdd = () => {
     if (soldOut) return;
     add(product.id, qty);
     setAdded(true);
-    window.setTimeout(() => setAdded(false), 1800);
+    if (timer.current) window.clearTimeout(timer.current);
+    timer.current = window.setTimeout(() => setAdded(false), 1800);
   };
 
   return (
     <>
-      <section className="mesh-light relative pt-[clamp(7rem,12vw,10rem)] pb-[clamp(3.5rem,6vw,6rem)]">
-        <Container>
-          {/* Breadcrumb */}
+      {/* ═══ INK MASTHEAD ═══════════════════════════════════════════ */}
+      <section
+        data-tone="ink"
+        className="mesh-dark nav-clear relative isolate overflow-hidden pb-[clamp(2.5rem,5vw,4rem)]"
+      >
+        <div
+          aria-hidden
+          className="grid-lines pointer-events-none absolute inset-0 opacity-60"
+        />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -top-56 end-[-8rem] h-[38rem] w-[38rem] rounded-chip bg-aqua-500/12 blur-[130px]"
+        />
+        <div
+          aria-hidden
+          className="grain-layer pointer-events-none absolute inset-0 opacity-[0.08]"
+        />
+
+        <Container className="relative">
           <nav
-            aria-label="Breadcrumb"
-            className="mb-8 flex flex-wrap items-center gap-2 text-[0.78rem] font-semibold text-mist-500"
+            aria-label={t.common.breadcrumb}
+            className="eyebrow flex flex-wrap items-center gap-2.5 text-onink-300"
           >
-            <Link href={href("/")} className="transition-colors hover:text-aqua-700">
+            <Link href={href("/")} className="hover-rule hover:text-aqua-300">
               {t.nav.home}
             </Link>
-            <HiChevronRight className="h-3.5 w-3.5 flip-rtl" />
-            <Link href={href("/shop")} className="transition-colors hover:text-aqua-700">
+            <HiChevronRight
+              aria-hidden
+              className="h-3 w-3 shrink-0 text-onink-400 flip-rtl"
+            />
+            <Link href={href("/shop")} className="hover-rule hover:text-aqua-300">
               {t.nav.shop}
             </Link>
-            <HiChevronRight className="h-3.5 w-3.5 flip-rtl" />
-            <span className="text-ink-900">{product.name[locale]}</span>
+            <HiChevronRight
+              aria-hidden
+              className="h-3 w-3 shrink-0 text-onink-400 flip-rtl"
+            />
+            <span aria-current="page" className="text-aqua-300">
+              {product.name[locale]}
+            </span>
           </nav>
 
-          <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
-            {/* ── Gallery ─────────────────────────────────── */}
-            <Reveal>
-              <div className="flex flex-col gap-4">
-                <div className="relative aspect-square overflow-hidden rounded-[2rem] border border-mist-200 bg-white shadow-[var(--shadow-card)]">
-                  <div className="grid-lines-ink pointer-events-none absolute inset-0" />
+          <div className="enter mt-8 flex flex-col gap-5">
+            {category ? (
+              <Link
+                href={href(`/products#${category.slug}`)}
+                className="w-fit hover-rule"
+              >
+                <Eyebrow tone="light">{category.name[locale]}</Eyebrow>
+              </Link>
+            ) : null}
+
+            <h1 className="fs-h1 max-w-[20ch] font-bold text-white">
+              {product.name[locale]}
+            </h1>
+
+            <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
+              <span className="num fs-micro font-semibold text-onink-300">
+                {product.sku}
+              </span>
+              <span
+                className={`inline-flex items-center gap-2 fs-micro font-semibold ${stockInk}`}
+              >
+                <span
+                  aria-hidden
+                  className="h-1.5 w-1.5 rounded-chip bg-current"
+                />
+                {stockLabel}
+              </span>
+            </div>
+          </div>
+        </Container>
+      </section>
+
+      {/* ═══ PAPER — the datasheet ══════════════════════════════════ */}
+      <Chapter tone="paper" pad="base">
+        <Container>
+          <div className="grid items-start gap-[clamp(2.5rem,5vw,4.5rem)] lg:grid-cols-[1.04fr_0.96fr]">
+            {/* ── Gallery plate. Same contact-sheet language as the
+                   hero, inverted for paper. No bobbing product. ── */}
+            <Reveal className="flex flex-col gap-[clamp(1.25rem,2.4vw,2rem)]">
+              <figure className="overflow-hidden rounded-panel border border-hairline bg-page">
+                <div
+                  aria-hidden
+                  className="tick-rule h-4 w-full border-b border-hairline"
+                />
+
+                <div className="relative grid aspect-[4/3] place-items-center p-8 sm:p-12">
                   <div
                     aria-hidden
-                    className="pointer-events-none absolute -end-20 -top-20 h-72 w-72 rounded-full bg-aqua-300/25 blur-3xl"
+                    className="grid-lines-ink pointer-events-none absolute inset-0"
                   />
-                  <div className="absolute inset-0 grid place-items-center p-10">
-                    <ProductArt
-                      art={product.art}
-                      className="animate-float h-full w-full max-w-[22rem]"
-                    />
-                  </div>
+                  <ProductArt
+                    art={product.art}
+                    className="relative h-full max-h-[19rem] w-auto"
+                  />
 
-                  <div className="absolute start-6 top-6 flex flex-col gap-2">
-                    {product.badges.map((b) => (
-                      <span
-                        key={b}
-                        className={`rounded-full px-3 py-1.5 text-[0.66rem] font-bold tracking-[0.1em] uppercase ${badgeStyles[b]}`}
-                      >
-                        {t.common[b]}
-                      </span>
-                    ))}
-                  </div>
+                  {product.badges.length ? (
+                    <div className="absolute start-5 top-5 flex flex-col items-start gap-2">
+                      {product.badges.map((b) => (
+                        <span
+                          key={b}
+                          className={`rounded-chip px-3 py-1 fs-micro font-semibold ${badgeStyles[b]}`}
+                        >
+                          {t.common[b]}
+                        </span>
+                      ))}
+                    </div>
+                  ) : null}
+
+                  {product.compareAt ? (
+                    <span className="absolute end-5 top-5 rounded-chip bg-sand-700 px-3 py-1 fs-micro font-semibold text-white">
+                      <span className="num">{`−${num(off)}%`}</span>
+                    </span>
+                  ) : null}
                 </div>
 
-                {/* trust strip */}
-                <div className="grid grid-cols-3 gap-3">
-                  {[
-                    { Icon: HiOutlineTruck, label: t.home.marquee[2] },
-                    { Icon: HiOutlineShieldCheck, label: t.home.marquee[0] },
-                    { Icon: HiOutlineArrowPath, label: t.home.marquee[5] },
-                  ].map(({ Icon, label }) => (
-                    <div
-                      key={label}
-                      className="flex flex-col items-center gap-2 rounded-2xl border border-mist-200 bg-white/70 p-4 text-center backdrop-blur-sm"
-                    >
-                      <Icon className="h-5 w-5 text-aqua-600" />
-                      <span className="text-[0.72rem] leading-snug font-semibold text-mist-600">
-                        {label}
+                <figcaption className="flex items-center justify-between gap-4 border-t border-hairline px-5 py-3.5">
+                  <span className="eyebrow text-mist-600">
+                    {category ? category.name[locale] : t.nav.shop}
+                  </span>
+                  <span aria-hidden className="flex gap-1">
+                    <i className="block h-1.5 w-1.5 rounded-chip bg-aqua-700" />
+                    <i className="block h-1.5 w-1.5 rounded-chip bg-mist-300" />
+                    <i className="block h-1.5 w-1.5 rounded-chip bg-mist-300" />
+                  </span>
+                </figcaption>
+              </figure>
+
+              {/* Credentials — the paperwork a buyer asks for */}
+              <div>
+                <Eyebrow>{t.home.quality.eyebrow}</Eyebrow>
+                <div className="plate-rule mt-4 grid-cols-2 overflow-hidden rounded-card border border-hairline sm:grid-cols-4">
+                  {t.home.quality.items.map((item) => (
+                    <div key={item.code} className="bg-page px-4 py-4">
+                      <span
+                        dir="ltr"
+                        className="num fs-caption font-bold text-ink-900"
+                      >
+                        {item.code}
                       </span>
+                      <p className="fs-micro mt-1.5 text-mist-600">
+                        {item.label}
+                      </p>
                     </div>
                   ))}
                 </div>
               </div>
             </Reveal>
 
-            {/* ── Buy box ─────────────────────────────────── */}
-            <div className="flex flex-col gap-6">
-              <Reveal delay={80}>
-                <div className="flex flex-col gap-4">
-                  {category ? (
-                    <Link
-                      href={href(`/products#${category.slug}`)}
-                      className="link-underline w-fit text-[0.78rem] font-bold tracking-[0.16em] text-aqua-700 uppercase"
-                    >
-                      {category.name[locale]}
-                    </Link>
+            {/* ── Buy box — the one place on this page that decides ── */}
+            <Reveal
+              delay={90}
+              className="lg:sticky lg:top-[calc(var(--nav-h)+1.5rem)]"
+            >
+              <div className="rounded-card border border-hairline bg-page p-6 shadow-e2 sm:p-7">
+                <span className="eyebrow block text-mist-600">
+                  {t.common.perPack}
+                </span>
+                <div className="mt-2.5 flex flex-wrap items-baseline gap-x-3.5 gap-y-2">
+                  <span className="num fs-h2 font-bold text-ink-900">
+                    {price(product.price)}
+                  </span>
+                  {product.compareAt ? (
+                    <s className="num fs-lead text-mist-550 line-through">
+                      {price(product.compareAt)}
+                    </s>
                   ) : null}
-
-                  <h1 className="fs-h2 font-extrabold text-ink-900">
-                    {product.name[locale]}
-                  </h1>
-
-                  <div className="flex flex-wrap items-center gap-4">
-                    <span className="flex items-center gap-1.5">
-                      <span className="flex">
-                        {Array.from({ length: 5 }).map((_, i) => (
-                          <HiStar
-                            key={i}
-                            className={`h-4 w-4 ${
-                              i < Math.round(product.rating)
-                                ? "text-sand-500"
-                                : "text-mist-300"
-                            }`}
-                          />
-                        ))}
-                      </span>
-                      <span className="num text-[0.86rem] font-bold text-ink-800">
-                        {num(product.rating)}
-                      </span>
-                      <span className="num text-[0.8rem] text-mist-400">
-                        ({num(product.reviews)})
-                      </span>
-                    </span>
-
-                    <span
-                      className={`flex items-center gap-1.5 rounded-full px-3 py-1 text-[0.75rem] font-bold ${
-                        soldOut
-                          ? "bg-mist-100 text-mist-500"
-                          : product.stock === "low"
-                            ? "bg-sand-300/40 text-sand-500"
-                            : "bg-leaf-400/15 text-leaf-600"
-                      }`}
-                    >
-                      <span
-                        className={`h-1.5 w-1.5 rounded-full ${
-                          soldOut
-                            ? "bg-mist-400"
-                            : product.stock === "low"
-                              ? "bg-sand-500"
-                              : "bg-leaf-400"
-                        }`}
-                      />
-                      {soldOut
-                        ? t.common.outOfStock
-                        : product.stock === "low"
-                          ? t.common.lowStock
-                          : t.common.inStock}
-                    </span>
-                  </div>
-
-                  <p className="text-[1rem] leading-relaxed text-mist-600">
-                    {product.description[locale]}
-                  </p>
                 </div>
-              </Reveal>
 
-              {/* Price + add */}
-              <Reveal delay={140}>
-                <div className="ring-gradient flex flex-col gap-5 rounded-[1.75rem] border border-mist-200 bg-white p-6 shadow-[var(--shadow-card)]">
-                  <div className="flex items-end justify-between gap-4">
-                    <div className="flex flex-col gap-1">
-                      <span className="text-[0.7rem] font-bold tracking-[0.16em] text-mist-400 uppercase">
-                        {t.common.perPack}
-                      </span>
-                      <span className="flex items-baseline gap-3">
-                        <span className="num text-brand-gradient text-[2.1rem] leading-none font-extrabold">
-                          {price(product.price)}
-                        </span>
-                        {product.compareAt ? (
-                          <span className="num text-[1rem] font-medium text-mist-400 line-through">
-                            {price(product.compareAt)}
-                          </span>
-                        ) : null}
-                      </span>
-                    </div>
-
-                    <div className="flex items-center rounded-full border border-mist-200 bg-mist-50">
-                      <button
-                        type="button"
-                        onClick={() => setQty((q) => Math.max(1, q - 1))}
-                        aria-label="-"
-                        className="flex h-11 w-11 items-center justify-center rounded-full text-ink-700 transition-colors hover:bg-white"
-                      >
-                        <HiMinus className="h-4 w-4" />
-                      </button>
-                      <span className="num w-10 text-center text-[1rem] font-extrabold text-ink-900">
-                        {num(qty)}
-                      </span>
-                      <button
-                        type="button"
-                        onClick={() => setQty((q) => Math.min(99, q + 1))}
-                        aria-label="+"
-                        className="flex h-11 w-11 items-center justify-center rounded-full text-ink-700 transition-colors hover:bg-white"
-                      >
-                        <HiPlus className="h-4 w-4" />
-                      </button>
-                    </div>
-                  </div>
-
-                  <div className="flex flex-col gap-2.5 sm:flex-row">
+                <div className="mt-6 flex flex-wrap items-center justify-between gap-4 border-t border-hairline pt-6">
+                  <span className="fs-caption font-semibold text-mist-600">
+                    {t.common.quantity}
+                  </span>
+                  <div
+                    role="group"
+                    aria-label={t.common.quantity}
+                    className="flex items-center rounded-ctrl border border-hairline-strong"
+                  >
                     <button
                       type="button"
-                      onClick={onAdd}
-                      disabled={soldOut}
-                      className={`sheen flex h-14 flex-1 items-center justify-center gap-2.5 rounded-full text-[0.95rem] font-bold text-white transition-all duration-400 disabled:cursor-not-allowed disabled:bg-mist-200 disabled:text-mist-400 ${
-                        added
-                          ? "bg-leaf-600"
-                          : "brand-gradient hover:-translate-y-0.5"
-                      }`}
+                      onClick={() => setQty((q) => Math.max(1, q - 1))}
+                      aria-label={`${t.common.quantity} −`}
+                      className="hover-rule grid h-11 w-11 place-items-center rounded-s-ctrl text-ink-800 hover:bg-mist-100 hover:text-ink-900"
                     >
-                      {added ? (
-                        <>
-                          <HiCheck className="h-5 w-5" />
-                          {t.common.added}
-                        </>
-                      ) : (
-                        <>
-                          <HiOutlineShoppingBag className="h-5 w-5" />
-                          {t.common.addToCart}
-                        </>
-                      )}
+                      <HiMinus aria-hidden className="h-4 w-4" />
                     </button>
-
-                    <a
-                      href={`https://wa.me/989160611093?text=${encodeURIComponent(
-                        `${product.sku} — ${product.name[locale]}`,
-                      )}`}
-                      target="_blank"
-                      rel="noreferrer noopener"
-                      className="flex h-14 items-center justify-center gap-2.5 rounded-full border border-mist-200 px-6 text-[0.9rem] font-bold text-ink-800 transition-all duration-300 hover:-translate-y-0.5 hover:border-leaf-400 hover:text-leaf-600"
+                    <span className="num w-12 text-center fs-body font-bold text-ink-900">
+                      {num(qty)}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => setQty((q) => Math.min(99, q + 1))}
+                      aria-label={`${t.common.quantity} +`}
+                      className="hover-rule grid h-11 w-11 place-items-center rounded-e-ctrl text-ink-800 hover:bg-mist-100 hover:text-ink-900"
                     >
-                      <FaWhatsapp className="h-5 w-5" />
-                      <span className="hidden sm:inline">
-                        {t.common.orderOnWhatsapp}
-                      </span>
-                    </a>
+                      <HiPlus aria-hidden className="h-4 w-4" />
+                    </button>
                   </div>
                 </div>
-              </Reveal>
 
-              {/* Specs */}
-              <Reveal delay={200}>
-                <div className="flex flex-col gap-4">
-                  <h2 className="text-[0.72rem] font-bold tracking-[0.22em] text-aqua-700 uppercase">
-                    {t.common.specifications}
-                  </h2>
-                  <dl className="overflow-hidden rounded-2xl border border-mist-200 bg-white">
-                    {specs.map((spec, i) => (
-                      <div
-                        key={spec.label}
-                        className={`flex flex-wrap items-center justify-between gap-3 px-5 py-3.5 ${
-                          i % 2 === 0 ? "bg-white" : "bg-mist-50"
-                        }`}
-                      >
-                        <dt className="text-[0.84rem] font-semibold text-mist-500">
-                          {spec.label}
-                        </dt>
-                        <dd
-                          className={`text-[0.87rem] font-bold text-ink-900 ${
-                            spec.ltr ? "num" : ""
-                          }`}
-                        >
-                          {spec.value}
-                        </dd>
-                      </div>
-                    ))}
-                  </dl>
+                <div className="mt-5 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+                  <span className="fs-caption font-semibold text-mist-600">
+                    {t.common.subtotal}
+                  </span>
+                  <span className="num fs-h4 font-bold text-ink-900">
+                    {price(product.price * qty)}
+                  </span>
                 </div>
-              </Reveal>
-            </div>
+
+                <div className="mt-6 flex flex-col gap-2.5">
+                  <button
+                    type="button"
+                    onClick={onAdd}
+                    disabled={soldOut}
+                    className={`press flex h-14 w-full items-center justify-center gap-2.5 rounded-ctrl fs-body font-semibold text-white shadow-e2 transition-[background-color,box-shadow,transform,translate] duration-300 ease-out-expo disabled:cursor-not-allowed disabled:bg-mist-100 disabled:text-mist-600 disabled:shadow-none ${
+                      added
+                        ? "bg-leaf-700"
+                        : "brand-gradient hover:-translate-y-px hover:shadow-e3"
+                    }`}
+                  >
+                    {added ? (
+                      <HiCheck aria-hidden className="h-5 w-5" />
+                    ) : (
+                      <HiOutlineShoppingBag aria-hidden className="h-5 w-5" />
+                    )}
+                    {added ? t.common.added : t.common.addToCart}
+                  </button>
+
+                  <a
+                    href={`https://wa.me/989160611093?text=${encodeURIComponent(
+                      `${product.sku} — ${product.name[locale]}`,
+                    )}`}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    className="hover-rule flex h-14 w-full items-center justify-center gap-2.5 rounded-ctrl border border-hairline-strong bg-page fs-caption font-semibold text-ink-900 hover:border-ink-900"
+                  >
+                    <FaWhatsapp aria-hidden className="h-5 w-5" />
+                    {t.common.orderOnWhatsapp}
+                  </a>
+
+                  <span role="status" aria-live="polite" className="sr-only">
+                    {added ? `${product.name[locale]} — ${t.common.added}` : ""}
+                  </span>
+                </div>
+
+                <dl className="mt-6 grid gap-2.5 border-t border-hairline pt-5">
+                  <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-0.5">
+                    <dt className="fs-micro font-semibold text-mist-600">
+                      {t.common.moq}
+                    </dt>
+                    <dd className="fs-micro font-semibold text-ink-800">
+                      {product.moq[locale]}
+                    </dd>
+                  </div>
+                  <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-0.5">
+                    <dt className="fs-micro font-semibold text-mist-600">
+                      {t.common.leadTime}
+                    </dt>
+                    <dd className="fs-micro inline-flex items-center gap-1.5 font-semibold text-ink-800">
+                      <HiOutlineTruck
+                        aria-hidden
+                        className="h-4 w-4 text-aqua-700"
+                      />
+                      {t.home.marquee[2]}
+                    </dd>
+                  </div>
+                </dl>
+              </div>
+            </Reveal>
+          </div>
+
+          {/* ── Specification ledger, then the description ─────────── */}
+          <div className="stack-block grid gap-[clamp(2.5rem,5vw,4rem)] lg:grid-cols-[1.04fr_0.96fr]">
+            <Reveal>
+              <h2 className="fs-h3 font-semibold text-ink-900">
+                {t.common.specifications}
+              </h2>
+              <dl className="mt-6 border-t border-hairline">
+                {specs.map((spec) => (
+                  <div
+                    key={spec.label}
+                    className="grid gap-1 border-b border-hairline py-4 sm:grid-cols-[13rem_1fr] sm:gap-8"
+                  >
+                    <dt className="fs-caption font-semibold text-mist-600">
+                      {spec.label}
+                    </dt>
+                    <dd
+                      className={`fs-body font-medium text-ink-900 ${
+                        spec.ltr ? "num" : ""
+                      }`}
+                    >
+                      {spec.value}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+            </Reveal>
+
+            <Reveal delay={80}>
+              <h2 className="fs-h3 font-semibold text-ink-900">
+                {t.common.description}
+              </h2>
+              <p className="fs-body mt-6 max-w-[62ch] text-ink-800">
+                {product.description[locale]}
+              </p>
+              <ButtonLink
+                href={href("/contact")}
+                variant="outline"
+                size="md"
+                className="mt-7"
+              >
+                {t.common.getQuote}
+                <HiArrowUpRight aria-hidden className="h-4 w-4 flip-rtl" />
+              </ButtonLink>
+            </Reveal>
           </div>
         </Container>
-      </section>
+      </Chapter>
 
-      {/* ── Related ───────────────────────────────────────── */}
-      <section className="relative bg-white section-y-tight">
-        <div className="grid-lines-ink pointer-events-none absolute inset-0" />
-        <Container className="relative">
-          <Reveal>
-            <h2 className="fs-h3 mb-10 font-extrabold text-ink-900">
+      {/* ═══ BOARD — cross-sell rail ════════════════════════════════ */}
+      <Chapter tone="board" pad="tight" seam="top">
+        <Container>
+          <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between sm:gap-10">
+            <h2 className="fs-h2 max-w-[22ch] font-bold text-ink-900">
               {t.common.relatedProducts}
             </h2>
-          </Reveal>
-          <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
-            {related.map((p, i) => (
-              <Reveal key={p.id} delay={i * 70}>
-                <ProductCard product={p} />
-              </Reveal>
-            ))}
+            <Link
+              href={href("/shop")}
+              className="link-underline w-fit shrink-0 fs-caption font-semibold text-aqua-700"
+            >
+              {t.common.viewAll}
+            </Link>
           </div>
+
+          <RevealGroup
+            variant="fade"
+            className="rail stack-block flex grid-gutter snap-x snap-mandatory overflow-x-auto pt-2 pb-6"
+          >
+            {related.map((p) => (
+              <div
+                key={p.id}
+                className="w-[76vw] shrink-0 snap-start min-[26rem]:w-[62vw] sm:w-[46vw] lg:w-[31%] xl:w-[23.5%]"
+              >
+                <ProductCard product={p} />
+              </div>
+            ))}
+          </RevealGroup>
         </Container>
-      </section>
+      </Chapter>
     </>
   );
 }

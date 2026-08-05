@@ -2,6 +2,11 @@ import type { Metadata } from "next";
 import { isLocale } from "@/i18n/config";
 import { getDictionary } from "@/i18n";
 import { ShopView } from "@/components/shop/ShopView";
+import {
+  BreadcrumbJsonLd,
+  SiteJsonLd,
+  pageMetadata,
+} from "@/components/seo/JsonLd";
 
 export async function generateMetadata({
   params,
@@ -11,9 +16,33 @@ export async function generateMetadata({
   const { locale } = await params;
   if (!isLocale(locale)) return {};
   const t = getDictionary(locale);
-  return { title: t.shop.hero.title, description: t.shop.hero.subtitle };
+  return pageMetadata({
+    locale,
+    path: "/shop",
+    title: t.shop.hero.title,
+    description: t.shop.hero.subtitle,
+  });
 }
 
-export default function ShopPage() {
-  return <ShopView />;
+export default async function ShopPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+
+  return (
+    <>
+      {isLocale(locale) && (
+        <>
+          <SiteJsonLd locale={locale} />
+          <BreadcrumbJsonLd
+            locale={locale}
+            crumbs={[{ name: getDictionary(locale).nav.shop, path: "/shop" }]}
+          />
+        </>
+      )}
+      <ShopView />
+    </>
+  );
 }

@@ -1,12 +1,26 @@
 "use client";
 
-import { HiArrowUpRight, HiOutlineChatBubbleLeftRight } from "react-icons/hi2";
-import { Container } from "@/components/ui/Section";
+import { HiArrowUpRight } from "react-icons/hi2";
+import { Chapter, Container, SectionHeading } from "@/components/ui/Section";
 import { Reveal } from "@/components/ui/Reveal";
 import { ButtonLink } from "@/components/ui/Button";
 import { LogoMark } from "@/components/brand/Logo";
 import { useI18n } from "@/i18n/I18nProvider";
 
+/**
+ * Section 11 — INK · archetype A (BAND) · the terminal statement.
+ *
+ * Full-bleed. The white `section-y` wrapper, the 2.5rem rounded panel,
+ * the drifting blob and the hand-rolled `border-white/20` button
+ * override are all gone. What is left is an edge-to-edge ink field, one
+ * `shell-narrow` column, a mark, a claim at `fs-h1` — the only heading
+ * on the page besides the hero that breaks `fs-h2` — and two buttons.
+ * A single `brand-gradient` hairline seals the top edge: this is the
+ * "HomeCta panel edge" the accent budget in §1.3 allows, and the only
+ * gradient in the lower half of the page.
+ *
+ * Props are unchanged — `AboutView` and `ProductsView` also render this.
+ */
 export function CtaBand({
   title,
   body,
@@ -25,51 +39,50 @@ export function CtaBand({
   const { href } = useI18n();
 
   return (
-    <section className="relative bg-white section-y">
-      <Container>
-        <Reveal>
-          <div className="mesh-dark relative overflow-hidden rounded-[2.5rem] px-8 py-14 shadow-[0_50px_120px_-50px_rgba(8,36,59,0.8)] sm:px-14 lg:px-20 lg:py-20">
-            <div className="grid-lines pointer-events-none absolute inset-0 opacity-70" />
-            <div className="grain-layer pointer-events-none absolute inset-0 opacity-[0.14]" />
-            <div
-              aria-hidden
-              className="animate-drift pointer-events-none absolute -end-24 -top-24 h-96 w-96 rounded-full bg-aqua-500/25 blur-[100px]"
-            />
+    <Chapter tone="ink" pad="loose">
+      <span
+        aria-hidden
+        className="brand-gradient pointer-events-none absolute inset-x-0 top-0 h-1"
+      />
+      <div
+        aria-hidden
+        className="grid-lines pointer-events-none absolute inset-0 opacity-60"
+      />
+      <div
+        aria-hidden
+        className="grain-layer pointer-events-none absolute inset-0 opacity-[0.08]"
+      />
 
-            <div className="relative flex flex-col items-start gap-8 lg:flex-row lg:items-center lg:justify-between lg:gap-14">
-              <div className="flex items-start gap-5">
-                <span className="hidden shrink-0 sm:block">
-                  <LogoMark tone="light" className="h-14 w-14" />
-                </span>
-                <div className="flex flex-col gap-3">
-                  <h2 className="fs-h2 max-w-2xl font-extrabold text-white">
-                    {title}
-                  </h2>
-                  <p className="max-w-xl text-[0.98rem] leading-relaxed text-ink-100/60">
-                    {body}
-                  </p>
-                </div>
-              </div>
+      <Container narrow className="relative flex flex-col items-center">
+        <Reveal variant="fade">
+          <LogoMark tone="light" className="h-10 w-10 opacity-90" />
+        </Reveal>
 
-              <div className="flex shrink-0 flex-wrap gap-3">
-                <ButtonLink href={href(primaryHref)} variant="light" size="lg">
-                  <HiOutlineChatBubbleLeftRight className="h-4 w-4" />
-                  {primary}
-                </ButtonLink>
-                <ButtonLink
-                  href={href(secondaryHref)}
-                  variant="outline"
-                  size="lg"
-                  className="border-white/20 bg-white/5 text-white hover:border-aqua-400/60 hover:bg-white/10 hover:text-white"
-                >
-                  {secondary}
-                  <HiArrowUpRight className="h-4 w-4 flip-rtl" />
-                </ButtonLink>
-              </div>
-            </div>
-          </div>
+        <SectionHeading
+          titleAs="h2"
+          size="h1"
+          align="center"
+          tone="light"
+          title={title}
+          subtitle={body}
+          reveal="fade"
+          className="mt-8 w-full"
+        />
+
+        <Reveal
+          variant="fade"
+          delay={140}
+          className="stack-block flex w-full flex-col items-stretch gap-3 min-[26rem]:w-auto min-[26rem]:flex-row min-[26rem]:items-center"
+        >
+          <ButtonLink href={href(primaryHref)} variant="light" size="lg">
+            {primary}
+          </ButtonLink>
+          <ButtonLink href={href(secondaryHref)} variant="onink" size="lg">
+            {secondary}
+            <HiArrowUpRight className="h-4 w-4 flip-rtl" />
+          </ButtonLink>
         </Reveal>
       </Container>
-    </section>
+    </Chapter>
   );
 }

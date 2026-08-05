@@ -1,161 +1,305 @@
 "use client";
 
 import Link from "next/link";
-import { HiArrowUpRight, HiOutlineWrenchScrewdriver } from "react-icons/hi2";
-import { PageHero } from "@/components/layout/PageHero";
-import { Container } from "@/components/ui/Section";
-import { Reveal } from "@/components/ui/Reveal";
+import { HiArrowUpRight, HiChevronRight } from "react-icons/hi2";
+import {
+  Chapter,
+  Container,
+  Eyebrow,
+  SectionHeading,
+} from "@/components/ui/Section";
+import { Reveal, RevealGroup } from "@/components/ui/Reveal";
 import { ButtonLink } from "@/components/ui/Button";
 import { ProductArt } from "@/components/brand/ProductArt";
-import { ProductCard } from "@/components/shop/ProductCard";
-import { CtaBand } from "@/components/home/CtaBand";
 import { categories, products } from "@/lib/catalog";
 import { useI18n } from "@/i18n/I18nProvider";
 
+/**
+ * PRODUCTS — MEASURED.
+ *
+ * The catalogue overview, built as a manufacturer's catalogue rather than
+ * a second shop: every family gets a spec summary and a ruled SKU
+ * register. There are no product *cards* on this route at all — the
+ * elevated CARD/COMMERCE treatment stays exclusive to /shop, so the two
+ * routes never look like the same page twice.
+ *
+ *   1 masthead   INK   · SPLIT (copy + catalogue index plate)
+ *   2..9 family  PAPER / BOARD alternating · SPLIT (summary + SKU ledger)
+ *   10 custom    INK   · BAND · section-y-loose
+ */
+
+/** Unique, order-preserving, capped — the family summary lines. */
+function summarise(values: string[], cap = 4) {
+  return Array.from(new Set(values)).slice(0, cap).join(" · ");
+}
+
 export function ProductsView() {
-  const { t, locale, href, num } = useI18n();
+  const { t, locale, href, num, price } = useI18n();
 
   return (
     <>
-      <PageHero
-        eyebrow={t.products.hero.eyebrow}
-        title={t.products.hero.title}
-        subtitle={t.products.hero.subtitle}
-        crumb={t.nav.products}
-      >
-        {/* jump rail */}
-        <nav className="rail -mx-1 mt-2 flex gap-2 overflow-x-auto px-1 pb-2">
-          {categories.map((cat) => (
-            <a
-              key={cat.id}
-              href={`#${cat.slug}`}
-              className="shrink-0 rounded-full border border-white/15 bg-white/5 px-4 py-2 text-[0.8rem] font-semibold whitespace-nowrap text-ink-100/70 backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-aqua-400/50 hover:text-white"
+      {/* ═══ 1 · MASTHEAD — INK · SPLIT ═══════════════════════════ */}
+      <section className="mesh-dark nav-clear relative isolate text-white pb-[clamp(3.5rem,7vw,7rem)]">
+        <div
+          aria-hidden
+          className="grid-lines pointer-events-none absolute inset-0 opacity-60"
+        />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -top-52 -end-40 h-[40rem] w-[40rem] rounded-chip bg-aqua-500/12 blur-[130px]"
+        />
+        <div
+          aria-hidden
+          className="grain-layer pointer-events-none absolute inset-0 opacity-[0.08]"
+        />
+
+        <Container className="relative grid gap-[clamp(2.5rem,5vw,4rem)] lg:grid-cols-[1fr_0.86fr] lg:items-end lg:gap-[clamp(2.5rem,5vw,5rem)]">
+          <div className="enter flex flex-col items-start gap-5">
+            <nav
+              aria-label={t.common.breadcrumb}
+              className="eyebrow flex items-center gap-2 text-onink-300"
             >
-              {cat.name[locale]}
-            </a>
-          ))}
-        </nav>
-      </PageHero>
+              <Link
+                href={href("/")}
+                className="tap-target hover-rule hover:text-aqua-300"
+              >
+                {t.nav.home}
+              </Link>
+              <HiChevronRight
+                aria-hidden
+                className="h-3 w-3 shrink-0 text-onink-300 flip-rtl"
+              />
+              <span aria-current="page" className="text-aqua-300">
+                {t.nav.products}
+              </span>
+            </nav>
 
-      {categories.map((cat, index) => {
-        const items = products.filter((p) => p.category === cat.id);
-        const alt = index % 2 === 1;
+            <Eyebrow tone="light">{t.products.hero.eyebrow}</Eyebrow>
 
-        return (
-          <section
-            key={cat.id}
-            id={cat.slug}
-            className={`relative scroll-mt-28 overflow-hidden section-y-tight ${
-              alt ? "bg-white" : "mesh-light"
-            }`}
+            <h1 className="fs-h1 max-w-[16ch] font-bold text-white">
+              {t.products.hero.title}
+            </h1>
+
+            <p className="fs-lead max-w-[52ch] text-onink-200">
+              {t.products.hero.subtitle}
+            </p>
+          </div>
+
+          {/* The catalogue index: one object that is both the fan of
+              production marks and the page's jump navigation. */}
+          <nav
+            aria-label={t.common.categories}
+            className="enter-fade w-full overflow-hidden rounded-panel border border-hairline-inverse bg-inverse-2"
           >
-            <Container className="relative">
-              <div className="grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:items-start lg:gap-16">
-                {/* Line summary */}
-                <Reveal className="lg:sticky lg:top-28">
-                  <div
-                    className="relative overflow-hidden rounded-[2rem] p-8 shadow-[0_36px_90px_-40px_rgba(8,36,59,0.55)]"
-                    style={{
-                      backgroundImage: `linear-gradient(150deg, ${cat.from}, ${cat.to})`,
-                    }}
-                  >
-                    <div className="grid-lines pointer-events-none absolute inset-0 opacity-60" />
-                    <div
-                      aria-hidden
-                      className="pointer-events-none absolute -end-16 -top-16 h-52 w-52 rounded-full bg-white/15 blur-3xl"
-                    />
-
-                    <div className="relative flex flex-col gap-5">
-                      <div className="flex items-start justify-between gap-4">
-                        <span className="rounded-full border border-white/25 px-3 py-1 text-[0.66rem] font-bold tracking-[0.14em] text-white/75 uppercase">
-                          <span className="num">{num(cat.skus)}</span>{" "}
+            <div
+              aria-hidden
+              className="tick-rule h-4 w-full border-b border-hairline-inverse"
+            />
+            <ul className="plate-rule-ink min-[26rem]:grid-cols-2">
+              {categories.map((cat) => {
+                const count = products.filter(
+                  (p) => p.category === cat.id,
+                ).length;
+                return (
+                  <li key={cat.id} className="bg-inverse-2">
+                    <a
+                      href={`#${cat.slug}`}
+                      className="hover-rule flex h-full items-center gap-3 px-4 py-3 hover:bg-white/[0.05]"
+                    >
+                      <ProductArt
+                        art={cat.art}
+                        className="h-9 w-9 shrink-0 opacity-90"
+                      />
+                      <span className="flex min-w-0 flex-col gap-1">
+                        <span className="fs-caption font-semibold text-white">
+                          {cat.name[locale]}
+                        </span>
+                        <span className="eyebrow text-onink-300">
+                          <span className="num">{num(count)}</span>{" "}
                           {t.common.results}
                         </span>
-                        <span className="num text-[2.6rem] leading-none font-extrabold text-white/15">
-                          {`${num(0)}${num(index + 1)}`}
-                        </span>
-                      </div>
-
-                      <div className="grid place-items-center py-2">
-                        <ProductArt art={cat.art} className="h-32 w-32" />
-                      </div>
-
-                      <h2 className="fs-h3 font-extrabold text-white">
-                        {cat.name[locale]}
-                      </h2>
-                      <p className="text-[0.92rem] leading-relaxed text-white/70">
-                        {cat.blurb[locale]}
-                      </p>
-
-                      <Link
-                        href={href("/shop")}
-                        className="link-underline mt-2 inline-flex w-fit items-center gap-1.5 text-[0.88rem] font-bold text-white"
-                      >
-                        {t.products.exploreLine}
-                        <HiArrowUpRight className="h-3.5 w-3.5 flip-rtl" />
-                      </Link>
-                    </div>
-                  </div>
-                </Reveal>
-
-                {/* SKUs in this line */}
-                <div className="flex flex-col gap-6">
-                  <Reveal>
-                    <h3 className="text-[0.72rem] font-bold tracking-[0.22em] text-aqua-700 uppercase">
-                      {t.products.lineTitle}
-                    </h3>
-                  </Reveal>
-
-                  <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
-                    {items.map((p, i) => (
-                      <Reveal key={p.id} delay={i * 70}>
-                        <ProductCard product={p} />
-                      </Reveal>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </Container>
-          </section>
-        );
-      })}
-
-      {/* ── Custom tooling ─────────────────────────────────── */}
-      <section className="relative bg-white section-y-tight">
-        <Container>
-          <Reveal>
-            <div className="flex flex-col items-start gap-7 rounded-[2rem] border border-mist-200 bg-mist-50 p-8 sm:p-12 lg:flex-row lg:items-center lg:justify-between">
-              <div className="flex items-start gap-5">
-                <span className="brand-gradient hidden h-14 w-14 shrink-0 items-center justify-center rounded-2xl text-white sm:flex">
-                  <HiOutlineWrenchScrewdriver className="h-6 w-6" />
-                </span>
-                <div className="flex flex-col gap-2.5">
-                  <h2 className="fs-h3 font-extrabold text-ink-900">
-                    {t.products.customTitle}
-                  </h2>
-                  <p className="max-w-2xl text-[0.95rem] leading-relaxed text-mist-600">
-                    {t.products.customBody}
-                  </p>
-                </div>
-              </div>
-
-              <ButtonLink href={href("/contact")} size="lg" className="shrink-0">
-                {t.products.customCta}
-                <HiArrowUpRight className="h-4 w-4 flip-rtl" />
-              </ButtonLink>
-            </div>
-          </Reveal>
+                      </span>
+                    </a>
+                  </li>
+                );
+              })}
+            </ul>
+          </nav>
         </Container>
       </section>
 
-      <CtaBand
-        title={t.home.cta.title}
-        body={t.home.cta.body}
-        primary={t.home.cta.primary}
-        primaryHref="/contact"
-        secondary={t.home.cta.secondary}
-        secondaryHref="/shop"
-      />
+      {/* ═══ 2…9 · ONE SECTION PER FAMILY ═════════════════════════ */}
+      {categories.map((cat, index) => {
+        const items = products.filter((p) => p.category === cat.id);
+        const board = index % 2 === 1;
+
+        const specs = [
+          {
+            label: t.common.material,
+            value: summarise(items.map((p) => p.material[locale]), 3),
+          },
+          {
+            label: t.common.capacity,
+            value: summarise(items.map((p) => p.capacity[locale])),
+          },
+          {
+            label: t.common.moq,
+            value: summarise(items.map((p) => p.moq[locale]), 2),
+          },
+        ];
+
+        return (
+          <Chapter
+            key={cat.id}
+            id={cat.slug}
+            tone={board ? "board" : "paper"}
+            seam={board ? "both" : "none"}
+            pad="base"
+          >
+            <Container>
+              <div className="grid gap-[clamp(2rem,4vw,3rem)] lg:grid-cols-[0.8fr_1.2fr] lg:items-start lg:gap-[clamp(2.5rem,5vw,4.5rem)]">
+                {/* ── family summary ─────────────────────────── */}
+                <Reveal
+                  variant={board ? "fade" : "rise"}
+                  className="flex flex-col items-start gap-5"
+                >
+                  <span
+                    className={`grid aspect-square w-20 shrink-0 place-items-center rounded-tile border border-hairline ${
+                      board ? "bg-page" : "bg-sunken"
+                    }`}
+                  >
+                    <ProductArt art={cat.art} className="h-[74%] w-[74%]" />
+                  </span>
+
+                  <Eyebrow>
+                    <span className="num">{`${num(0)}${num(index + 1)}`}</span>
+                  </Eyebrow>
+
+                  <h2 className="fs-h2 max-w-[16ch] font-bold text-ink-900">
+                    {cat.name[locale]}
+                  </h2>
+
+                  <p className="fs-lead max-w-[46ch] text-mist-600">
+                    {cat.blurb[locale]}
+                  </p>
+
+                  <dl className="w-full border-t border-hairline">
+                    {specs.map((spec) => (
+                      <div
+                        key={spec.label}
+                        className="grid gap-1 border-b border-hairline py-3.5 sm:grid-cols-[8rem_1fr] sm:gap-5"
+                      >
+                        <dt className="eyebrow pt-1 text-mist-600">
+                          {spec.label}
+                        </dt>
+                        <dd className="fs-caption text-ink-800">
+                          {spec.value}
+                        </dd>
+                      </div>
+                    ))}
+                  </dl>
+
+                  <Link
+                    href={href(`/shop?cat=${cat.id}`)}
+                    className="link-underline tap-target hover-rule fs-caption inline-flex items-center gap-2 py-2 font-semibold text-aqua-700 hover:text-ink-900"
+                  >
+                    {t.products.exploreLine}
+                    <HiArrowUpRight
+                      aria-hidden
+                      className="h-3.5 w-3.5 shrink-0 flip-rtl"
+                    />
+                  </Link>
+                </Reveal>
+
+                {/* ── the SKU register ───────────────────────── */}
+                <div className="flex flex-col gap-4">
+                  <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+                    <h3 className="eyebrow text-mist-600">
+                      {t.products.lineTitle}
+                    </h3>
+                    <span className="eyebrow text-mist-600">
+                      <span className="num">{num(items.length)}</span>{" "}
+                      {t.common.results}
+                    </span>
+                  </div>
+
+                  <RevealGroup
+                    as="ul"
+                    variant={board ? "fade" : "rise"}
+                    stagger={50}
+                    className="plate-rule overflow-hidden rounded-card border border-hairline"
+                  >
+                    {items.map((p) => (
+                      <li key={p.id} className="bg-page">
+                        <Link
+                          href={href(`/shop/${p.slug}`)}
+                          className="hover-rule group grid grid-cols-[2.75rem_1fr] items-start gap-4 bg-page p-4 hover:bg-sunken sm:grid-cols-[3.25rem_1fr] sm:gap-5 sm:p-5"
+                        >
+                          <span className="grid aspect-square place-items-center rounded-tile border border-hairline bg-page">
+                            <ProductArt
+                              art={p.art}
+                              className="h-[78%] w-[78%]"
+                            />
+                          </span>
+
+                          <span className="flex min-w-0 flex-col gap-1.5">
+                            <span className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+                              <span className="fs-h4 font-semibold text-ink-900 transition-colors duration-200 group-hover:text-aqua-700">
+                                {p.name[locale]}
+                              </span>
+                              <span className="fs-caption shrink-0 font-semibold tabular-nums text-ink-900">
+                                {price(p.price)}
+                              </span>
+                            </span>
+                            <span className="fs-caption text-mist-600">
+                              {`${p.capacity[locale]} · ${p.packSize[locale]}`}
+                            </span>
+                            <span className="num fs-micro font-semibold text-mist-600">
+                              {p.sku}
+                            </span>
+                          </span>
+                        </Link>
+                      </li>
+                    ))}
+                  </RevealGroup>
+                </div>
+              </div>
+            </Container>
+          </Chapter>
+        );
+      })}
+
+      {/* ═══ 10 · CUSTOM SPECIFICATION — INK · BAND ═══════════════ */}
+      <Chapter tone="ink" pad="loose">
+        <div
+          aria-hidden
+          className="grid-lines pointer-events-none absolute inset-0 opacity-50"
+        />
+        <Container narrow className="relative">
+          <SectionHeading
+            title={t.products.customTitle}
+            subtitle={t.products.customBody}
+            tone="light"
+            align="center"
+            titleAs="h2"
+            size="h1"
+          >
+            <div className="mt-4">
+              <ButtonLink
+                href={href("/contact")}
+                variant="light"
+                size="lg"
+              >
+                {t.products.customCta}
+                <HiArrowUpRight
+                  aria-hidden
+                  className="h-4 w-4 shrink-0 flip-rtl"
+                />
+              </ButtonLink>
+            </div>
+          </SectionHeading>
+        </Container>
+      </Chapter>
     </>
   );
 }

@@ -1,9 +1,47 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import { defaultLocale, isLocale } from "@/i18n/config";
+
 /**
  * The app's only root layout lives under [locale], so this boundary has to
- * ship its own document shell and styles.
+ * ship its own document shell, its own head and its own styles — the
+ * Tailwind layer and the font variables are both gone by the time this
+ * renders. Everything below is therefore inline, in the MEASURED palette:
+ * ink-950 field, two mesh radials, a hairline plate with a drawn tick rule,
+ * and 10px controls. Farsi only, by design.
  */
+
+const INK_950 = "#041624";
+const INK_900 = "#08243b";
+const HAIRLINE = "rgba(255,255,255,0.13)";
+const HAIRLINE_STRONG = "rgba(255,255,255,0.26)";
+const ONINK_100 = "#d6e4ef";
+const ONINK_300 = "#94adc1";
+const AQUA_300 = "#6bd3e5";
+
+/* The simplified mark: no gradients, no sub-3px strokes — it has to hold
+   up without the stylesheet that normally sizes and colours it. */
+function Mark() {
+  return (
+    <svg
+      width="48"
+      height="48"
+      viewBox="0 0 48 48"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <rect width="48" height="48" rx="14" fill={INK_900} />
+      <rect x="0" y="14" width="48" height="3" fill={AQUA_300} opacity="0.85" />
+      <path
+        d="M13.6 17.8 H34.4 L31.1 36.2 A3.4 3.4 0 0 1 27.75 39 H20.25 A3.4 3.4 0 0 1 16.9 36.2 Z"
+        fill="#ffffff"
+        fillOpacity="0.96"
+      />
+    </svg>
+  );
+}
+
 export default function GlobalError({
   error,
   reset,
@@ -11,70 +49,181 @@ export default function GlobalError({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
+  const [home, setHome] = useState(`/${defaultLocale}`);
+
+  /* Keep the reader in the language they were already browsing. */
+  useEffect(() => {
+    const segment = window.location.pathname.split("/")[1] ?? "";
+    if (isLocale(segment)) setHome(`/${segment}`);
+  }, []);
+
+  const control: React.CSSProperties = {
+    display: "inline-flex",
+    alignItems: "center",
+    justifyContent: "center",
+    minHeight: "3rem",
+    paddingInline: "1.75rem",
+    borderRadius: "0.625rem",
+    fontSize: "0.9rem",
+    fontWeight: 600,
+    textDecoration: "none",
+    cursor: "pointer",
+  };
+
   return (
     <html lang="fa-IR" dir="rtl">
+      <head>
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>خطایی رخ داد · تاریانا اکسین</title>
+        <style>{`
+          *, *::before, *::after { box-sizing: border-box; }
+          a, button { transition: background-color .2s linear, border-color .2s linear, color .2s linear; }
+          a:focus-visible, button:focus-visible { outline: 2px solid ${AQUA_300}; outline-offset: 3px; border-radius: 4px; }
+          .tx-primary:hover { background: #eefbfe; }
+          .tx-secondary:hover { border-color: #35bad5; background: rgba(255,255,255,0.12); }
+          @media (prefers-reduced-motion: reduce) { a, button { transition: none; } }
+        `}</style>
+      </head>
       <body
         style={{
           margin: 0,
           minHeight: "100dvh",
           display: "grid",
           placeItems: "center",
-          padding: "2rem",
-          backgroundColor: "#041624",
+          padding: "clamp(1.25rem, 5vw, 3rem)",
+          backgroundColor: INK_950,
           backgroundImage:
-            "radial-gradient(50rem 36rem at 20% -10%, rgba(23,162,191,0.28), transparent 62%)",
-          color: "#eef4f9",
-          // This boundary replaces the root layout, so the font variables are
-          // gone — fall back to faces that ship with the OS.
-          fontFamily: "Vazirmatn, Tahoma, 'Segoe UI', sans-serif",
-          textAlign: "center",
+            "radial-gradient(70rem 46rem at 8% -14%, rgba(23,162,191,0.17), transparent 60%), radial-gradient(52rem 40rem at 96% 6%, rgba(15,59,92,0.55), transparent 58%)",
+          color: "#f4f9fd",
+          // The root layout's font variables are gone with it — name only
+          // faces that actually ship with the OS.
+          fontFamily: "Tahoma, 'Segoe UI', sans-serif",
+          lineHeight: 1.9,
+          WebkitFontSmoothing: "antialiased",
         }}
       >
-        <div style={{ maxWidth: "34rem", display: "grid", gap: "1.25rem" }}>
-          <h1 style={{ fontSize: "2rem", fontWeight: 800, margin: 0 }}>
-            خطایی رخ داد
-          </h1>
-          <p style={{ margin: 0, opacity: 0.65, lineHeight: 1.9 }}>
-            یک خطای پیش‌بینی‌نشده نمایش این صفحه را متوقف کرد. دوباره تلاش کنید
-            یا به صفحه اصلی بازگردید.
-          </p>
-          {error.digest ? (
-            <code style={{ fontSize: "0.75rem", opacity: 0.4 }}>
-              {error.digest}
-            </code>
-          ) : null}
-          <div style={{ display: "flex", gap: "0.75rem", justifyContent: "center" }}>
-            <button
-              type="button"
-              onClick={reset}
+        <main
+          style={{
+            width: "100%",
+            maxWidth: "34rem",
+            display: "grid",
+            gap: "1.75rem",
+            justifyItems: "center",
+            textAlign: "center",
+          }}
+        >
+          <Mark />
+
+          <div
+            style={{
+              width: "100%",
+              border: `1px solid ${HAIRLINE}`,
+              borderRadius: "1.75rem",
+              backgroundColor: INK_900,
+              overflow: "hidden",
+            }}
+          >
+            {/* drawn measurement rule — symmetric, no direction */}
+            <div
+              aria-hidden="true"
               style={{
-                border: 0,
-                cursor: "pointer",
-                borderRadius: "999px",
-                padding: "0.9rem 2rem",
-                fontWeight: 700,
-                color: "#fff",
+                height: "1rem",
+                borderBottom: `1px solid ${HAIRLINE}`,
                 backgroundImage:
-                  "linear-gradient(100deg, #08243b, #0f3b5c 40%, #17a2bf)",
+                  "repeating-linear-gradient(to right, #35bad5 0 1px, transparent 1px 2.75rem)",
+                backgroundRepeat: "no-repeat",
+                backgroundPosition: "left bottom",
+                backgroundSize: "100% 0.55rem",
+                opacity: 0.45,
               }}
-            >
-              تلاش دوباره
-            </button>
-            <a
-              href="/fa"
+            />
+
+            <div
               style={{
-                borderRadius: "999px",
-                padding: "0.9rem 2rem",
-                fontWeight: 700,
-                color: "#eef4f9",
-                textDecoration: "none",
-                border: "1px solid rgba(255,255,255,0.2)",
+                display: "grid",
+                gap: "1.15rem",
+                justifyItems: "center",
+                padding: "clamp(1.5rem, 5vw, 2.75rem)",
               }}
             >
-              صفحه اصلی
-            </a>
+              <h1
+                style={{
+                  margin: 0,
+                  fontSize: "clamp(1.7rem, 1.26rem + 1.95vw, 2.4rem)",
+                  lineHeight: 1.46,
+                  fontWeight: 700,
+                }}
+              >
+                خطایی رخ داد
+              </h1>
+
+              <p
+                style={{
+                  margin: 0,
+                  maxWidth: "40ch",
+                  fontSize: "1rem",
+                  color: ONINK_100,
+                }}
+              >
+                یک خطای پیش‌بینی‌نشده نمایش این صفحه را متوقف کرد. دوباره
+                تلاش کنید یا به صفحه اصلی بازگردید.
+              </p>
+
+              {error.digest ? (
+                <code
+                  dir="ltr"
+                  style={{
+                    fontSize: "0.76rem",
+                    letterSpacing: "0.04em",
+                    color: ONINK_300,
+                    opacity: 0.65,
+                    fontFamily: "'Consolas', 'Courier New', monospace",
+                  }}
+                >
+                  {error.digest}
+                </code>
+              ) : null}
+
+              <div
+                style={{
+                  display: "flex",
+                  flexWrap: "wrap",
+                  gap: "0.75rem",
+                  justifyContent: "center",
+                  marginBlockStart: "0.5rem",
+                }}
+              >
+                <button
+                  type="button"
+                  onClick={reset}
+                  className="tx-primary"
+                  style={{
+                    ...control,
+                    border: 0,
+                    color: INK_900,
+                    backgroundColor: "#ffffff",
+                  }}
+                >
+                  تلاش دوباره
+                </button>
+
+                <a
+                  href={home}
+                  className="tx-secondary"
+                  style={{
+                    ...control,
+                    border: `1px solid ${HAIRLINE_STRONG}`,
+                    color: "#ffffff",
+                    backgroundColor: "rgba(255,255,255,0.06)",
+                  }}
+                >
+                  صفحه اصلی
+                </a>
+              </div>
+            </div>
           </div>
-        </div>
+        </main>
       </body>
     </html>
   );

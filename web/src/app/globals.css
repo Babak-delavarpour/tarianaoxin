@@ -1,13 +1,20 @@
 @import "tailwindcss";
 
 /* ═══════════════════════════════════════════════════════════════
-   TARIANAOXIN — design tokens
-   Palette derived from the corporate wordmark: a deep industrial
-   navy resolving into a clean process teal.
+   TARIANAOXIN — DESIGN SYSTEM  ·  direction "MEASURED"
+   A manufacturer's specification sheet, elevated to editorial
+   quality. Structure comes from hairlines, alignment and the value
+   step between three chapter surfaces — never from shadows,
+   rounded boxes or gradient washes.
+
+   Three chapter surfaces, and nothing else:
+     PAPER  → bg-page    (#ffffff)
+     BOARD  → bg-sunken  (#e8eef4)
+     INK    → mesh-dark / ink-flat (#041624)
    ═══════════════════════════════════════════════════════════════ */
 
 @theme {
-  /* Ink — the navy end of the wordmark gradient */
+  /* ── Ink — the navy end of the wordmark gradient ─────────────── */
   --color-ink-50: #eef4f9;
   --color-ink-100: #d6e4ef;
   --color-ink-200: #adc7db;
@@ -20,7 +27,8 @@
   --color-ink-900: #08243b;
   --color-ink-950: #041624;
 
-  /* Aqua — the teal end */
+  /* ── Aqua — the teal end. A machine marking: it appears where
+        something is measured, actionable or certified. ─────────── */
   --color-aqua-50: #eefbfe;
   --color-aqua-100: #d3f4fb;
   --color-aqua-200: #a6e6f0;
@@ -32,71 +40,137 @@
   --color-aqua-800: #0d6178;
   --color-aqua-900: #0f5063;
 
-  /* Mist — cool neutrals for surfaces and body copy */
+  /* ── Mist — cool neutrals for surfaces, rules and body copy ───
+        mist-400 / mist-500 are BANNED as text (2.3:1 / 3.9:1).
+        They are borders, dividers, disabled fills and icon strokes. */
   --color-mist-50: #f7fafc;
   --color-mist-100: #eef3f7;
+  --color-mist-150: #e8eef4; /* the BOARD chapter surface — a real, visible tint */
   --color-mist-200: #dfe8ef;
   --color-mist-300: #c6d5e0;
   --color-mist-400: #97aebe;
   --color-mist-500: #6b8497;
-  --color-mist-600: #4e6577;
+  --color-mist-550: #5a7386; /* 4.83:1 on white — the QUIETEST text allowed */
+  --color-mist-600: #4e6577; /* 6.0:1 on white — default secondary text */
 
-  /* Sand — a single warm accent, used sparingly (eco, highlights) */
+  /* ── On-dark text ramp. Solid, never an alpha guess. ────────── */
+  --color-onink-50: #f4f9fd; /* 17.6:1 on ink-950 — display / headings on ink */
+  --color-onink-100: #d6e4ef; /* 14.0:1 — lead paragraphs on ink */
+  --color-onink-200: #b3c8d9; /* 10.5:1 — body copy on ink */
+  --color-onink-300: #94adc1; /*  7.8:1 — captions / meta on ink */
+  --color-onink-400: #6f8ba2; /*  NON-TEXT ONLY: rules, disabled, decoration */
+
+  /* ── Sand — a single warm accent (eco, low stock, highlights) ── */
   --color-sand-300: #f3d3a8;
   --color-sand-400: #eaba7c;
   --color-sand-500: #dc9d51;
+  --color-sand-700: #8a5410; /* 6.26:1 on white, 5.64:1 on sand-300/35 */
 
-  /* Leaf — eco line only */
+  /* ── Leaf — eco / in-stock line only ────────────────────────── */
   --color-leaf-400: #5cc9a7;
   --color-leaf-600: #1f8f74;
+  --color-leaf-700: #147d64; /* 5.07:1 on white */
 
+  /* ── Semantic surfaces — the only backgrounds that exist ────── */
+  --color-page: #ffffff; /* PAPER chapter */
+  --color-sunken: #e8eef4; /* BOARD chapter (= mist-150) */
+  --color-raised: #ffffff; /* elevated card fill on any light ground */
+  --color-inverse: #041624; /* INK chapter (= ink-950) */
+  --color-inverse-2: #08243b; /* tiles / plates inside the INK chapter */
+
+  /* ── Hairlines — structure comes from these, not from boxes ─── */
+  --color-hairline: #dfe8ef; /* = mist-200 */
+  --color-hairline-strong: #c6d5e0; /* = mist-300 — chapter seams, input borders */
+  --color-hairline-inverse: rgb(255 255 255 / 0.13);
+  --color-hairline-inverse-strong: rgb(255 255 255 / 0.26);
+
+  /* ── Type families ──────────────────────────────────────────── */
   --font-display: var(--font-outfit), "Segoe UI", sans-serif;
   --font-sans: var(--font-outfit), "Segoe UI", sans-serif;
 
-  --radius-4xl: 2rem;
-  --radius-5xl: 2.75rem;
+  /* ── Radius scale — replaces every rounded-[…] literal ───────
+        Buttons are 10px, not pills. Pills survive only for chips. */
+  --radius-chip: 999px;
+  --radius-ctrl: 0.625rem; /* 10px — buttons, inputs, selects, steppers */
+  --radius-tile: 0.875rem; /* 14px — icon tiles, thumbnails, media frames */
+  --radius-card: 1.25rem; /* 20px — every card in the system */
+  --radius-panel: 1.75rem; /* 28px — drawers, sheets, the hero plate */
 
-  --shadow-glow: 0 0 0 1px rgb(23 162 191 / 0.25), 0 18px 60px -20px rgb(11 122 150 / 0.55);
-  --shadow-card: 0 1px 2px rgb(8 36 59 / 0.04), 0 12px 32px -12px rgb(8 36 59 / 0.16);
-  --shadow-lift: 0 2px 4px rgb(8 36 59 / 0.06), 0 28px 60px -20px rgb(8 36 59 / 0.28);
+  /* ── Elevation — exactly three steps, assigned by name ────────
+        e1  sticky toolbars · marquee band · Testimonials panel · chips on board
+        e2  ProductCard at rest (the only resting e2) · PDP buy box · primary/light buttons
+        e3  overlays only — drawer, sheet, popover, hero plate · ProductCard on hover */
+  --shadow-e1: 0 1px 2px rgb(8 36 59 / 0.05), 0 2px 8px -2px rgb(8 36 59 / 0.07);
+  --shadow-e2: 0 2px 6px rgb(8 36 59 / 0.05), 0 18px 38px -18px rgb(8 36 59 / 0.22);
+  --shadow-e3: 0 8px 20px rgb(8 36 59 / 0.1), 0 44px 90px -32px rgb(8 36 59 / 0.42);
 
+  /* ── Easing ─────────────────────────────────────────────────── */
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
-  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
 }
 
-/* Script-aware typography: the Latin display face never renders Arabic
-   glyphs, so each locale swaps its own family in at the :root level. */
-/* Farsi is the site default, so the root values are the Persian ones —
-   anything rendered outside a locale segment (404, error shells) inherits
-   the right face without extra wiring. */
+/* ═══════════════════════════════════════════════════════════════
+   Fluid tokens, per-script registers, layering
+   Farsi is the site default, so the :root values are the Persian
+   ones — anything rendered outside a locale segment (404, error
+   shells) inherits the right metrics without extra wiring.
+   ═══════════════════════════════════════════════════════════════ */
+
 :root {
   --font-locale: var(--font-vazirmatn);
-  --tracking-display: 0em;
-  --leading-display: 1.45;
-  --nav-h: 4.5rem;
 
-  /* ── Fluid shell ──────────────────────────────────────────────
-     One source of truth for page width and gutters, so the header,
-     hero, sections and footer stay on the same vertical rhythm at
-     every viewport instead of each hard-coding its own padding. */
+  /* ── Fluid shell ───────────────────────────────────────────── */
   --shell-max: 80rem;
+  --shell-narrow: 62rem; /* editorial / statement columns */
   --shell-pad: clamp(1.15rem, 4vw, 2.5rem);
 
-  /* ── Fluid type scale ─────────────────────────────────────────
-     clamp() interpolates between the small-phone and desktop ends,
-     so type keeps growing between breakpoints rather than jumping
-     at them. Tuned so 320px stays readable and 4K never balloons. */
-  --fs-hero: clamp(2.3rem, 1.28rem + 4.7vw, 4.15rem);
-  --fs-h1: clamp(2.05rem, 1.35rem + 3.2vw, 3.6rem);
-  --fs-h2: clamp(1.8rem, 1.28rem + 2.4vw, 3.05rem);
-  --fs-h3: clamp(1.45rem, 1.2rem + 1.15vw, 2rem);
-  --fs-h4: clamp(1.02rem, 0.97rem + 0.24vw, 1.14rem);
-  --fs-lead: clamp(0.98rem, 0.93rem + 0.3vw, 1.12rem);
-  --fs-body: clamp(0.88rem, 0.855rem + 0.13vw, 0.94rem);
+  /* Header clearance is STATIC. If it changed on scroll every page
+     top would jump. One source of truth for all top-of-page space. */
+  --nav-h: clamp(4.75rem, 4rem + 2.4vw, 6.5rem);
 
-  /* ── Fluid vertical rhythm ────────────────────────────────── */
-  --section-y: clamp(3.75rem, 7.5vw, 8rem);
-  --section-y-tight: clamp(3rem, 5.5vw, 6rem);
+  /* ── Fluid type ramp ───────────────────────────────────────── */
+  --fs-hero: clamp(2.35rem, 1.35rem + 5.1vw, 5.1rem); /* home h1 ONLY */
+  --fs-h1: clamp(2.05rem, 1.45rem + 3vw, 3.4rem); /* page h1 */
+  --fs-h2: clamp(1.7rem, 1.26rem + 1.95vw, 2.65rem); /* section h2 */
+  --fs-h3: clamp(1.32rem, 1.13rem + 0.88vw, 1.8rem); /* the mid-tier */
+  --fs-h4: clamp(1.08rem, 1.02rem + 0.28vw, 1.25rem); /* card + row titles */
+  --fs-lead: clamp(1.04rem, 0.98rem + 0.28vw, 1.2rem); /* section subtitle */
+  --fs-body: clamp(0.97rem, 0.94rem + 0.16vw, 1.05rem); /* body copy */
+  --fs-caption: clamp(0.83rem, 0.81rem + 0.1vw, 0.88rem); /* meta, labels, chips */
+  --fs-micro: clamp(0.72rem, 0.705rem + 0.06vw, 0.76rem); /* eyebrow, SKU, badges */
+  --fs-numeral: clamp(3.2rem, 1.6rem + 6.6vw, 7rem); /* step + display figures */
+
+  /* ── Per-script tracking & leading ──────────────────────────
+     Arabic script needs looser leading and ZERO letter-spacing —
+     spacing breaks cursive joining. Encoded once, here, so the
+     .eyebrow utility self-disables its Latin devices in fa/ar. */
+  --tracking-display: 0em;
+  --leading-display: 1.38;
+  --tracking-head: 0em;
+  --leading-head: 1.46;
+  --tracking-title: 0em;
+  --leading-title: 1.58;
+  --leading-lead: 1.9;
+  --leading-body: 1.95;
+  --tracking-eyebrow: 0em;
+  --eyebrow-transform: none;
+  --eyebrow-weight: 700;
+
+  /* ── Vertical rhythm ───────────────────────────────────────── */
+  --section-y: clamp(4.25rem, 7.5vw, 8.5rem); /* base   */
+  --section-y-tight: clamp(2.75rem, 4.8vw, 5rem); /* tight  */
+  --section-y-loose: clamp(7rem, 12vw, 13rem); /* climax */
+  --space-gutter: clamp(1rem, 2.2vw, 1.75rem); /* grid gaps */
+  --space-block: clamp(2.5rem, 4.5vw, 4.5rem); /* heading → content */
+
+  /* ── Layering ──────────────────────────────────────────────── */
+  --z-header: 50;
+  --z-scrim: 60;
+  --z-drawer: 70;
+  --z-popover: 80;
+
+  /* ── Focus ring colour, re-pointed inside ink chapters ─────── */
+  --focus-ring: var(--color-aqua-600);
 }
 
 /* Large monitors get a wider shell — 80rem leaves a 27" display
@@ -107,38 +181,68 @@
   }
 }
 
-/* The locale layout stamps [data-locale] on <html> server-side, alongside
-   the matching dir/lang. */
+/* The locale layout stamps [data-locale] on <html> server-side,
+   alongside the matching dir/lang. */
 [data-locale="fa"] {
   --font-locale: var(--font-vazirmatn);
-  --tracking-display: 0em;
-  --leading-display: 1.45;
 }
 
 [data-locale="en"] {
   --font-locale: var(--font-outfit);
-  --tracking-display: -0.03em;
+  --tracking-display: -0.035em;
   --leading-display: 1.02;
+  --tracking-head: -0.024em;
+  --leading-head: 1.1;
+  --tracking-title: -0.012em;
+  --leading-title: 1.32;
+  --leading-lead: 1.6;
+  --leading-body: 1.72;
+  --tracking-eyebrow: 0.22em;
+  --eyebrow-transform: uppercase;
+  --eyebrow-weight: 700;
 }
 
 [data-locale="ar"] {
   --font-locale: var(--font-cairo);
   --tracking-display: 0em;
-  --leading-display: 1.4;
+  --leading-display: 1.42;
+  --tracking-head: 0em;
+  --leading-head: 1.5;
+  --tracking-title: 0em;
+  --leading-title: 1.62;
+  --leading-lead: 1.92;
+  --leading-body: 1.98;
+  --tracking-eyebrow: 0em;
+  --eyebrow-transform: none;
+  --eyebrow-weight: 700;
 }
 
 [data-locale] {
   font-family: var(--font-locale), var(--font-outfit), "Segoe UI", sans-serif;
 }
 
+/* Anything inside an ink chapter gets the light focus ring, so the
+   indicator never drops below 3:1 against its own ground. */
+.mesh-dark,
+.ink-flat,
+.glass-dark,
+[data-tone="ink"] {
+  --focus-ring: var(--color-aqua-300);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Base
+   ═══════════════════════════════════════════════════════════════ */
+
 @layer base {
   * {
-    border-color: var(--color-mist-200);
+    border-color: var(--color-hairline);
   }
 
   html {
     scroll-behavior: smooth;
-    scroll-padding-top: 6rem;
+    /* One source of truth: anchors clear the static header. */
+    scroll-padding-top: calc(var(--nav-h) + 1rem);
     -webkit-text-size-adjust: 100%;
     /* Reserve the scrollbar track permanently: without it, locking the
        body for the cart drawer or mobile menu shifts the whole page. */
@@ -146,9 +250,11 @@
   }
 
   body {
-    background: var(--color-mist-50);
+    background: var(--color-page);
     color: var(--color-ink-800);
     font-family: var(--font-locale), var(--font-outfit), "Segoe UI", sans-serif;
+    font-size: var(--fs-body);
+    line-height: var(--leading-body);
     font-feature-settings: "ss01", "cv01";
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
@@ -176,14 +282,23 @@
     color: inherit;
   }
 
-  h1, h2, h3, h4 {
+  /* Heading metrics come from the per-script registers. Sizing is the
+     job of the fs-* utilities — never of the element. */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     font-family: var(--font-locale), var(--font-outfit), sans-serif;
-    letter-spacing: var(--tracking-display);
-    line-height: var(--leading-display);
+    letter-spacing: var(--tracking-head);
+    line-height: var(--leading-head);
     text-wrap: balance;
   }
 
-  p { text-wrap: pretty; }
+  p {
+    text-wrap: pretty;
+  }
 
   ::selection {
     background: var(--color-aqua-500);
@@ -191,7 +306,7 @@
   }
 
   :focus-visible {
-    outline: 2px solid var(--color-aqua-500);
+    outline: 2px solid var(--focus-ring);
     outline-offset: 3px;
     border-radius: 4px;
   }
@@ -205,22 +320,30 @@
   }
 }
 
-/* ── Scrollbar ─────────────────────────────────────────────────── */
+/* ── Scrollbar — quiet, hairline-derived, no gradient ─────────── */
 @layer base {
-  ::-webkit-scrollbar { width: 11px; height: 11px; }
-  ::-webkit-scrollbar-track { background: var(--color-mist-100); }
+  html {
+    scrollbar-color: var(--color-mist-300) var(--color-mist-100);
+  }
+  ::-webkit-scrollbar {
+    width: 11px;
+    height: 11px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--color-mist-100);
+  }
   ::-webkit-scrollbar-thumb {
-    background: linear-gradient(var(--color-ink-700), var(--color-aqua-700));
+    background: var(--color-mist-300);
     border-radius: 99px;
     border: 3px solid var(--color-mist-100);
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(var(--color-ink-800), var(--color-aqua-600));
+    background: var(--color-mist-400);
   }
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   Layout primitives — fluid shell, rhythm and type scale
+   Layout primitives — shell, rhythm, clearance
    ═══════════════════════════════════════════════════════════════ */
 
 /* The page shell. `env()` keeps content clear of the notch when a
@@ -237,6 +360,18 @@
   );
 }
 
+/* The editorial column — statements, long-form copy, BAND sections. */
+@utility shell-narrow {
+  margin-inline: auto;
+  width: 100%;
+  max-width: var(--shell-narrow);
+  padding-inline: max(
+    var(--shell-pad),
+    env(safe-area-inset-left),
+    env(safe-area-inset-right)
+  );
+}
+
 @utility section-y {
   padding-block: var(--section-y);
 }
@@ -245,28 +380,24 @@
   padding-block: var(--section-y-tight);
 }
 
-@utility fs-hero {
-  font-size: var(--fs-hero);
+@utility section-y-loose {
+  padding-block: var(--section-y-loose);
 }
-@utility fs-h1 {
-  font-size: var(--fs-h1);
+
+/* Grid gaps are ALWAYS this (cards) or gap-px (hairline-ruled plates). */
+@utility grid-gutter {
+  gap: var(--space-gutter);
 }
-@utility fs-h2 {
-  font-size: var(--fs-h2);
+
+/* Heading → content distance is ALWAYS this. */
+@utility stack-block {
+  margin-block-start: var(--space-block);
 }
-@utility fs-h3 {
-  font-size: var(--fs-h3);
-}
-@utility fs-h4 {
-  font-size: var(--fs-h4);
-}
-@utility fs-lead {
-  font-size: var(--fs-lead);
-  line-height: 1.65;
-}
-@utility fs-body {
-  font-size: var(--fs-body);
-  line-height: 1.7;
+
+/* Top-of-page clearance for any surface that sits under the header.
+   Equivalent to pt-[calc(var(--nav-h)+clamp(2.25rem,5vw,5rem))]. */
+@utility nav-clear {
+  padding-block-start: calc(var(--nav-h) + clamp(2.25rem, 5vw, 5rem));
 }
 
 /* Bottom padding that clears the iOS home indicator on sheets and
@@ -276,7 +407,7 @@
 }
 
 /* Expands a visually small control to a 44px hit area without
-   changing how it looks — used by carousel dots and icon buttons. */
+   changing how it looks — carousel dots, icon buttons, steppers. */
 @utility tap-target {
   position: relative;
 
@@ -294,8 +425,8 @@
 }
 
 /* Native selects render inconsistently across platforms; this gives
-   them the same pill as every other control, with a drawn chevron
-   that sits on the trailing edge in both directions. */
+   them the same control shape as every other field, with a drawn
+   chevron that sits on the trailing edge in both directions. */
 @utility select-pill {
   appearance: none;
   -webkit-appearance: none;
@@ -310,8 +441,118 @@
   }
 }
 
+/* Range input — WebKit renders no thumb at all without this. */
+@utility range-brand {
+  appearance: none;
+  -webkit-appearance: none;
+  height: 0.375rem;
+  border-radius: 999px;
+  background: var(--color-mist-200);
+
+  &::-webkit-slider-thumb {
+    appearance: none;
+    -webkit-appearance: none;
+    height: 1.25rem;
+    width: 1.25rem;
+    border-radius: 999px;
+    background: #fff;
+    border: 3px solid var(--color-aqua-700);
+    box-shadow: var(--shadow-e1);
+    margin-top: -0.44rem;
+    cursor: pointer;
+  }
+
+  &::-moz-range-thumb {
+    height: 1.25rem;
+    width: 1.25rem;
+    border-radius: 999px;
+    background: #fff;
+    border: 3px solid var(--color-aqua-700);
+    box-shadow: var(--shadow-e1);
+    cursor: pointer;
+  }
+
+  &:focus-visible::-webkit-slider-thumb {
+    outline: 2px solid var(--color-aqua-600);
+    outline-offset: 2px;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Typography utilities — the ONLY way to set a font size.
+   text-xs / text-sm / text-base / text-[…rem] are banned in
+   src/components/** and src/app/**.
+   ═══════════════════════════════════════════════════════════════ */
+
+@utility fs-hero {
+  font-size: var(--fs-hero);
+  letter-spacing: var(--tracking-display);
+  line-height: var(--leading-display);
+}
+@utility fs-h1 {
+  font-size: var(--fs-h1);
+  letter-spacing: var(--tracking-display);
+  line-height: var(--leading-display);
+}
+@utility fs-h2 {
+  font-size: var(--fs-h2);
+  letter-spacing: var(--tracking-head);
+  line-height: var(--leading-head);
+}
+@utility fs-h3 {
+  font-size: var(--fs-h3);
+  letter-spacing: var(--tracking-head);
+  line-height: var(--leading-title);
+}
+@utility fs-h4 {
+  font-size: var(--fs-h4);
+  letter-spacing: var(--tracking-title);
+  line-height: var(--leading-title);
+}
+@utility fs-lead {
+  font-size: var(--fs-lead);
+  line-height: var(--leading-lead);
+  letter-spacing: 0;
+}
+@utility fs-body {
+  font-size: var(--fs-body);
+  line-height: var(--leading-body);
+  letter-spacing: 0;
+}
+@utility fs-caption {
+  font-size: var(--fs-caption);
+  line-height: 1.55;
+  letter-spacing: 0;
+}
+@utility fs-micro {
+  font-size: var(--fs-micro);
+  line-height: 1.4;
+  letter-spacing: 0;
+}
+@utility fs-numeral {
+  font-size: var(--fs-numeral);
+  line-height: 0.92;
+  letter-spacing: var(--tracking-display);
+  font-variant-numeric: tabular-nums;
+}
+
+/* THE eyebrow. Carries size, weight, tracking and casing from the
+   per-script registers, so tracked-uppercase self-disables in fa/ar
+   and the Arabic letter-joining bug is fixed sitewide in one place.
+   Never hand-roll `uppercase tracking-[…]` on a localized string. */
+@utility eyebrow {
+  font-size: var(--fs-micro);
+  font-weight: var(--eyebrow-weight);
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: var(--eyebrow-transform);
+  line-height: 1;
+}
+
 /* ═══════════════════════════════════════════════════════════════
    Signature surfaces
+   Accent budget: brand-gradient paints the primary button and at
+   most ONE signature surface per chapter instance. ≤3 per viewport,
+   ≤6 on the whole home page. Gradient TEXT does not exist.
    ═══════════════════════════════════════════════════════════════ */
 
 @utility brand-gradient {
@@ -324,45 +565,45 @@
   );
 }
 
-@utility text-brand-gradient {
-  background-image: linear-gradient(
-    100deg,
-    var(--color-ink-900) 0%,
-    var(--color-ink-600) 38%,
-    var(--color-aqua-600) 72%,
-    var(--color-aqua-400) 100%
-  );
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
-@utility text-brand-gradient-light {
-  background-image: linear-gradient(
-    100deg,
-    #ffffff 0%,
-    var(--color-aqua-200) 45%,
-    var(--color-aqua-400) 100%
-  );
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
-/* Living mesh used behind dark sections */
+/* The INK chapter, with a calm two-layer mesh. */
 @utility mesh-dark {
   background-color: var(--color-ink-950);
   background-image:
-    radial-gradient(58rem 42rem at 12% -8%, rgb(23 162 191 / 0.28), transparent 62%),
-    radial-gradient(46rem 34rem at 92% 8%, rgb(15 59 92 / 0.85), transparent 58%),
-    radial-gradient(38rem 38rem at 78% 96%, rgb(11 122 150 / 0.32), transparent 60%);
+    radial-gradient(70rem 46rem at 8% -14%, rgb(23 162 191 / 0.17), transparent 60%),
+    radial-gradient(52rem 40rem at 96% 6%, rgb(15 59 92 / 0.55), transparent 58%);
 }
 
-@utility mesh-light {
-  background-color: var(--color-mist-50);
-  background-image:
-    radial-gradient(48rem 36rem at 88% -12%, rgb(53 186 213 / 0.13), transparent 60%),
-    radial-gradient(42rem 32rem at 4% 4%, rgb(15 59 92 / 0.07), transparent 58%);
+/* The INK chapter with no mesh at all — the Statement section. */
+@utility ink-flat {
+  background-color: var(--color-ink-950);
+  background-image: radial-gradient(
+    60rem 40rem at 50% 120%,
+    rgb(23 162 191 / 0.12),
+    transparent 62%
+  );
+}
+
+/* Semantic surface shorthands. Equivalent to the bg-* utilities of
+   the same name; provided so a recipe can name a surface directly. */
+@utility surface-page {
+  background-color: var(--color-page);
+  color: var(--color-ink-800);
+}
+@utility surface-sunken {
+  background-color: var(--color-sunken);
+  color: var(--color-ink-800);
+}
+@utility surface-raised {
+  background-color: var(--color-raised);
+  color: var(--color-ink-800);
+}
+@utility surface-inverse {
+  background-color: var(--color-inverse);
+  color: #fff;
+}
+@utility surface-inverse-2 {
+  background-color: var(--color-inverse-2);
+  color: #fff;
 }
 
 /* Fine engineered grid — reads as a technical drawing, not a gimmick */
@@ -380,194 +621,260 @@
   background-size: 3.5rem 3.5rem;
 }
 
-/* Film grain — kills gradient banding on large washes */
+/* Engineering tick rule — a drawn measurement scale across an edge.
+   The `to right` is a SYMMETRIC repeating pattern with no directional
+   meaning, so it is exempt from the logical-property rule. Do not add
+   an RTL variant. */
+@utility tick-rule {
+  background-image: repeating-linear-gradient(
+    to right,
+    var(--color-aqua-400) 0 1px,
+    transparent 1px 2.75rem
+  );
+  background-repeat: no-repeat;
+  background-position: left bottom;
+  background-size: 100% 0.55rem;
+  opacity: 0.45;
+}
+
+/* The house method for ruled grids: a coloured parent showing through
+   1px gaps. Perfect hairlines, no borders, direction-agnostic.
+   Children must set their own opaque fill (bg-page / bg-inverse-2). */
+@utility plate-rule {
+  display: grid;
+  gap: 1px;
+  background-color: var(--color-hairline);
+}
+@utility plate-rule-ink {
+  display: grid;
+  gap: 1px;
+  background-color: var(--color-hairline-inverse);
+}
+
+/* Film grain — kills gradient banding on large washes.
+   Never above 0.10 opacity. */
 @utility grain-layer {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
   mix-blend-mode: overlay;
 }
 
 @utility glass {
-  background: rgb(255 255 255 / 0.72);
-  backdrop-filter: blur(18px) saturate(180%);
-  -webkit-backdrop-filter: blur(18px) saturate(180%);
+  background: rgb(255 255 255 / 0.86);
+  backdrop-filter: blur(16px) saturate(170%);
+  -webkit-backdrop-filter: blur(16px) saturate(170%);
 }
 
 @utility glass-dark {
-  background: rgb(4 22 36 / 0.55);
-  backdrop-filter: blur(18px) saturate(160%);
-  -webkit-backdrop-filter: blur(18px) saturate(160%);
-}
-
-/* Gradient hairline border that survives border-radius */
-@utility ring-gradient {
-  position: relative;
-
-  &::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    padding: 1px;
-    background: linear-gradient(
-      140deg,
-      rgb(255 255 255 / 0.9),
-      rgb(53 186 213 / 0.5) 45%,
-      rgb(15 59 92 / 0.1)
-    );
-    -webkit-mask:
-      linear-gradient(#000 0 0) content-box,
-      linear-gradient(#000 0 0);
-    mask:
-      linear-gradient(#000 0 0) content-box,
-      linear-gradient(#000 0 0);
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-    pointer-events: none;
-    z-index: 1;
-  }
+  background: rgb(4 22 36 / 0.72);
+  backdrop-filter: blur(16px) saturate(160%);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   Motion
+   MOTION — named vocabulary only.
+   enter · enter-fade · enter-scale · hover-lift · hover-rule ·
+   press · marquee.  Budget: at most 2 continuously-moving elements
+   in any viewport. The marquee is the only infinite animation that
+   ships; the scroll-progress hairline is scroll-driven and free.
+   NOTHING ELSE ANIMATES.
    ═══════════════════════════════════════════════════════════════ */
 
-@keyframes tx-rise {
-  from { opacity: 0; transform: translateY(28px); }
-  to { opacity: 1; transform: none; }
+@keyframes tx-enter {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 @keyframes tx-fade {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
-@keyframes tx-scale-in {
-  from { opacity: 0; transform: scale(0.94); }
-  to { opacity: 1; transform: none; }
-}
-
-@keyframes tx-float {
-  0%, 100% { transform: translateY(0) rotate(0deg); }
-  50% { transform: translateY(-16px) rotate(1.5deg); }
-}
-
-@keyframes tx-drift {
-  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
-  33% { transform: translate3d(3%, -4%, 0) scale(1.06); }
-  66% { transform: translate3d(-3%, 3%, 0) scale(0.96); }
+@keyframes tx-enter-scale {
+  from {
+    opacity: 0;
+    transform: scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 @keyframes tx-marquee {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
 }
 
 @keyframes tx-marquee-rtl {
-  from { transform: translateX(0); }
-  to { transform: translateX(50%); }
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(50%);
+  }
 }
 
-@keyframes tx-sheen {
-  0% { transform: translateX(-140%) skewX(-18deg); }
-  100% { transform: translateX(320%) skewX(-18deg); }
+@keyframes tx-progress {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
 }
 
-@keyframes tx-pulse-ring {
-  0% { transform: scale(0.85); opacity: 0.6; }
-  100% { transform: scale(1.9); opacity: 0; }
+/* One-shot entrances for above-the-fold content that must not wait on
+   an observer (the hero). Everything below the fold uses Reveal /
+   RevealGroup instead. `both` holds the final frame. */
+.enter {
+  animation: tx-enter 620ms var(--ease-out-expo) both;
+}
+.enter-fade {
+  animation: tx-fade 700ms var(--ease-out-expo) both;
+}
+.enter-scale {
+  animation: tx-enter-scale 800ms var(--ease-out-expo) both;
 }
 
-@keyframes tx-shimmer {
-  0% { background-position: 200% 50%; }
-  100% { background-position: -200% 50%; }
+/* Utility aliases so the same names work inside a Tailwind class list. */
+@utility animate-enter {
+  animation: tx-enter 620ms var(--ease-out-expo) both;
+}
+@utility animate-enter-fade {
+  animation: tx-fade 700ms var(--ease-out-expo) both;
+}
+@utility animate-enter-scale {
+  animation: tx-enter-scale 800ms var(--ease-out-expo) both;
 }
 
-@keyframes tx-scroll-hint {
-  0%, 100% { transform: translateY(0); opacity: 0.35; }
-  50% { transform: translateY(8px); opacity: 1; }
-}
-
-@utility animate-float { animation: tx-float 7s ease-in-out infinite; }
-@utility animate-drift { animation: tx-drift 22s ease-in-out infinite; }
-@utility animate-scroll-hint { animation: tx-scroll-hint 2.2s ease-in-out infinite; }
-
-@utility animate-shimmer {
-  background: linear-gradient(
-    100deg,
-    transparent 20%,
-    rgb(255 255 255 / 0.55) 50%,
-    transparent 80%
-  );
-  background-size: 200% 100%;
-  animation: tx-shimmer 2.4s linear infinite;
+/* hover-rule — the default interaction for everything that is not a
+   card: a hairline changes colour. 200ms linear, nothing moves. */
+@utility hover-rule {
+  transition-property: border-color, background-color, color, opacity;
+  transition-duration: 200ms;
+  transition-timing-function: linear;
 }
 
 /* Marquee track — direction-aware so RTL locales scroll the natural way */
 .marquee-track {
-  animation: tx-marquee 34s linear infinite;
+  animation: tx-marquee 42s linear infinite;
 }
 [dir="rtl"] .marquee-track {
   animation-name: tx-marquee-rtl;
 }
-@media (hover: hover) {
+@media (hover: hover) and (pointer: fine) {
   .marquee:hover .marquee-track {
     animation-play-state: paused;
   }
 }
 
-/* Scroll reveal — elements start hidden, the observer flips data-shown */
+/* ── Scroll reveal ────────────────────────────────────────────
+   Single element: <Reveal>. Grids/rails/lists: <RevealGroup>, which
+   runs ONE observer for the whole group and staggers its children
+   through --i. will-change is released the moment the reveal lands. */
 .reveal {
   opacity: 0;
-  transform: translateY(26px);
+  transform: translateY(16px);
   transition:
-    opacity 0.85s var(--ease-out-expo),
-    transform 0.85s var(--ease-out-expo);
+    opacity 0.62s var(--ease-out-expo),
+    transform 0.62s var(--ease-out-expo);
   transition-delay: var(--reveal-delay, 0ms);
-  will-change: opacity, transform;
+}
+.reveal[data-variant="fade"] {
+  transform: none;
+}
+.reveal[data-variant="scale"] {
+  transform: scale(0.985);
 }
 .reveal[data-shown="true"] {
   opacity: 1;
   transform: none;
 }
 
-/* Button sheen sweep */
-.sheen { position: relative; overflow: hidden; isolation: isolate; }
-.sheen::after {
-  content: "";
-  position: absolute;
-  inset-block: -50%;
-  inset-inline-start: 0;
-  width: 45%;
-  background: linear-gradient(90deg, transparent, rgb(255 255 255 / 0.32), transparent);
+.reveal-group > * {
   opacity: 0;
-  pointer-events: none;
+  transform: translateY(16px);
+  transition:
+    opacity 0.62s var(--ease-out-expo),
+    transform 0.62s var(--ease-out-expo);
+  /* stagger capped at 6 steps so a 24-cell grid never crawls in */
+  transition-delay: calc(
+    var(--reveal-delay, 0ms) +
+      min(calc(var(--i, 0) * var(--stagger, 60ms)), var(--stagger-cap, 360ms))
+  );
+}
+.reveal-group[data-variant="fade"] > * {
+  transform: none;
+}
+.reveal-group[data-variant="scale"] > * {
+  transform: scale(0.985);
+}
+.reveal-group[data-shown="true"] > * {
+  opacity: 1;
+  transform: none;
+}
+
+/* Promote only while the transition is pending — 30+ permanently
+   promoted compositor layers is a real cost. */
+.reveal:not([data-shown="true"]),
+.reveal-group:not([data-shown="true"]) > * {
+  will-change: opacity, transform;
+}
+
+/* Without JS the observer never fires, so never hide the content. */
+@media (scripting: none) {
+  .reveal,
+  .reveal-group > * {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* hover-lift — permitted on ProductCard and the CategoryGrid hero
+   cell only. Everything else uses hover-rule. */
+.lift {
+  transition:
+    transform 0.35s var(--ease-out-expo),
+    box-shadow 0.35s var(--ease-out-expo),
+    border-color 0.35s var(--ease-out-expo);
 }
 /* Hover-driven flourishes are gated on a real pointer: on a touch
    screen `:hover` latches after a tap and the effect sticks. */
 @media (hover: hover) and (pointer: fine) {
-  .sheen:hover::after {
-    opacity: 1;
-    animation: tx-sheen 0.9s var(--ease-out-expo);
-  }
-}
-
-/* Interactive lift shared by every card in the system */
-.lift {
-  transition:
-    transform 0.5s var(--ease-out-expo),
-    box-shadow 0.5s var(--ease-out-expo),
-    border-color 0.5s var(--ease-out-expo);
-}
-@media (hover: hover) and (pointer: fine) {
   .lift:hover {
-    transform: translateY(-6px);
-    box-shadow: var(--shadow-lift);
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-e3);
   }
 }
 /* Touch gets a press state instead, so taps still feel responsive. */
 @media (hover: none) {
   .lift:active {
-    transform: scale(0.985);
+    transform: scale(0.99);
+  }
+}
+
+/* press — the touch affordance for controls. Pointer devices get
+   their hover state instead, so this never double-fires. It declares
+   no `transition` of its own on purpose: the consumer already lists
+   `transform` in its own transition, and an unlayered shorthand here
+   would clobber that element's colour transitions. */
+@media (hover: none) {
+  .press:active {
+    transform: scale(0.99);
   }
 }
 
@@ -587,14 +894,22 @@
   transform-origin: var(--underline-origin, left);
   transition: transform 0.45s var(--ease-out-expo);
 }
-[dir="rtl"] .link-underline::after { --underline-origin: right; }
-@media (hover: hover) and (pointer: fine) {
-  .link-underline:hover::after { transform: scaleX(1); }
+[dir="rtl"] .link-underline::after {
+  --underline-origin: right;
 }
-.link-underline:focus-visible::after { transform: scaleX(1); }
+@media (hover: hover) and (pointer: fine) {
+  .link-underline:hover::after {
+    transform: scaleX(1);
+  }
+}
+.link-underline:focus-visible::after {
+  transform: scaleX(1);
+}
 
 /* Icons that carry a directional meaning must flip in RTL */
-[dir="rtl"] .flip-rtl { transform: scaleX(-1); }
+[dir="rtl"] .flip-rtl {
+  transform: scaleX(-1);
+}
 
 /* Hide scrollbar on horizontal rails while keeping the scroll */
 .rail {
@@ -602,7 +917,9 @@
   -ms-overflow-style: none;
   overscroll-behavior-inline: contain;
 }
-.rail::-webkit-scrollbar { display: none; }
+.rail::-webkit-scrollbar {
+  display: none;
+}
 
 /* Panels that scroll on top of the page must not chain their scroll
    back to the document once they hit their own end. */
@@ -614,11 +931,6 @@
 /* Reading-progress hairline under the header. Driven entirely by the
    scroll timeline where it exists — no listener, no reflow. Browsers
    without it simply never paint the bar. */
-@keyframes tx-progress {
-  from { transform: scaleX(0); }
-  to { transform: scaleX(1); }
-}
-
 .scroll-progress {
   transform: scaleX(0);
   transform-origin: left center;
@@ -634,6 +946,12 @@
   }
 }
 
+/* ═══════════════════════════════════════════════════════════════
+   Reduced motion — every named animation in the vocabulary is
+   neutralised here, at its final state. Nothing is legible only at
+   an animation's opacity peak.
+   ═══════════════════════════════════════════════════════════════ */
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -643,8 +961,49 @@
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
-  .reveal { opacity: 1; transform: none; }
+
+  .reveal,
+  .reveal-group > * {
+    opacity: 1;
+    transform: none;
+    transition: none;
+    will-change: auto;
+  }
+
+  .enter,
+  .enter-fade,
+  .enter-scale {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  /* The ticker stops and becomes reachable by scrolling instead. */
+  .marquee-track {
+    animation: none !important;
+    transform: none !important;
+  }
+  .marquee {
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    overscroll-behavior-inline: contain;
+  }
+  .marquee::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* No hover translate, no press scale — the state still changes,
+     it just does not move. */
+  .lift:hover,
+  .lift:active,
+  .press:active {
+    transform: none;
+  }
+
   /* The blanket duration override above would freeze the scroll-driven
      bar at full width, so drop it rather than show it stuck. */
-  .scroll-progress { display: none; }
+  .scroll-progress {
+    display: none;
+  }
 }

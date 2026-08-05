@@ -1,10 +1,25 @@
 import type { Locale } from "@/i18n/config";
 
+/**
+ * `tone` follows the system convention: it names the colour of the TYPE.
+ *   "dark"  → dark lockup on PAPER / BOARD / glass
+ *   "light" → light lockup on the INK chapter
+ */
 type Tone = "dark" | "light";
 
 /**
- * The mark: a tapered vessel whose two walls continue past the rim and
- * cross — the "X" of OXIN drawn as the object we make.
+ * THE MARK — a tapered vessel drawn in three values: a deep gradient
+ * body, a bright aqua rim band, and the dark opening you look into.
+ *
+ * The app-icon tile is gone. The mark stands free, which is what lets it
+ * sit on glass, on ink and on paper without a container fighting the
+ * header. The crossing "X" arms are gone too: they were sub-pixel at
+ * favicon size and the redrawn `/icon.svg` already dropped them, so the
+ * lockup now matches the favicon exactly.
+ *
+ * This SVG gradient is the one accent the chrome spends — §1.3 names the
+ * mark as a permitted signature surface. Nothing else in the header,
+ * footer, page hero or language menu is gradient-painted.
  */
 export function LogoMark({
   className = "h-10 w-10",
@@ -13,52 +28,77 @@ export function LogoMark({
   className?: string;
   tone?: Tone;
 }) {
-  const id = tone === "light" ? "txm-l" : "txm-d";
+  const onInk = tone === "light";
+  // Two stable ids, one per tone. Repeated instances of the same tone
+  // redeclare an identical gradient, which is harmless; a hook-generated
+  // id would force this module to become a client component.
+  const id = onInk ? "txm-l" : "txm-d";
+
   return (
-    <svg viewBox="0 0 48 48" className={className} aria-hidden="true">
+    <svg
+      viewBox="0 0 48 48"
+      className={className}
+      aria-hidden="true"
+      focusable="false"
+    >
       <defs>
-        <linearGradient id={`${id}-bg`} x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stopColor="#08243b" />
-          <stop offset="52%" stopColor="#0f3b5c" />
-          <stop offset="100%" stopColor="#17a2bf" />
+        <linearGradient id={`${id}-body`} x1="0" y1="0" x2="1" y2="1">
+          {onInk ? (
+            <>
+              <stop offset="0%" stopColor="#0b7a96" />
+              <stop offset="45%" stopColor="#17a2bf" />
+              <stop offset="100%" stopColor="#6bd3e5" />
+            </>
+          ) : (
+            <>
+              <stop offset="0%" stopColor="#08243b" />
+              <stop offset="52%" stopColor="#0f3b5c" />
+              <stop offset="100%" stopColor="#17a2bf" />
+            </>
+          )}
         </linearGradient>
-        <linearGradient id={`${id}-sheen`} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#ffffff" stopOpacity="0.34" />
-          <stop offset="60%" stopColor="#ffffff" stopOpacity="0" />
+        <linearGradient id={`${id}-rim`} x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stopColor={onInk ? "#a6e6f0" : "#35bad5"} />
+          <stop offset="100%" stopColor="#6bd3e5" />
         </linearGradient>
       </defs>
 
-      <rect width="48" height="48" rx="14" fill={`url(#${id}-bg)`} />
-      <rect width="48" height="48" rx="14" fill={`url(#${id}-sheen)`} />
-
-      {/* crossing arms — the X */}
+      {/* Body: the rim's underside sweeps down, the walls taper, the base
+          is radiused. One camera — the rim ellipse is rx × 0.26. */}
       <path
-        d="M15.2 8.5 L32.8 19.5 M32.8 8.5 L15.2 19.5"
-        stroke="#a6e6f0"
-        strokeWidth="2.6"
-        strokeLinecap="round"
-        opacity="0.9"
+        d="M7.5 11 A16.5 4.3 0 0 0 40.5 11 L34.5 37.1 A4.6 4.6 0 0 1 29.9 41 H18.1 A4.6 4.6 0 0 1 13.5 37.1 Z"
+        fill={`url(#${id}-body)`}
       />
-      {/* the vessel */}
-      <path
-        d="M13.6 17.8 H34.4 L31.1 36.2 A3.4 3.4 0 0 1 27.75 39 H20.25 A3.4 3.4 0 0 1 16.9 36.2 Z"
-        fill="#ffffff"
-        fillOpacity="0.96"
+      {/* Rim band, then the opening cut out of it */}
+      <ellipse cx="24" cy="11" rx="16.5" ry="4.3" fill={`url(#${id}-rim)`} />
+      <ellipse
+        cx="24"
+        cy="11"
+        rx="12.6"
+        ry="3.28"
+        fill={onInk ? "#041624" : "#0b2e4a"}
       />
+      {/* One graduation — the machine marking */}
       <path
-        d="M18.6 24.4 H29.4"
-        stroke="#0f3b5c"
-        strokeWidth="2.2"
+        d="M15 25.6 H33"
+        stroke="#ffffff"
+        strokeOpacity="0.34"
+        strokeWidth="2.3"
         strokeLinecap="round"
-        opacity="0.35"
       />
     </svg>
   );
 }
 
 /**
- * The wordmark. Latin locales lead with TARIANAOXIN; RTL locales lead with
- * the native lockup and keep the Latin form as a tracked sub-line.
+ * THE LOCKUP. The wordmark no longer carries the gradient — its terminal
+ * stop measured 2.21:1 on glass. It is now solid `ink-900` on light and
+ * solid `white` on ink, and the mark alone carries the ramp.
+ *
+ * Latin locales lead with TARIANAOXIN over an English descriptor; RTL
+ * locales lead with the native lockup and keep the Latin transliteration
+ * as a tracked, `dir="ltr"` sub-line. The descriptor string is untranslated
+ * English, so it is gated to `locale === "en"` (§9).
  */
 export function Logo({
   locale,
@@ -73,10 +113,13 @@ export function Logo({
 }) {
   const rtl = locale !== "en";
   const native = locale === "ar" ? "تاريانا أوكسين" : "تاریانا اکسین";
+  const onInk = tone === "light";
 
-  const primaryTone =
-    tone === "light" ? "text-brand-gradient-light" : "text-brand-gradient";
-  const subTone = tone === "light" ? "text-aqua-200/70" : "text-mist-500";
+  const wordTone = onInk ? "text-white" : "text-ink-900";
+  const subTone = onInk ? "text-onink-300" : "text-mist-600";
+  // The one accented syllable. Solid, tone-matched, AA at display size.
+  const accentTone = onInk ? "text-aqua-300" : "text-aqua-700";
+  const wordStep = compact ? "fs-h4" : "fs-h3";
 
   return (
     <span className={`inline-flex items-center gap-3 ${className}`}>
@@ -84,56 +127,59 @@ export function Logo({
         tone={tone}
         className={compact ? "h-9 w-9 shrink-0" : "h-11 w-11 shrink-0"}
       />
-      <span className="flex flex-col justify-center leading-none">
-        {rtl ? (
-          <>
-            <span
-              className={`${primaryTone} font-extrabold ${
-                compact ? "text-[1.15rem]" : "text-[1.35rem]"
-              }`}
-            >
-              {native}
-            </span>
-            <span
-              className={`${subTone} mt-1 text-[0.58rem] font-semibold tracking-[0.34em] uppercase`}
-              dir="ltr"
-            >
-              Tarianaoxin
-            </span>
-          </>
+      {/* Compact is the chrome lockup: mark + wordmark, no descriptor, and
+          below 26rem the mark stands entirely alone so a 320px header row
+          never has to compress its controls to fit a name. */}
+      <span
+        className={`flex-col justify-center ${
+          compact ? "hidden min-[26rem]:flex" : "flex"
+        }`}
+      >
+        <span
+          className={`${wordStep} ${wordTone} font-bold transition-colors duration-500 ease-out-expo`}
+          style={{ lineHeight: rtl ? 1.28 : 1.02 }}
+        >
+          {rtl ? (
+            native
+          ) : (
+            <>
+              TARIANA<span className={accentTone}>OXIN</span>
+            </>
+          )}
+        </span>
+
+        {compact ? null : rtl ? (
+          // Latin-locked by nature: the tracking is legal here (§2.3).
+          <span
+            dir="ltr"
+            className={`${subTone} fs-micro mt-1 font-semibold tracking-[0.26em] uppercase transition-colors duration-500 ease-out-expo`}
+          >
+            Tarianaoxin
+          </span>
         ) : (
-          <>
-            <span
-              className={`${primaryTone} font-extrabold tracking-[-0.02em] ${
-                compact ? "text-[1.2rem]" : "text-[1.42rem]"
-              }`}
-            >
-              TARIANA
-              <span className="relative">
-                O
-                <span className="mx-[0.02em] inline-block">X</span>
-                IN
-              </span>
-            </span>
-            <span
-              className={`${subTone} mt-1 text-[0.55rem] font-semibold tracking-[0.3em] uppercase`}
-            >
-              Disposable Tableware
-            </span>
-          </>
+          <span
+            className={`${subTone} eyebrow mt-1.5 transition-colors duration-500 ease-out-expo`}
+          >
+            Disposable Tableware
+          </span>
         )}
       </span>
     </span>
   );
 }
 
-/** Oversized decorative wordmark used as a section watermark. */
+/**
+ * Oversized decorative wordmark. Kept as an export because About and the
+ * home hero still place it; the chrome no longer does — a repeated giant
+ * wordmark is decoration standing in for structure, which is exactly what
+ * this direction removes.
+ */
 export function LogoWatermark({ className = "" }: { className?: string }) {
   return (
     <span
       aria-hidden="true"
       dir="ltr"
-      className={`pointer-events-none select-none font-extrabold tracking-[-0.045em] ${className}`}
+      className={`pointer-events-none select-none font-bold tracking-[-0.045em] ${className}`}
     >
       TARIANAOXIN
     </span>

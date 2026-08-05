@@ -1,191 +1,119 @@
 "use client";
 
-import {
-  HiArrowUpRight,
-  HiShieldCheck,
-  HiOutlineTruck,
-  HiOutlineSparkles,
-  HiOutlineArrowDown,
-} from "react-icons/hi2";
+import { HiArrowUpRight, HiShieldCheck } from "react-icons/hi2";
 import { ButtonLink } from "@/components/ui/Button";
+import { Eyebrow } from "@/components/ui/Section";
 import { ProductArt } from "@/components/brand/ProductArt";
-import { LogoWatermark } from "@/components/brand/Logo";
+import { categories } from "@/lib/catalog";
 import { useI18n } from "@/i18n/I18nProvider";
 
+/**
+ * HERO — "The Contact Sheet" (§7).
+ *
+ * Not a product floating in space: a catalogue plate. The eight
+ * production families are laid out on a ruled specification sheet with a
+ * drawn measurement scale across its top edge — "we make all of this, to
+ * a standard" in one glance. Two entrance animations, then total
+ * stillness. No orbit rings, no satellites, no glass, no drift, no
+ * scroll hint, no credential chips, and — per the client instruction —
+ * no statistic, counter or big-number credibility device of any kind.
+ */
 export function Hero() {
-  const { t, href, num } = useI18n();
+  const { t, href } = useI18n();
   const h = t.home.hero;
 
   return (
     <section className="mesh-dark relative isolate overflow-hidden">
-      {/* Structural layers */}
-      <div className="grid-lines pointer-events-none absolute inset-0" />
-      <div className="grain-layer pointer-events-none absolute inset-0 opacity-[0.14]" />
+      {/* Exactly three decorative layers, all inert. */}
       <div
         aria-hidden
-        className="animate-drift pointer-events-none absolute -top-40 -start-40 h-[38rem] w-[38rem] rounded-full bg-aqua-500/18 blur-[120px]"
+        className="grid-lines pointer-events-none absolute inset-0 opacity-60"
       />
       <div
         aria-hidden
-        className="animate-drift pointer-events-none absolute -bottom-56 end-[-10rem] h-[34rem] w-[34rem] rounded-full bg-ink-600/40 blur-[120px] [animation-delay:-8s]"
+        className="pointer-events-none absolute -top-56 -start-40 h-[42rem] w-[42rem] rounded-full bg-aqua-500/12 blur-[130px]"
       />
-      <LogoWatermark className="absolute inset-x-0 top-1/2 -z-10 text-center text-[22vw] leading-none text-white/[0.022]" />
+      <div
+        aria-hidden
+        className="grain-layer pointer-events-none absolute inset-0 opacity-[0.08]"
+      />
 
-      <div className="shell relative grid gap-12 pt-[clamp(8.5rem,16vw,12rem)] pb-[clamp(4rem,8vw,8rem)] sm:gap-14 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:gap-10">
-        {/* ── Copy ─────────────────────────────────────────── */}
-        <div className="flex flex-col items-start gap-6 sm:gap-7">
-          <span
-            className="inline-flex items-center gap-2.5 rounded-full border border-white/15 bg-white/5 py-2 ps-2 pe-4 text-[0.74rem] font-semibold text-ink-100/85 backdrop-blur-sm"
-            style={{ animation: "tx-fade .8s var(--ease-out-expo) both" }}
-          >
-            <span className="brand-gradient flex h-6 w-6 items-center justify-center rounded-full">
-              <HiShieldCheck className="h-3.5 w-3.5 text-white" />
-            </span>
-            {h.badge}
-          </span>
+      <div className="shell relative grid gap-12 pt-[calc(var(--nav-h)+clamp(2.5rem,6vw,5.5rem))] pb-[clamp(3.5rem,7vw,7rem)] lg:grid-cols-[1.02fr_0.98fr] lg:items-center lg:gap-[clamp(2.5rem,5vw,5rem)]">
+        {/* ── Leading cell — the claim ─────────────────────────── */}
+        <div className="enter flex flex-col items-start gap-[clamp(1.15rem,2.2vw,1.9rem)]">
+          <Eyebrow tone="light">{h.eyebrow}</Eyebrow>
 
-          <h1
-            className="fs-hero font-extrabold text-white"
-            style={{ animation: "tx-rise .9s var(--ease-out-expo) .08s both" }}
-          >
-            {h.titleTop}{" "}
-            <span className="text-brand-gradient-light relative inline-block">
-              {h.titleAccent}
-              <svg
-                viewBox="0 0 200 12"
-                preserveAspectRatio="none"
-                className="absolute inset-x-0 -bottom-1 h-3 w-full"
-                aria-hidden
-              >
-                <path
-                  d="M2 8 C 50 2, 150 2, 198 7"
-                  fill="none"
-                  stroke="#35bad5"
-                  strokeWidth="3"
-                  strokeLinecap="round"
-                  opacity="0.8"
-                />
-              </svg>
-            </span>{" "}
+          <h1 className="fs-hero max-w-[16ch] font-extrabold text-white">
+            {h.titleTop} <span className="text-aqua-300">{h.titleAccent}</span>{" "}
             {h.titleBottom}
           </h1>
 
-          <p
-            className="fs-lead max-w-xl text-ink-100/65"
-            style={{ animation: "tx-rise .9s var(--ease-out-expo) .18s both" }}
-          >
-            {h.subtitle}
-          </p>
+          <p className="fs-lead max-w-[46ch] text-onink-100">{h.subtitle}</p>
 
-          <div
-            className="flex w-full flex-col gap-3 min-[26rem]:w-auto min-[26rem]:flex-row min-[26rem]:flex-wrap min-[26rem]:items-center"
-            style={{ animation: "tx-rise .9s var(--ease-out-expo) .28s both" }}
-          >
+          <div className="flex w-full flex-col gap-3 min-[26rem]:w-auto min-[26rem]:flex-row min-[26rem]:items-center">
             <ButtonLink href={href("/shop")} size="lg">
               {h.ctaPrimary}
-              <HiArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 flip-rtl" />
+              <HiArrowUpRight aria-hidden className="h-4 w-4 shrink-0 flip-rtl" />
             </ButtonLink>
-            <ButtonLink
-              href={href("/about")}
-              size="lg"
-              variant="outline"
-              className="border-white/20 bg-white/5 text-white hover:border-aqua-400/60 hover:bg-white/10 hover:text-white"
-            >
+            <ButtonLink href={href("/about")} size="lg" variant="onink">
               {h.ctaSecondary}
             </ButtonLink>
           </div>
 
-          {/* Stat strip */}
-          <dl
-            className="mt-4 grid w-full grid-cols-2 gap-x-6 gap-y-5 border-t border-white/10 pt-7 sm:grid-cols-4"
-            style={{ animation: "tx-rise .9s var(--ease-out-expo) .38s both" }}
-          >
-            {t.home.stats.map((s) => (
-              <div key={s.label} className="flex flex-col gap-1">
-                <dt className="text-brand-gradient-light num text-[clamp(1.4rem,1.1rem+1vw,1.85rem)] font-extrabold">
-                  {s.value}
-                </dt>
-                <dd className="text-[0.74rem] leading-snug font-medium text-ink-100/45">
-                  {s.label}
-                </dd>
-              </div>
-            ))}
-          </dl>
+          {/* One credential line — replaces the deleted chip row + badge. */}
+          <span className="fs-caption inline-flex items-center gap-2 text-onink-300">
+            <HiShieldCheck
+              aria-hidden
+              className="h-4 w-4 shrink-0 text-aqua-400"
+            />
+            {h.badge}
+          </span>
         </div>
 
-        {/* ── Product constellation ────────────────────────── */}
-        <div
-          className="relative mx-auto w-full max-w-lg lg:max-w-none"
-          style={{ animation: "tx-scale-in 1.1s var(--ease-out-expo) .25s both" }}
+        {/* ── Trailing cell — the plate ────────────────────────── */}
+        <figure
+          className="enter-scale relative mx-auto w-full max-w-[32rem] overflow-hidden rounded-panel border border-hairline-inverse bg-inverse-2 shadow-e3 lg:max-w-[38rem]"
+          style={{ animationDelay: "120ms" }}
         >
-          <div className="relative aspect-square">
-            {/* orbit rings */}
-            <div className="absolute inset-[6%] rounded-full border border-white/8" />
-            <div className="absolute inset-[20%] rounded-full border border-white/10" />
-            <div className="absolute inset-[34%] rounded-full border border-dashed border-aqua-400/25" />
+          {/* Drawn measurement scale. Symmetric — no RTL variant. */}
+          <div
+            aria-hidden
+            className="tick-rule h-4 w-full border-b border-hairline-inverse"
+          />
 
-            {/* core glow */}
-            <div className="absolute inset-[26%] rounded-full bg-aqua-500/20 blur-3xl" />
-
-            {/* hero object */}
-            <div className="animate-float absolute inset-[22%] grid place-items-center">
-              <div className="glass-dark grid h-full w-full place-items-center rounded-[2.5rem] border border-white/15 shadow-[0_40px_120px_-40px_rgba(23,162,191,0.8)]">
-                <ProductArt art="paperCup" className="h-[68%] w-[68%]" />
-              </div>
-            </div>
-
-            {/* satellites */}
-            {[
-              { art: "cutlery", pos: "top-0 start-[8%]", delay: "-1.4s" },
-              { art: "plate", pos: "top-[14%] end-0", delay: "-3.2s" },
-              { art: "container", pos: "bottom-[16%] start-0", delay: "-2.1s" },
-              { art: "kraft", pos: "bottom-[2%] end-[12%]", delay: "-4.6s" },
-            ].map((s) => (
+          {/* The contact sheet. 1px rules come from gap-px over the
+              hairline parent, so the grid stays direction-agnostic. */}
+          <div className="grid grid-cols-2 gap-px bg-hairline-inverse min-[26rem]:grid-cols-3 sm:grid-cols-4">
+            {categories.map((cat) => (
               <div
-                key={s.art}
-                className={`animate-float absolute ${s.pos} grid h-[22%] w-[22%] place-items-center rounded-3xl border border-white/12 bg-white/95 shadow-[0_20px_50px_-20px_rgba(4,22,36,0.8)]`}
-                style={{ animationDelay: s.delay }}
+                key={cat.id}
+                className="relative grid aspect-square place-items-center bg-inverse-2 p-3"
               >
-                <ProductArt
-                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                  art={s.art as any}
-                  className="h-[72%] w-[72%]"
-                />
+                <ProductArt art={cat.art} className="h-[58%] w-[58%]" />
               </div>
             ))}
+            {/* Eight cells never fill a 3-column row; this keeps the
+                ruled plate solid instead of exposing the hairline
+                parent as a pale block in the last row. */}
+            <span
+              aria-hidden
+              className="hidden bg-inverse-2 min-[26rem]:block sm:hidden"
+            />
           </div>
 
-          {/* Floating credential chips — wrap rather than overflow on
-              the narrowest phones. */}
-          <div className="absolute inset-x-0 -bottom-2 flex flex-wrap justify-center gap-2">
-            {[
-              { Icon: HiOutlineTruck, label: `24${"h"}` },
-              { Icon: HiShieldCheck, label: "ISO 9001" },
-              { Icon: HiOutlineSparkles, label: `${num(240)}M` },
-            ].map(({ Icon, label }) => (
-              <span
-                key={label}
-                className="flex items-center gap-1.5 rounded-full border border-white/12 bg-ink-950/70 px-3 py-2 text-[0.72rem] font-bold whitespace-nowrap text-ink-100/80 backdrop-blur-md sm:px-3.5"
-                dir="ltr"
-              >
-                <Icon className="h-3.5 w-3.5 text-aqua-400" />
-                {label}
-              </span>
-            ))}
-          </div>
-        </div>
+          <figcaption className="flex items-center justify-between gap-4 border-t border-hairline-inverse px-5 py-3.5">
+            <span className="eyebrow text-onink-300">
+              {t.home.categories.eyebrow}
+            </span>
+            {/* Registration marks — a printer's mark, not a control. */}
+            <span aria-hidden className="flex shrink-0 gap-1">
+              <i className="block h-1.5 w-1.5 rounded-chip bg-aqua-400/80" />
+              <i className="block h-1.5 w-1.5 rounded-chip bg-onink-400/60" />
+              <i className="block h-1.5 w-1.5 rounded-chip bg-onink-400/60" />
+            </span>
+          </figcaption>
+        </figure>
       </div>
-
-      {/* scroll hint */}
-      <div className="relative flex justify-center pb-8">
-        <span className="animate-scroll-hint flex flex-col items-center gap-1.5 text-[0.66rem] font-semibold tracking-[0.2em] text-ink-100/40 uppercase">
-          {t.common.scrollToExplore}
-          <HiOutlineArrowDown className="h-4 w-4" />
-        </span>
-      </div>
-
-      {/* bottom fade into the page */}
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-gradient-to-b from-transparent to-mist-50" />
     </section>
   );
 }

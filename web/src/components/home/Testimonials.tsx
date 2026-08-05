@@ -1,120 +1,188 @@
 "use client";
 
-import { useState } from "react";
-import { HiChevronLeft, HiChevronRight, HiStar } from "react-icons/hi2";
+import { useRef, useState } from "react";
+import { HiChevronLeft, HiChevronRight } from "react-icons/hi2";
 import { ImQuotesLeft } from "react-icons/im";
-import { Container, SectionHeading } from "@/components/ui/Section";
+import { Chapter, Container, SectionHeading } from "@/components/ui/Section";
 import { Reveal } from "@/components/ui/Reveal";
+import { Button } from "@/components/ui/Button";
 import { useI18n } from "@/i18n/I18nProvider";
 
+/**
+ * Section 10 — BOARD · archetype B (SPLIT) · CARD/PANEL + shadow-e1.
+ *
+ * The old carousel translated a flex track by `index * 100%` with a sign
+ * flip for RTL: it clipped its own panel, fought `overflow-hidden`, and
+ * broke the moment a locale changed the panel's intrinsic width. This
+ * one stacks every quote in a single grid cell and crossfades, so:
+ *
+ *   · the container is always as tall as the tallest quote — no jump,
+ *     no clipping, no transform arithmetic, nothing to mirror;
+ *   · inactive figures carry `inert` **and** `aria-hidden`, so they are
+ *     out of the tab order and out of the accessibility tree;
+ *   · the live track announces the change politely;
+ *   · Arrow keys work from any control (mapped to the *visual*
+ *     direction, so RTL reverses them, per WAI-ARIA);
+ *   · a touch swipe on the panel advances it, in the direction a reader
+ *     of that script expects.
+ *
+ * Three quotes genuinely do not need a carousel, but keeping one lets
+ * the SPLIT hold a single large pull-quote instead of three cramped
+ * cards — and the controls give the leading column something to do.
+ */
 export function Testimonials() {
-  const { t, isRtl } = useI18n();
-  const items = t.home.testimonials.items;
+  const { t, num } = useI18n();
+  const ts = t.home.testimonials;
+  const items = ts.items;
+
   const [index, setIndex] = useState(0);
+  const swipeFrom = useRef<number | null>(null);
+  const regionRef = useRef<HTMLDivElement>(null);
 
-  const go = (dir: -1 | 1) =>
-    setIndex((i) => (i + dir + items.length) % items.length);
+  const go = (step: number) =>
+    setIndex((i) => (i + step + items.length) % items.length);
 
-  // In RTL the visual "previous" arrow points right.
-  const PrevIcon = isRtl ? HiChevronRight : HiChevronLeft;
-  const NextIcon = isRtl ? HiChevronLeft : HiChevronRight;
+  /** true when the section is currently laid out right-to-left. */
+  const rtl = () =>
+    !!regionRef.current &&
+    getComputedStyle(regionRef.current).direction === "rtl";
+
+  const onControlKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
+    e.preventDefault();
+    const forward = e.key === "ArrowRight" ? 1 : -1;
+    go(rtl() ? -forward : forward);
+  };
+
+  const onPointerDown = (e: React.PointerEvent) => {
+    if (e.pointerType === "mouse") return;
+    swipeFrom.current = e.clientX;
+  };
+  const endSwipe = (e: React.PointerEvent) => {
+    const from = swipeFrom.current;
+    swipeFrom.current = null;
+    if (from === null) return;
+    const dx = e.clientX - from;
+    if (Math.abs(dx) < 44) return;
+    // Dragging away from where the next item sits advances the deck.
+    go((dx < 0 ? 1 : -1) * (rtl() ? -1 : 1));
+  };
 
   return (
-    <section className="mesh-light relative overflow-hidden section-y">
+    <Chapter tone="board" pad="base" seam="bottom">
       <Container>
-        <div className="mb-12 flex flex-col justify-between gap-8 sm:flex-row sm:items-end">
-          <SectionHeading
-            eyebrow={t.home.testimonials.eyebrow}
-            title={t.home.testimonials.title}
-          />
+        <div
+          ref={regionRef}
+          className="grid gap-[clamp(2.25rem,4.5vw,4rem)] lg:grid-cols-[0.82fr_1.18fr] lg:items-center lg:gap-[clamp(2.5rem,5vw,5rem)]"
+        >
+          {/* Leading column — heading and the whole control set */}
+          <div className="flex flex-col">
+            <SectionHeading
+              eyebrow={ts.eyebrow}
+              title={ts.title}
+              reveal="fade"
+            />
 
-          <Reveal delay={120}>
-            <div className="flex items-center gap-2">
-              <button
-                type="button"
+            <Reveal
+              variant="fade"
+              delay={120}
+              className="stack-block flex items-center gap-2.5"
+            >
+              <Button
+                variant="outline"
+                size="sm"
+                aria-label={t.common.previous}
                 onClick={() => go(-1)}
-                aria-label="Previous"
-                className="flex h-12 w-12 items-center justify-center rounded-full border border-mist-200 bg-white text-ink-700 transition-all duration-300 hover:-translate-y-0.5 hover:border-aqua-400 hover:text-aqua-700"
+                onKeyDown={onControlKeyDown}
               >
-                <PrevIcon className="h-5 w-5" />
-              </button>
-              <button
-                type="button"
+                <HiChevronLeft className="h-4 w-4 flip-rtl" aria-hidden />
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                aria-label={t.common.next}
                 onClick={() => go(1)}
-                aria-label="Next"
-                className="brand-gradient sheen flex h-12 w-12 items-center justify-center rounded-full text-white transition-transform duration-300 hover:-translate-y-0.5"
+                onKeyDown={onControlKeyDown}
               >
-                <NextIcon className="h-5 w-5" />
-              </button>
+                <HiChevronRight className="h-4 w-4 flip-rtl" aria-hidden />
+              </Button>
+
+              <span
+                aria-hidden
+                className="mx-1 h-px flex-1 bg-hairline-strong"
+              />
+
+              <div className="flex items-center">
+                {items.map((item, i) => (
+                  <button
+                    key={item.name}
+                    type="button"
+                    onClick={() => setIndex(i)}
+                    onKeyDown={onControlKeyDown}
+                    aria-label={`${t.common.viewAll} ${num(i + 1)}`}
+                    aria-current={i === index || undefined}
+                    className="group flex h-11 w-11 items-center justify-center rounded-ctrl"
+                  >
+                    <span
+                      aria-hidden
+                      className={`block h-1.5 rounded-chip transition-[width,background-color] duration-300 ease-out-expo ${
+                        i === index
+                          ? "w-8 bg-ink-900"
+                          : "w-4 bg-mist-500 group-hover:bg-mist-600"
+                      }`}
+                    />
+                  </button>
+                ))}
+              </div>
+            </Reveal>
+          </div>
+
+          {/* Trailing column — one panel, three stacked quotes */}
+          <Reveal variant="fade" delay={60}>
+            <div
+              aria-live="polite"
+              className="grid"
+              onPointerDown={onPointerDown}
+              onPointerUp={endSwipe}
+              onPointerCancel={() => {
+                swipeFrom.current = null;
+              }}
+            >
+              {items.map((item, i) => {
+                const active = i === index;
+                return (
+                  <figure
+                    key={item.name}
+                    inert={!active}
+                    aria-hidden={!active || undefined}
+                    className={`col-start-1 row-start-1 flex flex-col gap-6 rounded-card border border-hairline bg-page p-[clamp(1.5rem,3.2vw,2.75rem)] shadow-e1 transition-opacity duration-500 ease-out-expo ${
+                      active ? "opacity-100" : "pointer-events-none opacity-0"
+                    }`}
+                  >
+                    <ImQuotesLeft
+                      aria-hidden
+                      className="h-7 w-7 shrink-0 text-mist-300 flip-rtl"
+                    />
+
+                    <blockquote className="fs-h3 font-semibold text-ink-900">
+                      {item.quote}
+                    </blockquote>
+
+                    {/* mt-auto: every figure stretches to the tallest quote,
+                        so the attribution must pin to the panel's foot. */}
+                    <figcaption className="fs-caption mt-auto flex flex-col gap-1 border-t border-hairline pt-5">
+                      <span className="font-semibold text-ink-900">
+                        {item.name}
+                      </span>
+                      <span className="text-mist-600">{item.role}</span>
+                    </figcaption>
+                  </figure>
+                );
+              })}
             </div>
           </Reveal>
         </div>
-
-        <Reveal>
-          <div className="relative overflow-hidden rounded-[2rem]">
-            <div
-              className="flex transition-transform duration-700 [transition-timing-function:var(--ease-out-expo)]"
-              style={{
-                transform: `translateX(${(isRtl ? 1 : -1) * index * 100}%)`,
-              }}
-            >
-              {items.map((item) => (
-                <figure
-                  key={item.name}
-                  className="brand-gradient relative w-full shrink-0 overflow-hidden p-[clamp(1.5rem,4.5vw,3.5rem)]"
-                >
-                  <div className="grid-lines pointer-events-none absolute inset-0 opacity-60" />
-                  <ImQuotesLeft className="absolute end-8 top-8 h-20 w-20 text-white/[0.07] flip-rtl" />
-
-                  <div className="relative flex flex-col gap-8">
-                    <div className="flex gap-1">
-                      {Array.from({ length: 5 }).map((_, s) => (
-                        <HiStar key={s} className="h-5 w-5 text-aqua-300" />
-                      ))}
-                    </div>
-
-                    <blockquote className="max-w-3xl text-[clamp(1.05rem,0.85rem+0.9vw,1.45rem)] leading-relaxed font-medium text-white">
-                      “{item.quote}”
-                    </blockquote>
-
-                    <figcaption className="flex items-center gap-4">
-                      <span className="flex h-12 w-12 items-center justify-center rounded-full border border-white/20 bg-white/10 text-[1rem] font-extrabold text-white">
-                        {item.name.trim().charAt(0)}
-                      </span>
-                      <span className="flex flex-col">
-                        <span className="text-[0.95rem] font-bold text-white">
-                          {item.name}
-                        </span>
-                        <span className="text-[0.82rem] text-ink-100/60">
-                          {item.role}
-                        </span>
-                      </span>
-                    </figcaption>
-                  </div>
-                </figure>
-              ))}
-            </div>
-          </div>
-        </Reveal>
-
-        {/* progress dots — the bar is 6px tall but the hit area is 44px */}
-        <div className="mt-7 flex justify-center gap-2">
-          {items.map((item, i) => (
-            <button
-              key={item.name}
-              type="button"
-              onClick={() => setIndex(i)}
-              aria-label={`${i + 1}`}
-              aria-current={i === index}
-              className={`tap-target h-1.5 rounded-full transition-all duration-500 ${
-                i === index
-                  ? "brand-gradient w-10"
-                  : "w-4 bg-mist-300 hover:bg-mist-400"
-              }`}
-            />
-          ))}
-        </div>
       </Container>
-    </section>
+    </Chapter>
   );
 }

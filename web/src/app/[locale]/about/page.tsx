@@ -2,6 +2,11 @@ import type { Metadata } from "next";
 import { isLocale } from "@/i18n/config";
 import { getDictionary } from "@/i18n";
 import { AboutView } from "@/components/about/AboutView";
+import {
+  BreadcrumbJsonLd,
+  SiteJsonLd,
+  pageMetadata,
+} from "@/components/seo/JsonLd";
 
 export async function generateMetadata({
   params,
@@ -11,9 +16,35 @@ export async function generateMetadata({
   const { locale } = await params;
   if (!isLocale(locale)) return {};
   const t = getDictionary(locale);
-  return { title: t.about.hero.title, description: t.about.hero.subtitle };
+  return pageMetadata({
+    locale,
+    path: "/about",
+    title: t.about.hero.title,
+    description: t.about.hero.subtitle,
+  });
 }
 
-export default function AboutPage() {
-  return <AboutView />;
+export default async function AboutPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+
+  return (
+    <>
+      {isLocale(locale) && (
+        <>
+          <SiteJsonLd locale={locale} />
+          <BreadcrumbJsonLd
+            locale={locale}
+            crumbs={[
+              { name: getDictionary(locale).nav.about, path: "/about" },
+            ]}
+          />
+        </>
+      )}
+      <AboutView />
+    </>
+  );
 }
