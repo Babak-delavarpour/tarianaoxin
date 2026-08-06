@@ -18,15 +18,15 @@ export default function manifest(): MetadataRoute.Manifest {
     categories: ["business", "shopping"],
     icons: [
       {
-        src: "/icon.svg",
-        sizes: "any",
-        type: "image/svg+xml",
+        src: "/brand/tarianaoxin-to-concept.png",
+        sizes: "1254x1254",
+        type: "image/png",
         purpose: "any",
       },
       {
-        src: "/icon-maskable.svg",
-        sizes: "any",
-        type: "image/svg+xml",
+        src: "/brand/tarianaoxin-to-concept.png",
+        sizes: "1254x1254",
+        type: "image/png",
         purpose: "maskable",
       },
     ],

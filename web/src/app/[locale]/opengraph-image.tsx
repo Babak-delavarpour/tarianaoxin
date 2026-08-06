@@ -2,6 +2,7 @@ import { ImageResponse } from "next/og";
 
 import { locales, isLocale, defaultLocale } from "@/i18n/config";
 import en from "@/i18n/dictionaries/en";
+import { logoDataUri } from "@/lib/brand-image";
 
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
@@ -27,6 +28,7 @@ export default async function OpengraphImage({
 }) {
   const { locale } = await params;
   const iso = (isLocale(locale) ? locale : defaultLocale).toUpperCase();
+  const logo = await logoDataUri();
 
   return new ImageResponse(
     (
@@ -54,25 +56,13 @@ export default async function OpengraphImage({
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: 22 }}>
-            <svg width="86" height="86" viewBox="0 0 48 48">
-              <rect width="48" height="48" rx="13" fill="#0d3552" />
-              <path
-                d="M15.2 8.5 L32.8 19.5"
-                stroke="#4fd6ea"
-                strokeWidth="2.8"
-                strokeLinecap="round"
-              />
-              <path
-                d="M32.8 8.5 L15.2 19.5"
-                stroke="#4fd6ea"
-                strokeWidth="2.8"
-                strokeLinecap="round"
-              />
-              <path
-                d="M13.6 17.8 H34.4 L31.1 36.2 A3.4 3.4 0 0 1 27.75 39 H20.25 A3.4 3.4 0 0 1 16.9 36.2 Z"
-                fill="#ffffff"
-              />
-            </svg>
+            <img
+              src={logo}
+              alt=""
+              width={86}
+              height={86}
+              style={{ borderRadius: 10 }}
+            />
             <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
               <div
                 style={{
@@ -82,7 +72,7 @@ export default async function OpengraphImage({
                   color: "#ffffff",
                 }}
               >
-                TARIANAOXIN
+                TarianaOxin
               </div>
               <div
                 style={{

@@ -1,15 +1,15 @@
 const en = {
   meta: {
-    title: "Tarianaoxin — Disposable Tableware Manufacturing & Distribution",
+    title: "TarianaOxin — Disposable Tableware Manufacturing & Distribution",
     description:
-      "Tarianaoxin manufactures and distributes premium disposable tableware — cups, plates, cutlery, containers and eco lines — for hospitality, catering and retail across the region.",
+      "TarianaOxin manufactures and distributes premium disposable tableware — cups, plates, cutlery, containers and eco lines — for hospitality, catering and retail across the region.",
   },
 
   brand: {
-    name: "Tarianaoxin",
+    name: "TarianaOxin",
     native: "تاریانا اکسین",
     tagline: "Single-use. Never single-standard.",
-    legal: "Tarianaoxin Industrial & Trading Co.",
+    legal: "TarianaOxin Industrial & Trading Co.",
   },
 
   nav: {
@@ -106,7 +106,7 @@ const en = {
     showPassword: "Show password",
     hidePassword: "Hide password",
     rememberMe: "Remember me",
-    noAccount: "New to Tarianaoxin?",
+    noAccount: "New to TarianaOxin?",
     haveAccount: "Already have an account?",
     backToSignIn: "Back to sign in",
     sendResetLink: "Send reset link",
@@ -157,7 +157,7 @@ const en = {
       eyebrow: "Who we are",
       title: "A factory, a fleet, and a standard we refuse to lower.",
       body1:
-        "Tarianaoxin began as a family distribution business and grew into an integrated producer of disposable tableware. Today we control the full chain — raw material sourcing, injection and thermoforming, hygienic packing and last-mile delivery.",
+        "TarianaOxin began as a family distribution business and grew into an integrated producer of disposable tableware. Today we control the full chain — raw material sourcing, injection and thermoforming, hygienic packing and last-mile delivery.",
       body2:
         "That control is why our clients — restaurant chains, caterers, airlines and wholesalers — get the same product, the same weight and the same finish in every carton, every month.",
       points: [
@@ -204,7 +204,7 @@ const en = {
       ],
     },
     why: {
-      eyebrow: "Why Tarianaoxin",
+      eyebrow: "Why TarianaOxin",
       title: "The reasons buyers stay for years.",
       items: [
         {
@@ -251,7 +251,7 @@ const en = {
       items: [
         {
           quote:
-            "We run 42 branches. Tarianaoxin is the only supplier whose cup weight has not changed in four years — that predictability is worth more than a cheaper quote.",
+            "We run 42 branches. TarianaOxin is the only supplier whose cup weight has not changed in four years — that predictability is worth more than a cheaper quote.",
           name: "Reza Mostafavi",
           role: "Supply Chain Director, national café chain",
         },
@@ -292,7 +292,7 @@ const en = {
       body2:
         "We started by distributing only what we would use ourselves. When the market grew faster than our suppliers could hold standard, we built our own lines — first cutlery, then cups, then containers.",
       body3:
-        "Tarianaoxin today runs its own moulds, its own printing and its own fleet. The promise has not changed since the counter: what is on the label is what is in the carton.",
+        "TarianaOxin today runs its own moulds, its own printing and its own fleet. The promise has not changed since the counter: what is on the label is what is in the carton.",
     },
     timeline: {
       eyebrow: "Milestones",
@@ -300,7 +300,7 @@ const en = {
       items: [
         { year: "1996", title: "The first counter", body: "Delavarpour opens a disposable tableware distribution counter in central Ahvaz." },
         { year: "2004", title: "Regional distribution", body: "Coverage extends across Khuzestan with the first owned delivery vehicles." },
-        { year: "2011", title: "First production line", body: "Injection moulding for cutlery begins under the Tarianaoxin brand." },
+        { year: "2011", title: "First production line", body: "Injection moulding for cutlery begins under the TarianaOxin brand." },
         { year: "2016", title: "Cups & containers", body: "Thermoforming and paper-cup lines commissioned; ISO 9001 certification achieved." },
         { year: "2021", title: "Eco series", body: "Kraft and bagasse lines launched for clients transitioning away from conventional plastics." },
         { year: "2024", title: "Nationwide", body: "Distribution network reaches thirty-one provinces with regional stock hubs." },

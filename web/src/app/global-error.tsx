@@ -20,25 +20,17 @@ const ONINK_100 = "#d6e4ef";
 const ONINK_300 = "#94adc1";
 const AQUA_300 = "#6bd3e5";
 
-/* The simplified mark: no gradients, no sub-3px strokes — it has to hold
-   up without the stylesheet that normally sizes and colours it. */
+/* The approved PNG, kept independent of Next's image runtime in this boundary. */
 function Mark() {
   return (
-    <svg
+    <img
+      src="/brand/tarianaoxin-to-concept.png"
+      alt=""
       width="48"
       height="48"
-      viewBox="0 0 48 48"
       aria-hidden="true"
-      focusable="false"
-    >
-      <rect width="48" height="48" rx="14" fill={INK_900} />
-      <rect x="0" y="14" width="48" height="3" fill={AQUA_300} opacity="0.85" />
-      <path
-        d="M13.6 17.8 H34.4 L31.1 36.2 A3.4 3.4 0 0 1 27.75 39 H20.25 A3.4 3.4 0 0 1 16.9 36.2 Z"
-        fill="#ffffff"
-        fillOpacity="0.96"
-      />
-    </svg>
+      style={{ borderRadius: "0.4rem" }}
+    />
   );
 }
 

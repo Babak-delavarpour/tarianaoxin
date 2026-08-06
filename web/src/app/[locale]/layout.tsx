@@ -43,7 +43,7 @@ export async function generateMetadata({
       template: `%s · ${t.brand.name}`,
     },
     description: t.meta.description,
-    applicationName: "Tarianaoxin",
+    applicationName: "TarianaOxin",
     alternates: {
       canonical: localePath(locale),
       languages: Object.fromEntries(
@@ -60,7 +60,15 @@ export async function generateMetadata({
       siteName: t.brand.name,
       locale: localeMeta[locale].htmlLang,
     },
-    icons: { icon: [{ url: "/icon.svg", type: "image/svg+xml" }] },
+    icons: {
+      icon: [
+        {
+          url: "/brand/tarianaoxin-to-concept.png",
+          type: "image/png",
+          sizes: "1254x1254",
+        },
+      ],
+    },
   };
 }
 

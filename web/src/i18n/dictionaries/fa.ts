@@ -125,7 +125,7 @@ const fa: Dictionary = {
   home: {
     hero: {
       eyebrow: "تولید و توزیع سراسری",
-      titleTop: "تأمین کامل",
+      titleTop: "تأمین",
       titleAccent: "محصولات یک‌بارمصرف",
       titleBottom: "برای کسب‌وکار شما",
       subtitle:
