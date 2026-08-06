@@ -10,7 +10,6 @@ import {
   HiOutlineEnvelope,
   HiOutlineLockClosed,
   HiOutlineUser,
-  HiOutlineUserCircle,
   HiXMark,
 } from "react-icons/hi2";
 import { Logo } from "@/components/brand/Logo";
@@ -150,7 +149,7 @@ export function AccountDialog({ tone }: { tone: "dark" | "light" }) {
             : "text-ink-800 hover:bg-mist-100 hover:text-ink-900"
         }`}
       >
-        <HiOutlineUserCircle aria-hidden className="h-[1.35rem] w-[1.35rem]" />
+        <HiOutlineUser aria-hidden className="h-[1.35rem] w-[1.35rem]" />
       </button>
 
       <div

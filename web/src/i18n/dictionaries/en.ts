@@ -127,7 +127,7 @@ const en = {
       titleAccent: "engineered",
       titleBottom: "for trust.",
       subtitle:
-        "From food-grade resin to the moment it reaches your guest's hand — Tarianaoxin produces, certifies and delivers single-use tableware that hospitality brands rely on every day.",
+        "Food-grade disposable tableware with reliable bulk supply and nationwide delivery.",
       ctaPrimary: "Explore the catalogue",
       ctaSecondary: "About the company",
       badge: "Food-grade certified",

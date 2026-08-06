@@ -337,7 +337,7 @@ export function Header() {
             </nav>
 
             <div className="flex items-center gap-1">
-              <LanguageSwitcher tone={tone} />
+              <LanguageSwitcher />
               <AccountDialog tone={tone} />
 
               <button

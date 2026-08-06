@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
   HiArrowUpRight,
@@ -9,13 +10,24 @@ import {
 } from "react-icons/hi2";
 
 import { ProductArt } from "@/components/brand/ProductArt";
+import { HeritageStamp } from "@/components/brand/HeritageStamp";
 import { IranProvinceMap } from "@/components/home/IranProvinceMap";
 import { ButtonLink } from "@/components/ui/Button";
 import { useI18n } from "@/i18n/I18nProvider";
 import { categories } from "@/lib/catalog";
 
-const POSTER_COUNT = 2;
+const POSTER_COUNT = 3;
 const ROTATION_INTERVAL = 7000;
+const PRODUCT_OFFSETS = [
+  "translate-y-4 rotate-[-4deg]",
+  "-translate-y-3 rotate-[2deg]",
+  "-translate-y-5 rotate-[-2deg]",
+  "translate-y-2 rotate-[4deg]",
+  "-translate-y-1 rotate-[3deg]",
+  "translate-y-5 rotate-[-3deg]",
+  "translate-y-3 rotate-[2deg]",
+  "-translate-y-2 rotate-[-4deg]",
+];
 
 export function HeroPosterSlider() {
   const { t, href, isRtl, num } = useI18n();
@@ -62,8 +74,12 @@ export function HeroPosterSlider() {
     }
   };
 
-  const slideClass = (index: number) =>
-    `col-start-1 row-start-1 grid items-center gap-10 transition-[opacity,transform] duration-700 ease-out-expo lg:grid-cols-[1.02fr_0.98fr] lg:gap-[clamp(2.5rem,5vw,5rem)] ${
+  const slideClass = (index: number, centered = false) =>
+    `col-start-1 row-start-1 grid transition-[opacity,transform] duration-700 ease-out-expo ${
+      centered
+        ? "place-items-center"
+        : "items-center gap-10 lg:grid-cols-[1.02fr_0.98fr] lg:gap-[clamp(2.5rem,5vw,5rem)]"
+    } ${
       active === index
         ? "relative z-10 translate-y-0 opacity-100"
         : "pointer-events-none translate-y-3 opacity-0"
@@ -132,30 +148,62 @@ export function HeroPosterSlider() {
             </span>
           </div>
 
-          <figure className="relative mx-auto w-full max-w-[32rem] overflow-hidden rounded-panel border border-hairline-inverse bg-inverse-2 shadow-e3 lg:max-w-[38rem]">
-            <div
+          <figure className="relative mx-auto w-full max-w-[40rem]">
+            <span
               aria-hidden
-              className="tick-rule h-4 w-full border-b border-hairline-inverse"
+              className="pointer-events-none absolute inset-x-[12%] top-1/2 h-44 -translate-y-1/2 rounded-full bg-aqua-400/[0.08] blur-3xl"
             />
-            <div className="grid grid-cols-4 grid-rows-2 gap-px bg-hairline-inverse">
-              {categories.map((category) => (
+            <svg
+              aria-hidden
+              viewBox="0 0 640 360"
+              preserveAspectRatio="none"
+              className="pointer-events-none absolute inset-0 h-full w-full overflow-visible"
+            >
+              <ellipse
+                cx="320"
+                cy="180"
+                rx="282"
+                ry="126"
+                fill="none"
+                stroke="#6bd3e5"
+                strokeWidth="1"
+                strokeDasharray="3 10"
+                opacity="0.24"
+              />
+              <ellipse
+                cx="320"
+                cy="180"
+                rx="230"
+                ry="154"
+                fill="none"
+                stroke="#d8b96f"
+                strokeWidth="0.8"
+                opacity="0.16"
+                transform="rotate(-8 320 180)"
+              />
+            </svg>
+
+            <div className="relative grid min-h-[17rem] grid-cols-4 grid-rows-2 items-center gap-x-1 gap-y-2 px-1 sm:min-h-[21rem] sm:gap-x-3 sm:px-5 lg:min-h-[24rem]">
+              {categories.map((category, index) => (
                 <div
                   key={category.id}
-                  className="relative grid aspect-square place-items-center bg-inverse-2 p-2.5 sm:p-3"
+                  className={`group relative grid aspect-square place-items-center transition-transform duration-500 ease-out-expo ${PRODUCT_OFFSETS[index]}`}
                 >
-                  <ProductArt art={category.art} className="h-[60%] w-[60%]" />
+                  <span
+                    aria-hidden
+                    className="absolute inset-[14%] rounded-full bg-aqua-200/[0.07] blur-xl transition-[transform,opacity] duration-500 group-hover:scale-125 group-hover:opacity-90"
+                  />
+                  <ProductArt
+                    art={category.art}
+                    className="relative z-10 h-[82%] w-[82%] drop-shadow-[0_18px_20px_rgba(1,18,31,0.34)] transition-transform duration-500 ease-out-expo group-hover:-translate-y-1 group-hover:scale-110"
+                  />
                 </div>
               ))}
             </div>
-            <figcaption className="flex items-center justify-between gap-4 border-t border-hairline-inverse px-5 py-3.5">
-              <span className="eyebrow text-onink-300">
-                {copy.productsLabel}
-              </span>
-              <span aria-hidden className="flex shrink-0 gap-1">
-                <i className="block h-1.5 w-1.5 rounded-chip bg-aqua-400/80" />
-                <i className="block h-1.5 w-1.5 rounded-chip bg-onink-400/60" />
-                <i className="block h-1.5 w-1.5 rounded-chip bg-onink-400/60" />
-              </span>
+            <figcaption className="relative mx-auto mt-1 flex w-fit items-center gap-3 text-center">
+              <span aria-hidden className="h-px w-8 bg-aqua-400/35" />
+              <span className="eyebrow text-onink-300">{copy.productsLabel}</span>
+              <span aria-hidden className="h-px w-8 bg-aqua-400/35" />
             </figcaption>
           </figure>
         </article>
@@ -194,6 +242,33 @@ export function HeroPosterSlider() {
           <figure className="relative mx-auto flex w-full max-w-[34rem] items-center justify-center lg:max-w-[40rem]">
             <IranProvinceMap label={copy.mapAlt} />
           </figure>
+        </article>
+
+        <article
+          role="group"
+          aria-roledescription="slide"
+          aria-label={`${num(3)} / ${num(POSTER_COUNT)}`}
+          aria-hidden={active !== 2}
+          inert={active !== 2 || undefined}
+          className={slideClass(2, true)}
+        >
+          <Link
+            href={href("/about")}
+            aria-label={hero.ctaSecondary}
+            className="group flex w-fit flex-col items-center gap-6 rounded-panel px-6 py-4 text-center focus-visible:outline-offset-4"
+          >
+            <h2 className="sr-only">{hero.ctaSecondary}</h2>
+            <div className="transition-transform duration-500 ease-out-expo group-hover:scale-[1.025] group-focus-visible:scale-[1.025]">
+              <HeritageStamp prominent />
+            </div>
+            <span className="fs-caption inline-flex h-12 items-center gap-2 rounded-ctrl border border-hairline-inverse bg-white/[0.05] px-5 font-semibold text-white transition-[background-color,border-color] duration-300 group-hover:border-aqua-400/35 group-hover:bg-white/[0.1]">
+              {hero.ctaSecondary}
+              <HiArrowUpRight
+                aria-hidden
+                className="h-4 w-4 shrink-0 flip-rtl"
+              />
+            </span>
+          </Link>
         </article>
       </div>
 
