@@ -140,6 +140,8 @@ const ar: Dictionary = {
         distributionTitle: "التوزيع في جميع أنحاء البلاد",
         distributionBody:
           "نوصّل طلبات الجملة بتوريد موثوق إلى الشركات في جميع أنحاء إيران ومحافظاتها الإحدى والثلاثين.",
+        shippingMethodsLabel: "طرق الشحن إلى جميع أنحاء البلاد",
+        shippingMethods: ["بريد إيران", "تيباكس", "الشحن البري"],
         branchesCta: "شاهد فروعنا",
         mapAlt: "خريطة إيران مع حدود المحافظات الإحدى والثلاثين",
         previous: "الملصق السابق",
@@ -424,9 +426,13 @@ const ar: Dictionary = {
       success: "شكراً لك — تم تسجيل رسالتك وسيتواصل معك فريقنا.",
     },
     info: {
-      title: "بيانات الشركة",
+      title: "معلومات الاتصال",
       addressLabel: "المقر الرئيسي والمصنع",
       address: "المنطقة الصناعية ٢، الأهواز، خوزستان، إيران",
+      headquartersTitle: "المقر الرئيسي في الأهواز",
+      headquartersAddress: "الأهواز، خوزستان، إيران",
+      factoryTitle: "مصنع تاريانا أوكسين",
+      factoryAddress: "المنطقة الصناعية ٢، الأهواز، خوزستان، إيران",
       phoneLabel: "خط المبيعات",
       emailLabel: "البريد الإلكتروني",
       hoursLabel: "ساعات العمل",
@@ -440,6 +446,22 @@ const ar: Dictionary = {
         { name: "قسم التصدير", detail: "export@tarianaoxin.com" },
         { name: "الجودة والشكاوى", detail: "quality@tarianaoxin.com" },
       ],
+    },
+    support: {
+      eyebrow: "دعم مباشر",
+      title: "دعم مباشر على مدار الساعة",
+      body:
+        "للحصول على إجابة أسرع، ابدأ محادثة مباشرة مع مساعد الدعم المتاح على مدار الساعة من دون مغادرة الصفحة.",
+      button: "فتح المحادثة المباشرة",
+    },
+    map: {
+      eyebrow: "مواقعنا",
+      title: "مكاتب تاريانا أوكسين على خرائط Google",
+      subtitle:
+        "اختر مكتباً أو مدينة توزيع. تعرض الخريطة مصنع الأهواز افتراضياً.",
+      locationListLabel: "اختر موقعاً",
+      openInGoogleMaps: "فتح في خرائط Google",
+      embedTitle: "خريطة موقع المكتب",
     },
   },
 

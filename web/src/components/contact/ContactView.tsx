@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
+  HiOutlineBuildingOffice,
+  HiOutlineBuildingOffice2,
+  HiOutlineChatBubbleLeftRight,
   HiOutlineMapPin,
-  HiOutlinePhone,
-  HiOutlineEnvelope,
-  HiOutlineClock,
   HiCheckCircle,
   HiPaperAirplane,
   HiOutlineArrowTopRightOnSquare,
@@ -18,19 +18,22 @@ import {
 } from "@/components/ui/Section";
 import { Reveal } from "@/components/ui/Reveal";
 import { Button } from "@/components/ui/Button";
-import { LogoMark } from "@/components/brand/Logo";
+import {
+  IranProvinceMap,
+  type BranchMarker,
+} from "@/components/home/IranProvinceMap";
+import { OPEN_LIVE_HELP_EVENT } from "@/components/support/LiveHelp";
 import { useI18n } from "@/i18n/I18nProvider";
 
 /**
  * CONTACT — MEASURED.
  *
- *   1 masthead INK   · SPLIT   (copy + a "who answers" ledger)
- *   2 form     PAPER · editorial column, `shell-narrow` — the site's main
- *                      conversion gets the whole measure, not a sidebar
- *   3 reach    INK   · LEDGER columns (address, lines, hours, directions)
+ *   1 contacts INK   · headquarters and factory cards
+ *   2 message  PAPER · enquiry form + direct 24-hour support
+ *   3 offices  INK   · selectable Google Maps embed, factory first
+ *   4 branches BOARD · nationwide branch network retained from About
  *
- * Validation: the dictionaries carry no error copy and this phase may not
- * add keys, so the form keeps **native constraint validation** — the
+ * The form keeps **native constraint validation** — the
  * browser supplies a message in the user's own language and focuses the
  * first offending field — and adds a visible hairline + `aria-invalid`
  * state on blur. Submission stays the local simulation; no network call.
@@ -39,7 +42,37 @@ import { useI18n } from "@/i18n/I18nProvider";
 const PHONE_DISPLAY = "+98 61 3221 5923";
 const PHONE_TEL = "+986132215923";
 const EMAIL = "sales@tarianaoxin.com";
-const MAP_URL = "https://maps.google.com/?q=Ahvaz+Industrial+Zone+2";
+
+const BRANCH_POINTS = [
+  { id: "ahvaz", x: 198, y: 382 },
+  { id: "tehran", x: 286, y: 198 },
+  { id: "mashhad", x: 565, y: 174 },
+  { id: "isfahan", x: 310, y: 323 },
+  { id: "shiraz", x: 334, y: 464 },
+  { id: "tabriz", x: 104, y: 92 },
+  { id: "rasht", x: 211, y: 109 },
+  { id: "bandar-abbas", x: 449, y: 566 },
+] as const;
+
+const OFFICE_QUERIES = [
+  { id: "factory", query: "Industrial Zone 2, Ahvaz, Khuzestan, Iran" },
+  { id: "headquarters", query: "Ahvaz, Khuzestan, Iran" },
+  { id: "tehran", query: "Tehran, Iran" },
+  { id: "mashhad", query: "Mashhad, Iran" },
+  { id: "isfahan", query: "Isfahan, Iran" },
+  { id: "shiraz", query: "Shiraz, Iran" },
+  { id: "tabriz", query: "Tabriz, Iran" },
+  { id: "rasht", query: "Rasht, Iran" },
+  { id: "bandar-abbas", query: "Bandar Abbas, Iran" },
+] as const;
+
+function googleMapsEmbedUrl(query: string) {
+  return `https://www.google.com/maps?q=${encodeURIComponent(query)}&z=12&output=embed`;
+}
+
+function googleMapsUrl(query: string) {
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
+}
 
 type FieldEl = HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
 
@@ -51,11 +84,74 @@ const labelClass = "fs-caption font-semibold text-mist-600";
 export function ContactView() {
   const { t } = useI18n();
   const c = t.contact;
+  const branches = t.about.branches;
 
   const [sent, setSent] = useState(false);
   const [sending, setSending] = useState(false);
   const [invalid, setInvalid] = useState<Record<string, boolean>>({});
+  const [activeOfficeId, setActiveOfficeId] = useState("factory");
   const successRef = useRef<HTMLDivElement>(null);
+
+  const branchMarkers = useMemo<BranchMarker[]>(
+    () =>
+      BRANCH_POINTS.map((point, index) => ({
+        ...point,
+        name: branches.locations[index],
+      })),
+    [branches.locations],
+  );
+
+  const officeLocations = useMemo(
+    () =>
+      OFFICE_QUERIES.map((office, index) => {
+        if (office.id === "factory") {
+          return {
+            ...office,
+            name: c.info.factoryTitle,
+            address: c.info.factoryAddress,
+          };
+        }
+
+        if (office.id === "headquarters") {
+          return {
+            ...office,
+            name: c.info.headquartersTitle,
+            address: c.info.headquartersAddress,
+          };
+        }
+
+        const branchName = branches.locations[index - 1];
+        return { ...office, name: branchName, address: branchName };
+      }),
+    [
+      branches.locations,
+      c.info.factoryAddress,
+      c.info.factoryTitle,
+      c.info.headquartersAddress,
+      c.info.headquartersTitle,
+    ],
+  );
+
+  const activeOffice =
+    officeLocations.find((office) => office.id === activeOfficeId) ??
+    officeLocations[0];
+
+  const primaryLocations = [
+    {
+      id: "headquarters",
+      Icon: HiOutlineBuildingOffice,
+      title: c.info.headquartersTitle,
+      address: c.info.headquartersAddress,
+      query: OFFICE_QUERIES[1].query,
+    },
+    {
+      id: "factory",
+      Icon: HiOutlineBuildingOffice2,
+      title: c.info.factoryTitle,
+      address: c.info.factoryAddress,
+      query: OFFICE_QUERIES[0].query,
+    },
+  ];
 
   /* Move focus into the confirmation so the change is not silent. */
   useEffect(() => {
@@ -80,31 +176,13 @@ export function ContactView() {
       invalid[name] ? "border-sand-700" : "border-hairline-strong"
     }`;
 
-  const reach = [
-    {
-      Icon: HiOutlinePhone,
-      label: c.info.phoneLabel,
-      value: PHONE_DISPLAY,
-      link: `tel:${PHONE_TEL}`,
-      ltr: true,
-    },
-    {
-      Icon: HiOutlineEnvelope,
-      label: c.info.emailLabel,
-      value: EMAIL,
-      link: `mailto:${EMAIL}`,
-      ltr: true,
-    },
-    {
-      Icon: HiOutlineClock,
-      label: c.info.hoursLabel,
-      value: c.info.hours,
-    },
-  ];
+  const openLiveHelp = () => {
+    window.dispatchEvent(new Event(OPEN_LIVE_HELP_EVENT));
+  };
 
   return (
     <>
-      {/* ═══ 1 · MASTHEAD — INK · SPLIT ═══════════════════════════ */}
+      {/* ═══ 1 · PRIMARY CONTACTS — INK ═══════════════════════════ */}
       <section className="mesh-dark nav-clear relative isolate text-white pb-[clamp(3.5rem,7vw,7rem)]">
         <div
           aria-hidden
@@ -119,63 +197,92 @@ export function ContactView() {
           className="grain-layer pointer-events-none absolute inset-0 opacity-[0.08]"
         />
 
-        <Container className="relative grid gap-[clamp(2.5rem,5vw,4rem)] lg:grid-cols-[1fr_0.9fr] lg:items-end lg:gap-[clamp(2.5rem,5vw,5rem)]">
-          <div className="enter flex flex-col items-start gap-5">
-            <h1 className="fs-h1 max-w-[16ch] font-bold text-white">
-              {c.hero.title}
-            </h1>
+        <Container className="relative">
+          <h1 className="enter fs-h1 max-w-[18ch] font-bold text-white">
+            {c.info.title}
+          </h1>
 
-            <p className="fs-lead max-w-[52ch] text-onink-200">
-              {c.hero.subtitle}
-            </p>
-          </div>
+          <div className="mt-[clamp(2rem,4vw,3.5rem)] grid gap-5 lg:grid-cols-2">
+            {primaryLocations.map(({ id, Icon, title, address, query }) => (
+              <article
+                key={id}
+                className="enter-fade overflow-hidden rounded-panel border border-hairline-inverse bg-inverse-2"
+              >
+                <div
+                  aria-hidden
+                  className="tick-rule h-4 w-full border-b border-hairline-inverse"
+                />
+                <div className="flex h-full flex-col gap-6 p-6 sm:p-8">
+                  <div className="flex items-start gap-4">
+                    <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-tile border border-hairline-inverse bg-white/[0.06] text-aqua-300">
+                      <Icon aria-hidden className="h-6 w-6" />
+                    </span>
+                    <div className="min-w-0">
+                      <h2 className="fs-h3 font-semibold text-white">{title}</h2>
+                      <a
+                        href={googleMapsUrl(query)}
+                        target="_blank"
+                        rel="noreferrer noopener"
+                        className="hover-rule mt-2 inline-flex items-start gap-2 fs-body text-onink-200 hover:text-aqua-300"
+                      >
+                        <HiOutlineMapPin
+                          aria-hidden
+                          className="mt-1 h-5 w-5 shrink-0 text-aqua-400"
+                        />
+                        <address className="not-italic">{address}</address>
+                      </a>
+                    </div>
+                  </div>
 
-          {/* who answers — direct lines, before the form is even seen */}
-          <div className="enter-fade w-full overflow-hidden rounded-panel border border-hairline-inverse bg-inverse-2">
-            <div
-              aria-hidden
-              className="tick-rule h-4 w-full border-b border-hairline-inverse"
-            />
-            <div className="border-b border-hairline-inverse px-5 py-3.5">
-              <span className="eyebrow text-onink-300">
-                {c.departments.title}
-              </span>
-            </div>
-            <ul className="plate-rule-ink">
-              {c.departments.items.map((d) => (
-                <li key={d.name} className="bg-inverse-2">
-                  <a
-                    href={`mailto:${d.detail}`}
-                    className="hover-rule flex flex-wrap items-baseline justify-between gap-x-5 gap-y-1 px-5 py-4 hover:bg-white/[0.05]"
-                  >
-                    <span className="fs-caption font-semibold text-white">
-                      {d.name}
-                    </span>
-                    <span className="num fs-caption font-semibold text-aqua-300">
-                      {d.detail}
-                    </span>
-                  </a>
-                </li>
-              ))}
-              <li className="flex flex-wrap items-baseline justify-between gap-x-5 gap-y-1 bg-inverse-2 px-5 py-4">
-                <span className="fs-caption font-semibold text-white">
-                  {c.info.hoursLabel}
-                </span>
-                <span className="fs-caption text-onink-200">
-                  {c.info.hours}
-                </span>
-              </li>
-            </ul>
+                  <dl className="grid gap-4 border-t border-hairline-inverse pt-5 sm:grid-cols-3">
+                    <div className="flex min-w-0 flex-col gap-1.5">
+                      <dt className="eyebrow text-onink-300">
+                        {c.info.phoneLabel}
+                      </dt>
+                      <dd>
+                        <a
+                          href={`tel:${PHONE_TEL}`}
+                          className="num hover-rule fs-caption font-semibold text-white hover:text-aqua-300"
+                        >
+                          {PHONE_DISPLAY}
+                        </a>
+                      </dd>
+                    </div>
+                    <div className="flex min-w-0 flex-col gap-1.5">
+                      <dt className="eyebrow text-onink-300">
+                        {c.info.emailLabel}
+                      </dt>
+                      <dd>
+                        <a
+                          href={`mailto:${EMAIL}`}
+                          className="num hover-rule break-all fs-caption font-semibold text-white hover:text-aqua-300"
+                        >
+                          {EMAIL}
+                        </a>
+                      </dd>
+                    </div>
+                    <div className="flex min-w-0 flex-col gap-1.5">
+                      <dt className="eyebrow text-onink-300">
+                        {c.info.hoursLabel}
+                      </dt>
+                      <dd className="fs-caption font-semibold text-white">
+                        {c.info.hours}
+                      </dd>
+                    </div>
+                  </dl>
+                </div>
+              </article>
+            ))}
           </div>
         </Container>
       </section>
 
-      {/* ═══ 2 · THE FORM — PAPER · editorial column ══════════════ */}
+      {/* ═══ 2 · MESSAGE + DIRECT SUPPORT — PAPER ═════════════════ */}
       <Chapter tone="paper" pad="base">
-        <Container narrow>
+        <Container>
           <SectionHeading title={c.form.title} subtitle={c.form.subtitle} />
 
-          <div className="stack-block">
+          <div className="stack-block grid items-start gap-[clamp(2.5rem,5vw,5rem)] lg:grid-cols-[minmax(0,1fr)_22rem]">
             {sent ? (
               <div
                 ref={successRef}
@@ -324,82 +431,193 @@ export function ContactView() {
                 </form>
               </Reveal>
             )}
+
+            <Reveal variant="fade" delay={80}>
+              <aside className="overflow-hidden rounded-card border border-hairline bg-sunken">
+                <div
+                  aria-hidden
+                  className="tick-rule h-4 border-b border-hairline-strong"
+                />
+                <div className="flex flex-col items-start gap-5 p-6 sm:p-8">
+                  <span className="flex h-12 w-12 items-center justify-center rounded-tile border border-hairline bg-page text-aqua-700">
+                    <HiOutlineChatBubbleLeftRight
+                      aria-hidden
+                      className="h-6 w-6"
+                    />
+                  </span>
+                  <div className="flex flex-col gap-2">
+                    <span className="eyebrow text-aqua-700">
+                      {c.support.eyebrow}
+                    </span>
+                    <h3 className="fs-h3 font-semibold text-ink-900">
+                      {c.support.title}
+                    </h3>
+                    <p className="fs-body text-mist-600">{c.support.body}</p>
+                  </div>
+                  <Button
+                    type="button"
+                    size="lg"
+                    onClick={openLiveHelp}
+                    className="w-full"
+                  >
+                    <HiOutlineChatBubbleLeftRight
+                      aria-hidden
+                      className="h-5 w-5"
+                    />
+                    {c.support.button}
+                  </Button>
+                </div>
+              </aside>
+            </Reveal>
           </div>
         </Container>
       </Chapter>
 
-      {/* ═══ 3 · WHERE WE ARE — INK · LEDGER columns ══════════════ */}
+      {/* ═══ 3 · OFFICE LOCATIONS — INK · GOOGLE MAP ══════════════ */}
       <Chapter tone="ink" pad="base">
         <div
           aria-hidden
           className="grid-lines pointer-events-none absolute inset-0 opacity-50"
         />
 
-        <Container className="relative grid gap-[clamp(2.5rem,5vw,4rem)] lg:grid-cols-[0.86fr_1.14fr] lg:items-start lg:gap-[clamp(2.5rem,5vw,5rem)]">
-          <Reveal variant="fade" className="flex flex-col items-start gap-5">
-            <LogoMark tone="light" className="h-12 w-12" />
+        <Container className="relative">
+          <SectionHeading
+            eyebrow={c.map.eyebrow}
+            title={c.map.title}
+            subtitle={c.map.subtitle}
+            tone="light"
+            reveal="fade"
+          />
 
-            <h2 className="fs-h2 max-w-[16ch] font-bold text-white">
-              {c.info.title}
-            </h2>
-
-            <span className="eyebrow text-onink-300">
-              {c.info.addressLabel}
-            </span>
-
-            {/* No cartography: the address is the object. */}
-            <a
-              href={MAP_URL}
-              target="_blank"
-              rel="noreferrer noopener"
-              className="hover-rule fs-h3 group inline-flex max-w-[18ch] items-start gap-3 font-semibold text-onink-100 hover:text-aqua-300"
-            >
-              <HiOutlineMapPin
+          <Reveal variant="scale" className="stack-block">
+            <div className="overflow-hidden rounded-panel border border-hairline-inverse bg-inverse-2 shadow-e2">
+              <div
                 aria-hidden
-                className="mt-1 h-5 w-5 shrink-0 text-aqua-400"
+                className="tick-rule h-4 border-b border-hairline-inverse"
               />
-              <span>
-                {c.info.address}
-                <HiOutlineArrowTopRightOnSquare
-                  aria-hidden
-                  className="ms-2 inline h-4 w-4 align-baseline opacity-60 flip-rtl"
-                />
-              </span>
-            </a>
-
-            <p className="fs-caption text-onink-300">{c.info.mapNote}</p>
-          </Reveal>
-
-          <Reveal variant="fade" delay={80} className="w-full">
-            <dl className="plate-rule-ink overflow-hidden rounded-card border border-hairline-inverse sm:grid-cols-3">
-              {reach.map(({ Icon, label, value, link, ltr }) => (
-                <div
-                  key={label}
-                  className="flex flex-col gap-3.5 bg-inverse-2 p-5 sm:p-6"
-                >
-                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-tile border border-hairline-inverse bg-white/[0.06] text-aqua-300">
-                    <Icon aria-hidden className="h-5 w-5" />
-                  </span>
-                  <dt className="eyebrow text-onink-300">{label}</dt>
-                  <dd
-                    className={`fs-caption font-semibold ${
-                      ltr ? "num" : ""
-                    } text-white`}
-                  >
-                    {link ? (
-                      <a
-                        href={link}
-                        className="tap-target hover-rule inline-block hover:text-aqua-300"
-                      >
-                        {value}
-                      </a>
-                    ) : (
-                      value
-                    )}
-                  </dd>
+              <div className="grid lg:grid-cols-[20rem_minmax(0,1fr)]">
+                <div className="flex max-h-[34rem] flex-col border-b border-hairline-inverse lg:border-b-0 lg:border-e">
+                  <div className="border-b border-hairline-inverse p-5 sm:p-6">
+                    <p className="eyebrow text-onink-300">
+                      {c.map.locationListLabel}
+                    </p>
+                  </div>
+                  <div className="rail flex gap-2 overflow-x-auto p-3 lg:flex-1 lg:flex-col lg:overflow-y-auto lg:p-4">
+                    {officeLocations.map((office) => {
+                      const selected = office.id === activeOffice.id;
+                      return (
+                        <button
+                          key={office.id}
+                          type="button"
+                          aria-pressed={selected}
+                          onClick={() => setActiveOfficeId(office.id)}
+                          className={`hover-rule flex min-w-[12rem] items-start gap-3 rounded-ctrl border px-4 py-3 text-start lg:min-w-0 ${
+                            selected
+                              ? "border-aqua-400 bg-white/[0.1] text-white"
+                              : "border-hairline-inverse bg-transparent text-onink-200 hover:bg-white/[0.05] hover:text-white"
+                          }`}
+                        >
+                          <HiOutlineMapPin
+                            aria-hidden
+                            className={`mt-0.5 h-5 w-5 shrink-0 ${
+                              selected ? "text-aqua-300" : "text-onink-300"
+                            }`}
+                          />
+                          <span className="min-w-0">
+                            <span className="fs-caption block font-semibold">
+                              {office.name}
+                            </span>
+                            <span className="fs-micro mt-1 block text-onink-300">
+                              {office.address}
+                            </span>
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
-              ))}
-            </dl>
+
+                <div className="relative bg-page">
+                  <iframe
+                    key={activeOffice.id}
+                    title={`${c.map.embedTitle}: ${activeOffice.name}`}
+                    src={googleMapsEmbedUrl(activeOffice.query)}
+                    loading="lazy"
+                    allowFullScreen
+                    referrerPolicy="no-referrer-when-downgrade"
+                    className="h-[26rem] w-full border-0 sm:h-[34rem]"
+                  />
+                  <div className="absolute inset-x-3 bottom-3 flex justify-end sm:inset-x-5 sm:bottom-5">
+                    <a
+                      href={googleMapsUrl(activeOffice.query)}
+                      target="_blank"
+                      rel="noreferrer noopener"
+                      className="hover-rule inline-flex min-h-11 items-center gap-2 rounded-ctrl border border-hairline bg-page px-4 fs-caption font-semibold text-ink-900 shadow-e2 hover:border-aqua-600 hover:text-aqua-700"
+                    >
+                      {c.map.openInGoogleMaps}
+                      <HiOutlineArrowTopRightOnSquare
+                        aria-hidden
+                        className="h-4 w-4 flip-rtl"
+                      />
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </Reveal>
+        </Container>
+      </Chapter>
+
+      {/* ═══ 4 · BRANCHES — BOARD · NATIONWIDE NETWORK ════════════ */}
+      <Chapter
+        id="branches"
+        tone="board"
+        pad="base"
+        seam="both"
+        className="scroll-mt-[var(--nav-h)]"
+      >
+        <Container>
+          <SectionHeading
+            eyebrow={branches.eyebrow}
+            title={branches.title}
+            subtitle={branches.subtitle}
+            reveal="fade"
+          />
+
+          <Reveal variant="scale" className="stack-block">
+            <figure className="overflow-hidden rounded-panel border border-hairline-inverse bg-inverse-2 shadow-e2">
+              <div
+                aria-hidden
+                className="tick-rule h-4 w-full border-b border-hairline-inverse"
+              />
+
+              <div className="grid lg:grid-cols-[minmax(0,1fr)_20rem]">
+                <div className="border-b border-hairline-inverse px-3 py-5 sm:px-7 lg:border-b-0 lg:border-e">
+                  <IranProvinceMap
+                    label={branches.mapAlt}
+                    branches={branchMarkers}
+                  />
+                </div>
+
+                <figcaption className="flex flex-col justify-center gap-6 p-6 sm:p-8">
+                  <p className="fs-body text-onink-200">{branches.note}</p>
+                  <ol className="grid grid-cols-2 gap-x-5 gap-y-3 border-t border-hairline-inverse pt-5 lg:grid-cols-1">
+                    {branches.locations.map((location) => (
+                      <li
+                        key={location}
+                        className="fs-caption flex items-center gap-3 font-semibold text-white"
+                      >
+                        <span
+                          aria-hidden
+                          className="h-2.5 w-2.5 shrink-0 rounded-chip bg-sand-500 ring-2 ring-white/70"
+                        />
+                        <span>{location}</span>
+                      </li>
+                    ))}
+                  </ol>
+                </figcaption>
+              </div>
+            </figure>
           </Reveal>
         </Container>
       </Chapter>

@@ -12,6 +12,8 @@ type Message = {
   text: string;
 };
 
+export const OPEN_LIVE_HELP_EVENT = "tarianaoxin:open-live-help";
+
 function AgentAvatar({ large = false }: { large?: boolean }) {
   return (
     <span
@@ -50,6 +52,12 @@ export function LiveHelp() {
   const [draft, setDraft] = useState("");
   const [messages, setMessages] = useState<Message[]>([]);
   const [replying, setReplying] = useState(false);
+
+  useEffect(() => {
+    const openLiveHelp = () => setOpen(true);
+    window.addEventListener(OPEN_LIVE_HELP_EVENT, openLiveHelp);
+    return () => window.removeEventListener(OPEN_LIVE_HELP_EVENT, openLiveHelp);
+  }, []);
 
   useEffect(() => {
     if (!open) return;

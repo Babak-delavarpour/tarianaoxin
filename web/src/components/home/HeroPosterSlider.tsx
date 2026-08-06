@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
@@ -18,6 +19,27 @@ import { categories } from "@/lib/catalog";
 
 const POSTER_COUNT = 3;
 const ROTATION_INTERVAL = 7000;
+const SHIPPING_METHOD_LOGOS = [
+  {
+    src: "/shipping/iran-post.png",
+    width: 559,
+    height: 357,
+    imageClass: "h-[3.15rem] w-auto max-w-full",
+  },
+  {
+    src: "/shipping/tipax.webp",
+    width: 512,
+    height: 512,
+    imageClass: "h-auto w-[6.75rem] max-w-none",
+  },
+  {
+    src: "/shipping/transport.png",
+    width: 800,
+    height: 800,
+    imageClass:
+      "h-auto w-[6.25rem] max-w-none brightness-110 contrast-125",
+  },
+] as const;
 const PRODUCT_OFFSETS = [
   "translate-y-4 rotate-[-4deg]",
   "-translate-y-3 rotate-[2deg]",
@@ -221,6 +243,33 @@ export function HeroPosterSlider() {
             <p className="hero-description fs-lead max-w-[46ch] text-onink-100">
               {copy.distributionBody}
             </p>
+
+            <div className="w-full max-w-[34rem]">
+              <p className="eyebrow mb-2.5 text-onink-300">
+                {copy.shippingMethodsLabel}
+              </p>
+              <ul className="grid grid-cols-3 overflow-hidden rounded-tile border border-hairline-inverse bg-white">
+                {SHIPPING_METHOD_LOGOS.map((logo, index) => (
+                  <li
+                    key={logo.src}
+                    className="flex min-w-0 flex-col items-center border-e border-ink-100 px-1.5 py-2.5 text-center last:border-e-0 sm:px-3"
+                  >
+                    <span className="flex h-14 w-full items-center justify-center overflow-hidden">
+                      <Image
+                        src={logo.src}
+                        width={logo.width}
+                        height={logo.height}
+                        alt=""
+                        className={`shrink-0 object-contain ${logo.imageClass}`}
+                      />
+                    </span>
+                    <span className="fs-micro mt-1 font-bold text-ink-800">
+                      {copy.shippingMethods[index]}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
 
             <div className="flex w-full flex-col gap-3 min-[26rem]:w-auto min-[26rem]:flex-row min-[26rem]:items-center">
               <ButtonLink href={href("/shop")} size="lg">

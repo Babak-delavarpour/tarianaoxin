@@ -140,6 +140,8 @@ const fa: Dictionary = {
         distributionTitle: "توزیع در سراسر کشور",
         distributionBody:
           "سفارش‌های عمده را با تأمین پایدار به کسب‌وکارهای سراسر ایران و هر ۳۱ استان ارسال می‌کنیم.",
+        shippingMethodsLabel: "روش‌های ارسال به سراسر کشور",
+        shippingMethods: ["پست ایران", "تیپاکس", "باربری"],
         branchesCta: "مشاهده شعب",
         mapAlt: "نقشه ایران با مرز همه ۳۱ استان",
         previous: "پوستر قبلی",
@@ -424,9 +426,13 @@ const fa: Dictionary = {
       success: "سپاسگزاریم — پیام شما ثبت شد. همکاران ما با شما تماس می‌گیرند.",
     },
     info: {
-      title: "اطلاعات شرکت",
+      title: "اطلاعات تماس",
       addressLabel: "دفتر مرکزی و کارخانه",
       address: "اهواز، شهرک صنعتی شماره ۲، خوزستان، ایران",
+      headquartersTitle: "دفتر مرکزی اهواز",
+      headquartersAddress: "اهواز، خوزستان، ایران",
+      factoryTitle: "کارخانه تاریانا اکسین",
+      factoryAddress: "اهواز، شهرک صنعتی شماره ۲، خوزستان، ایران",
       phoneLabel: "خط فروش",
       emailLabel: "ایمیل",
       hoursLabel: "ساعات کاری",
@@ -440,6 +446,22 @@ const fa: Dictionary = {
         { name: "واحد صادرات", detail: "export@tarianaoxin.com" },
         { name: "کیفیت و رسیدگی به شکایات", detail: "quality@tarianaoxin.com" },
       ],
+    },
+    support: {
+      eyebrow: "پشتیبانی مستقیم",
+      title: "پشتیبانی آنلاین ۲۴ ساعته",
+      body:
+        "برای دریافت پاسخ سریع‌تر، بدون خروج از این صفحه مستقیماً با پشتیبانی ۲۴ ساعته گفت‌وگو کنید.",
+      button: "شروع گفت‌وگوی آنلاین",
+    },
+    map: {
+      eyebrow: "موقعیت‌های ما",
+      title: "دفاتر تاریانا اکسین روی نقشه گوگل",
+      subtitle:
+        "دفتر یا شهر موردنظر را انتخاب کنید. نقشه به‌صورت پیش‌فرض موقعیت کارخانه اهواز را نمایش می‌دهد.",
+      locationListLabel: "انتخاب موقعیت",
+      openInGoogleMaps: "باز کردن در Google Maps",
+      embedTitle: "نقشه موقعیت دفتر",
     },
   },
 

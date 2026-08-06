@@ -138,6 +138,8 @@ const en = {
         distributionTitle: "Distribution across the country",
         distributionBody:
           "We deliver reliable wholesale orders to businesses throughout Iran, covering all 31 provinces.",
+        shippingMethodsLabel: "Nationwide shipping methods",
+        shippingMethods: ["Iran Post", "Tipax", "Freight"],
         branchesCta: "See our branches",
         mapAlt: "Map of Iran showing all 31 province boundaries",
         previous: "Previous poster",
@@ -426,9 +428,13 @@ const en = {
       success: "Thank you — your message has been recorded. Our team will be in touch.",
     },
     info: {
-      title: "Company details",
+      title: "Contact information",
       addressLabel: "Head office & plant",
       address: "Industrial Zone 2, Ahvaz, Khuzestan, Iran",
+      headquartersTitle: "Ahvaz headquarters",
+      headquartersAddress: "Ahvaz, Khuzestan, Iran",
+      factoryTitle: "TarianaOxin factory",
+      factoryAddress: "Industrial Zone 2, Ahvaz, Khuzestan, Iran",
       phoneLabel: "Sales line",
       emailLabel: "Email",
       hoursLabel: "Working hours",
@@ -442,6 +448,22 @@ const en = {
         { name: "Export department", detail: "export@tarianaoxin.com" },
         { name: "Quality & claims", detail: "quality@tarianaoxin.com" },
       ],
+    },
+    support: {
+      eyebrow: "Direct support",
+      title: "24-hour live support",
+      body:
+        "Need a faster answer? Start a direct conversation with our 24-hour support assistant without leaving this page.",
+      button: "Open live chat",
+    },
+    map: {
+      eyebrow: "Our locations",
+      title: "TarianaOxin offices on Google Maps",
+      subtitle:
+        "Choose an office or distribution city. The map opens on the Ahvaz factory by default.",
+      locationListLabel: "Choose a location",
+      openInGoogleMaps: "Open in Google Maps",
+      embedTitle: "Office location map",
     },
   },
 
