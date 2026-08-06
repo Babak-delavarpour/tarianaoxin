@@ -15,6 +15,7 @@ import {
 import { Logo } from "@/components/brand/Logo";
 import { ButtonLink } from "@/components/ui/Button";
 import { LanguageSwitcher } from "./LanguageSwitcher";
+import { AccountDialog } from "@/components/account/AccountDialog";
 import { useI18n } from "@/i18n/I18nProvider";
 import { publicPathname } from "@/i18n/config";
 import { useCart } from "@/components/shop/CartProvider";
@@ -337,6 +338,7 @@ export function Header() {
 
             <div className="flex items-center gap-1">
               <LanguageSwitcher tone={tone} />
+              <AccountDialog tone={tone} />
 
               <button
                 type="button"

@@ -361,7 +361,7 @@ export function ShopView({
             className={`grid gap-6 ${
               locale === "fa"
                 ? ""
-                : "lg:grid-cols-[1fr_0.8fr] lg:items-end lg:gap-10"
+                : "xl:grid-cols-[minmax(0,1fr)_minmax(0,42rem)] xl:items-end xl:gap-10"
             }`}
           >
             {locale !== "fa" && (
@@ -376,30 +376,59 @@ export function ShopView({
             )}
 
             <div
-              className={`enter-fade w-full max-w-xl ${
+              className={`enter-fade w-full max-w-2xl ${
                 locale === "fa" ? "mx-auto" : ""
               }`}
             >
-              <label
-                htmlFor="shop-search"
-                className="sr-only"
+              <form
+                role="search"
+                onSubmit={(event) => {
+                  event.preventDefault();
+                  if (!query.trim()) return;
+                  window.setTimeout(() => {
+                    document.getElementById("shop-results")?.scrollIntoView({
+                      behavior: window.matchMedia(
+                        "(prefers-reduced-motion: reduce)",
+                      ).matches
+                        ? "auto"
+                        : "smooth",
+                      block: "start",
+                    });
+                  }, 0);
+                }}
               >
-                {t.common.search}
-              </label>
-              <div className="relative">
-                <HiMagnifyingGlass
-                  aria-hidden
-                  className="pointer-events-none absolute start-4 top-1/2 h-5 w-5 -translate-y-1/2 text-onink-300"
-                />
-                <input
-                  id="shop-search"
-                  type="search"
-                  value={query}
-                  onChange={(e) => setQuery(e.target.value)}
-                  placeholder={t.common.search}
-                  className="hover-rule h-12 w-full rounded-ctrl border border-hairline-inverse-strong bg-white/[0.06] ps-12 pe-4 fs-body text-white placeholder:text-onink-300 focus:border-aqua-400 focus:bg-white/[0.12]"
-                />
-              </div>
+                <label htmlFor="shop-search" className="sr-only">
+                  {t.common.search}
+                </label>
+                <div className="relative flex h-14 items-center overflow-hidden rounded-card bg-inverse-2 shadow-e2 ring-1 ring-white/15 transition-shadow duration-200 focus-within:shadow-e3">
+                  <HiMagnifyingGlass
+                    aria-hidden
+                    className="pointer-events-none absolute start-4 h-5 w-5 text-aqua-300"
+                  />
+                  <input
+                    id="shop-search"
+                    type="text"
+                    inputMode="search"
+                    autoComplete="off"
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                    placeholder={t.common.search}
+                    className="h-full min-w-0 flex-1 border-0 bg-transparent ps-12 pe-4 fs-body text-white caret-aqua-300 placeholder:text-onink-300 focus-visible:outline-none"
+                  />
+
+                  {query ? (
+                    <button
+                      type="button"
+                      onClick={() => setQuery("")}
+                      aria-label={`${t.common.close} ${t.common.search}`}
+                      className="hover-rule me-1 grid h-10 w-10 shrink-0 place-items-center rounded-ctrl text-onink-200 hover:bg-white/10 hover:text-white focus-visible:outline-offset-[-2px]"
+                    >
+                      <HiXMark aria-hidden className="h-4.5 w-4.5" />
+                    </button>
+                  ) : null}
+
+                </div>
+              </form>
             </div>
           </div>
         </Container>

@@ -19,13 +19,11 @@ import { useI18n } from "@/i18n/I18nProvider";
  *
  *   1 masthead  INK   · SPLIT           (copy + capability plinth)
  *   2 story     BOARD · LEDGER rows     (three ruled clauses, editorial)
- *   3 timeline  PAPER · alternating spine (a vertical rule — a different axis)
- *   4 values    BOARD · ruled plate     (2×2, white cells on board)
- *   5 facility  INK   · drawn elevation + title block
- *   6 <Quality> PAPER · LEDGER columns  (owned by another agent)
- *   7 <CtaBand> INK   · BAND            (owned by another agent)
+ *   3 facility  INK   · drawn elevation + title block
+ *   4 <Quality> PAPER · LEDGER columns  (owned by another agent)
+ *   5 <CtaBand> INK   · BAND            (owned by another agent)
  *
- * Value sequence: ink → board → paper → board → ink → paper → ink.
+ * Value sequence: ink → board → ink → paper → ink.
  */
 
 /**
@@ -262,7 +260,6 @@ function HeritageStamp() {
 export function AboutView() {
   const { t, num, locale } = useI18n();
   const a = t.about;
-  const lastMilestone = a.timeline.items.length - 1;
 
   return (
     <>
@@ -369,111 +366,7 @@ export function AboutView() {
         </Container>
       </Chapter>
 
-      {/* ═══ 3 · TIMELINE — PAPER · spine ═════════════════════════ */}
-      <Chapter tone="paper" pad="base">
-        <Container>
-          <SectionHeading
-            eyebrow={a.timeline.eyebrow}
-            title={a.timeline.title}
-          />
-
-          {/* The spine lives OUTSIDE the <ol> so the list stays a clean
-              list, and it is positioned with logical insets only: at
-              `lg` it sits on the exact 50% seam between the two columns,
-              which is why the column gutter is padding, not gap. */}
-          <div className="stack-block relative">
-            <span
-              aria-hidden
-              className="pointer-events-none absolute inset-y-2 w-px bg-hairline-strong start-[calc(0.4375rem_-_0.5px)] lg:start-[calc(50%_-_0.5px)]"
-            />
-
-            <RevealGroup
-              as="ol"
-              className="relative grid gap-y-9 lg:grid-cols-2 lg:gap-y-4"
-            >
-              {a.timeline.items.map((item, i) => {
-                const leading = i % 2 === 0;
-                return (
-                  <li
-                    key={item.year}
-                    style={{ gridRowStart: i + 1 }}
-                    className={`relative ps-9 ${
-                      leading
-                        ? "lg:col-start-1 lg:ps-0 lg:pe-[clamp(2.5rem,5vw,5rem)] lg:text-end"
-                        : "lg:col-start-2 lg:pe-0 lg:ps-[clamp(2.5rem,5vw,5rem)]"
-                    }`}
-                  >
-                    <span
-                      aria-hidden
-                      className={`absolute top-[0.7rem] h-3.5 w-3.5 rounded-chip border-2 border-page start-0 ${
-                        leading
-                          ? "lg:start-auto lg:-end-[0.4375rem]"
-                          : "lg:-start-[0.4375rem]"
-                      } ${
-                        i === lastMilestone ? "bg-aqua-600" : "bg-ink-900"
-                      }`}
-                    />
-
-                    {/* `.num` forces `direction: ltr`, and `text-align: end`
-                        resolves against the element's OWN direction — so the
-                        isolated numeral is nested inside a plain block that
-                        keeps the page direction and does the aligning. */}
-                    <span className="fs-h1 block font-bold text-ink-900">
-                      <span className="num">{item.year}</span>
-                    </span>
-                    <h3 className="fs-h4 mt-1.5 font-semibold text-ink-900">
-                      {item.title}
-                    </h3>
-                    <p
-                      className={`fs-body mt-2.5 max-w-[46ch] text-mist-600 ${
-                        leading ? "lg:ms-auto" : ""
-                      }`}
-                    >
-                      {item.body}
-                    </p>
-                  </li>
-                );
-              })}
-            </RevealGroup>
-          </div>
-        </Container>
-      </Chapter>
-
-      {/* ═══ 4 · VALUES — BOARD · ruled plate ═════════════════════ */}
-      <Chapter tone="board" pad="tight" seam="both">
-        <Container>
-          <SectionHeading
-            eyebrow={a.values.eyebrow}
-            title={a.values.title}
-            reveal="fade"
-          />
-
-          {/* One entrance for the whole plate: staggering ruled cells
-              would flash the hairline ground through the 1px gaps. */}
-          <Reveal variant="fade" className="stack-block">
-            <div className="plate-rule overflow-hidden rounded-card sm:grid-cols-2">
-              {a.values.items.map((item, i) => (
-                <article
-                  key={item.title}
-                  className="flex flex-col gap-3 bg-page p-7 sm:p-8"
-                >
-                  <span className="eyebrow num text-aqua-700">
-                    {`${num(0)}${num(i + 1)}`}
-                  </span>
-                  <h3 className="fs-h4 font-semibold text-ink-900">
-                    {item.title}
-                  </h3>
-                  <p className="fs-body max-w-[46ch] text-mist-600">
-                    {item.body}
-                  </p>
-                </article>
-              ))}
-            </div>
-          </Reveal>
-        </Container>
-      </Chapter>
-
-      {/* ═══ 5 · FACILITY — INK · drawn elevation ═════════════════ */}
+      {/* ═══ 3 · FACILITY — INK · drawn elevation ═════════════════ */}
       <Chapter tone="ink" pad="base">
         <div
           aria-hidden
@@ -521,10 +414,10 @@ export function AboutView() {
         </Container>
       </Chapter>
 
-      {/* ═══ 6 · CERTIFICATION — PAPER · LEDGER columns ═══════════ */}
+      {/* ═══ 4 · CERTIFICATION — PAPER · LEDGER columns ═══════════ */}
       <Quality />
 
-      {/* ═══ 7 · CLOSE — INK · BAND ══════════════════════════════ */}
+      {/* ═══ 5 · CLOSE — INK · BAND ══════════════════════════════ */}
       <CtaBand
         title={a.cta.title}
         body={a.cta.body}

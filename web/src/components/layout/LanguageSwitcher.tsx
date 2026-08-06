@@ -22,7 +22,7 @@ import { useI18n } from "@/i18n/I18nProvider";
  * `uppercase` is legal on this site.
  */
 export function LanguageSwitcher({ tone = "dark" }: { tone?: "dark" | "light" }) {
-  const { locale, t } = useI18n();
+  const { locale, dir, t } = useI18n();
   const pathname = usePathname() || "/";
   const [open, setOpen] = useState(false);
   const wrapRef = useRef<HTMLDivElement>(null);
@@ -81,7 +81,7 @@ export function LanguageSwitcher({ tone = "dark" }: { tone?: "dark" | "light" })
   const onInk = tone === "light";
 
   return (
-    <div ref={wrapRef} className="relative">
+    <div ref={wrapRef} className="relative flex h-11 items-center">
       <button
         ref={triggerRef}
         type="button"
@@ -89,14 +89,14 @@ export function LanguageSwitcher({ tone = "dark" }: { tone?: "dark" | "light" })
         aria-expanded={open}
         aria-haspopup="menu"
         aria-label={t.common.language}
-        className={`hover-rule fs-caption flex h-11 items-center gap-2 rounded-ctrl px-2.5 font-semibold ${
+        className={`hover-rule fs-caption flex h-11 items-center justify-center gap-2 rounded-ctrl px-2.5 font-semibold leading-none ${
           onInk
             ? "text-onink-100 hover:bg-white/10 hover:text-white"
             : "text-ink-800 hover:bg-mist-100 hover:text-ink-900"
         }`}
       >
         <HiOutlineGlobeAlt aria-hidden className="h-[1.15rem] w-[1.15rem]" />
-        <span className="hidden sm:inline">{localeMeta[locale].name}</span>
+        <span className="hidden min-w-0 sm:inline">{localeMeta[locale].name}</span>
         <span
           dir="ltr"
           className="fs-micro font-bold uppercase opacity-70 sm:hidden"
@@ -118,8 +118,12 @@ export function LanguageSwitcher({ tone = "dark" }: { tone?: "dark" | "light" })
           onKeyDown={onMenuKey}
           // min-w is 44 rather than the recipe's 52: at 320px the trigger
           // sits ~206px from the leading edge and a 13rem panel clips.
-          className="absolute end-0 top-[calc(100%+0.5rem)] w-max min-w-44 max-w-[calc(100vw-2.5rem)] rounded-card border border-hairline bg-page p-1.5 shadow-e3 z-[var(--z-popover)]"
+          dir={dir}
+          className="absolute end-0 top-[calc(100%+0.5rem)] w-52 max-w-[calc(100vw-2rem)] overflow-hidden rounded-card border border-hairline bg-page p-2 shadow-e3 z-[var(--z-popover)]"
         >
+          <div className="eyebrow border-b border-hairline px-2.5 pb-2.5 pt-1 text-mist-600">
+            {t.common.language}
+          </div>
           {locales.map((l, i) => {
             const active = l === locale;
             return (
@@ -130,30 +134,33 @@ export function LanguageSwitcher({ tone = "dark" }: { tone?: "dark" | "light" })
                   itemRefs.current[i] = el;
                 }}
                 onClick={() => setOpen(false)}
-                role="menuitem"
+                role="menuitemradio"
                 aria-current={active ? "true" : undefined}
-                lang={localeMeta[l].htmlLang}
-                dir={l === "en" ? "ltr" : "rtl"}
-                className={`hover-rule fs-body flex items-center justify-between gap-3 rounded-ctrl px-3 py-2.5 font-semibold ${
+                aria-checked={active}
+                className={`hover-rule fs-caption mt-1 grid min-h-11 grid-cols-[1.25rem_minmax(0,1fr)_2rem] items-center gap-2.5 rounded-ctrl px-2.5 py-2 font-semibold focus-visible:outline-offset-[-2px] ${
                   active
-                    ? "bg-ink-900 text-white"
+                    ? "bg-aqua-50 text-aqua-800"
                     : "text-ink-800 hover:bg-mist-100 hover:text-ink-900"
                 }`}
               >
-                <span className="flex items-center gap-2.5">
-                  <HiCheck
-                    aria-hidden
-                    className={`h-4 w-4 shrink-0 ${
-                      active ? "text-aqua-300" : "opacity-0"
-                    }`}
-                  />
+                <HiCheck
+                  aria-hidden
+                  className={`h-4 w-4 shrink-0 ${
+                    active ? "text-aqua-700" : "opacity-0"
+                  }`}
+                />
+                <span
+                  lang={localeMeta[l].htmlLang}
+                  dir={l === "en" ? "ltr" : "rtl"}
+                  className={`truncate ${
+                    dir === "rtl" ? "text-right" : "text-left"
+                  }`}
+                >
                   {localeMeta[l].name}
                 </span>
                 <span
                   dir="ltr"
-                  className={`fs-micro font-bold uppercase ${
-                    active ? "text-onink-300" : "text-mist-600"
-                  }`}
+                  className="fs-micro justify-self-end font-bold uppercase text-mist-600"
                 >
                   {l}
                 </span>
