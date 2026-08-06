@@ -444,9 +444,9 @@ const ar: Dictionary = {
   },
 
   liveHelp: {
-    launcher: "فتح المحادثة المباشرة",
-    agentName: "تارا",
-    agentStatus: "مساعدة دعم ذكية · متصلة",
+    launcher: "فتح الدعم على مدار الساعة",
+    agentName: "TarianaOxin 24 hours support",
+    agentStatus: "مساعدة دعم ذكية · متاحة 24/7",
     greeting:
       "مرحباً! أنا تارا، مساعدة تاريانا أوكسين الذكية. اسألني عن المنتجات أو أسعار الجملة أو الطلبات.",
     suggestions: [
@@ -455,10 +455,8 @@ const ar: Dictionary = {
       "أحتاج مساعدة في طلب",
     ],
     messageLabel: "رسالتك",
-    messagePlaceholder: "اكتب رسالة إلى تارا…",
-    send: "إرسال الرسالة",
+    messagePlaceholder: "اكتب رسالة · اضغط Enter للإرسال",
     typing: "تارا تكتب الآن",
-    previewNotice: "محادثة تجريبية · تبقى الرسائل في هذه الصفحة",
     previewReply:
       "شكراً لرسالتك. واجهة المحادثة جاهزة — صِل خدمة الذكاء الاصطناعي لعرض إجابات العملاء هنا.",
   },

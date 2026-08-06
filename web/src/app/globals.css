@@ -817,6 +817,30 @@
   animation: tx-enter-scale 800ms var(--ease-out-expo) both;
 }
 
+/* Live chat opens from its launcher with a soft, direction-aware spring.
+   Visibility is delayed on close so the panel can finish its exit motion. */
+.live-chat-panel {
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+  transform: translateY(18px) scale(0.955);
+  transition:
+    opacity 200ms ease,
+    transform 300ms var(--ease-out-quart),
+    visibility 0s linear 300ms;
+}
+
+.live-chat-panel[data-open="true"] {
+  opacity: 1;
+  pointer-events: auto;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+  transition:
+    opacity 240ms ease,
+    transform 440ms var(--ease-out-expo),
+    visibility 0s linear 0s;
+}
+
 /* Utility aliases so the same names work inside a Tailwind class list. */
 @utility animate-enter {
   animation: tx-enter 620ms var(--ease-out-expo) both;

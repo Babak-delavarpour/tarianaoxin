@@ -446,9 +446,9 @@ const en = {
   },
 
   liveHelp: {
-    launcher: "Open live chat",
-    agentName: "Tara",
-    agentStatus: "AI support assistant · Online",
+    launcher: "Open 24-hour support",
+    agentName: "TarianaOxin 24 hours support",
+    agentStatus: "AI support assistant · Available 24/7",
     greeting:
       "Hi! I’m Tara, TarianaOxin’s AI assistant. Ask me about products, bulk pricing or an order.",
     suggestions: [
@@ -457,10 +457,8 @@ const en = {
       "I need help with an order",
     ],
     messageLabel: "Your message",
-    messagePlaceholder: "Message Tara…",
-    send: "Send message",
+    messagePlaceholder: "Type a message · Enter to send",
     typing: "Tara is typing",
-    previewNotice: "Demo chat · messages stay on this page",
     previewReply:
       "Thanks for your message. This chat interface is ready — connect the AI service to answer customers here.",
   },

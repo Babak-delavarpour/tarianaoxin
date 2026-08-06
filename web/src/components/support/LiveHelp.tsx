@@ -1,12 +1,8 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useId, useRef, useState } from "react";
-import {
-  HiChatBubbleOvalLeftEllipsis,
-  HiOutlinePaperAirplane,
-  HiSparkles,
-  HiXMark,
-} from "react-icons/hi2";
+import { HiSparkles, HiXMark } from "react-icons/hi2";
 import { LogoMark } from "@/components/brand/Logo";
 import { useI18n } from "@/i18n/I18nProvider";
 
@@ -19,15 +15,18 @@ type Message = {
 function AgentAvatar({ large = false }: { large?: boolean }) {
   return (
     <span
-      className={`relative grid shrink-0 place-items-center bg-ink-900 ${
-        large ? "h-11 w-11 rounded-tile" : "h-8 w-8 rounded-tile"
+      className={`relative grid shrink-0 place-items-center ${
+        large ? "h-9 w-9" : "h-7 w-7"
       }`}
     >
-      <LogoMark tone="light" className={large ? "h-7 w-7" : "h-5 w-5"} />
+      <LogoMark
+        tone={large ? "light" : "dark"}
+        className={large ? "h-9 w-9" : "h-7 w-7"}
+      />
       {large ? (
         <span
           aria-hidden
-          className="absolute -bottom-0.5 -end-0.5 h-3.5 w-3.5 rounded-chip border-2 border-ink-950 bg-leaf-400"
+          className="absolute -bottom-0.5 -end-0.5 h-3 w-3 rounded-chip border-2 border-ink-950 bg-leaf-400"
         />
       ) : null}
     </span>
@@ -119,11 +118,6 @@ export function LiveHelp() {
     }, 750);
   };
 
-  const submit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    sendText(draft);
-  };
-
   return (
     <div
       ref={rootRef}
@@ -135,32 +129,30 @@ export function LiveHelp() {
         aria-labelledby={titleId}
         aria-hidden={!open}
         inert={!open || undefined}
-        className={`absolute bottom-[calc(100%+0.75rem)] end-0 flex h-[min(38rem,calc(100dvh-7rem))] w-[calc(100vw-2rem)] max-w-sm origin-bottom-right flex-col overflow-hidden rounded-panel border border-hairline bg-page shadow-e3 transition-[transform,opacity,visibility] duration-300 ease-out-expo rtl:origin-bottom-left ${
-          open
-            ? "visible translate-y-0 scale-100 opacity-100"
-            : "invisible translate-y-3 scale-[0.98] opacity-0"
-        }`}
+        data-open={open}
+        className="live-chat-panel absolute bottom-[calc(100%+0.75rem)] end-0 flex h-[min(38rem,calc(100dvh-7rem))] w-[calc(100vw-2rem)] max-w-sm origin-bottom-right flex-col overflow-hidden rounded-card border border-hairline-strong bg-page shadow-e3 ring-1 ring-ink-950/5 rtl:origin-bottom-left"
       >
-        <header className="mesh-dark relative shrink-0 overflow-hidden px-5 py-4 text-white">
+        <header className="relative shrink-0 overflow-hidden border-b border-hairline-inverse bg-ink-950 px-4 py-3 text-white">
           <div
             aria-hidden
-            className="grid-lines pointer-events-none absolute inset-0 opacity-50"
-          />
-          <div
-            aria-hidden
-            className="pointer-events-none absolute -end-12 -top-16 h-40 w-40 rounded-chip bg-aqua-500/20 blur-[50px]"
+            className="brand-gradient absolute inset-x-0 top-0 h-0.5"
           />
 
-          <div className="relative flex items-center gap-3.5">
+          <div className="relative flex items-center gap-3">
             <AgentAvatar large />
             <div className="min-w-0 flex-1">
-              <h2 id={titleId} className="fs-h4 font-semibold text-white">
+              <h2
+                id={titleId}
+                className="text-[0.84rem] font-semibold leading-tight text-white"
+              >
                 {copy.agentName}
               </h2>
-              <p className="mt-0.5 flex items-center gap-2 fs-micro text-onink-200">
-                <HiSparkles aria-hidden className="h-3.5 w-3.5 text-aqua-300" />
-                {copy.agentStatus}
-              </p>
+              {copy.agentStatus ? (
+                <p className="mt-1 flex items-center gap-1.5 text-[0.7rem] leading-none text-onink-200">
+                  <HiSparkles aria-hidden className="h-3 w-3 text-aqua-300" />
+                  {copy.agentStatus}
+                </p>
+              ) : null}
             </div>
             <button
               ref={closeRef}
@@ -170,36 +162,21 @@ export function LiveHelp() {
                 triggerRef.current?.focus();
               }}
               aria-label={t.common.close}
-              className="hover-rule -me-2 grid h-11 w-11 shrink-0 place-items-center rounded-ctrl text-onink-200 hover:bg-white/10 hover:text-white"
+              className="hover-rule -me-1 grid h-10 w-10 shrink-0 place-items-center rounded-ctrl text-onink-200 hover:bg-white/10 hover:text-white"
             >
               <HiXMark aria-hidden className="h-5 w-5" />
             </button>
           </div>
         </header>
 
-        <div className="scroll-pane min-h-0 flex-1 overflow-y-auto bg-sunken p-4">
-          <div className="flex flex-col gap-3" aria-live="polite">
+        <div className="scroll-pane min-h-0 flex-1 overflow-y-auto bg-mist-100 p-4 sm:p-5">
+          <div className="flex min-h-full flex-col gap-3" aria-live="polite">
             <div className="flex items-end gap-2.5">
               <AgentAvatar />
               <p className="max-w-[17.5rem] rounded-card rounded-es-sm border border-hairline bg-page px-4 py-3 fs-caption text-ink-900 shadow-e1">
                 {copy.greeting}
               </p>
             </div>
-
-            {messages.length === 0 ? (
-              <div className="ms-10 mt-1 flex flex-wrap gap-2">
-                {copy.suggestions.map((suggestion) => (
-                  <button
-                    key={suggestion}
-                    type="button"
-                    onClick={() => sendText(suggestion)}
-                    className="hover-rule min-h-10 rounded-chip border border-hairline-strong bg-page px-3 py-2 text-start fs-micro font-semibold text-ink-800 shadow-e1 hover:border-aqua-600 hover:text-aqua-800"
-                  >
-                    {suggestion}
-                  </button>
-                ))}
-              </div>
-            ) : null}
 
             {messages.map((message) =>
               message.role === "user" ? (
@@ -235,12 +212,27 @@ export function LiveHelp() {
               </div>
             ) : null}
 
+            {messages.length === 0 ? (
+              <div className="ms-auto mt-auto flex max-w-[17.5rem] flex-col items-end gap-2 pt-6">
+                {copy.suggestions.map((suggestion) => (
+                  <button
+                    key={suggestion}
+                    type="button"
+                    onClick={() => sendText(suggestion)}
+                    className="hover-rule min-h-10 rounded-card rounded-ee-sm border border-aqua-600 bg-page px-3.5 py-2 text-end fs-micro font-semibold text-aqua-800 shadow-e1 hover:bg-aqua-50 hover:text-ink-900"
+                  >
+                    {suggestion}
+                  </button>
+                ))}
+              </div>
+            ) : null}
+
             <div ref={conversationEndRef} aria-hidden />
           </div>
         </div>
 
-        <footer className="shrink-0 border-t border-hairline bg-page px-4 pb-3 pt-4">
-          <form onSubmit={submit} className="flex items-end gap-2">
+        <footer className="shrink-0 border-t border-hairline bg-page p-3.5">
+          <div>
             <label htmlFor={`${panelId}-message`} className="sr-only">
               {copy.messageLabel}
             </label>
@@ -257,31 +249,21 @@ export function LiveHelp() {
                 )}px`;
               }}
               onKeyDown={(event) => {
-                if (event.key === "Enter" && !event.shiftKey) {
+                if (
+                  event.key === "Enter" &&
+                  !event.shiftKey &&
+                  !event.nativeEvent.isComposing
+                ) {
                   event.preventDefault();
-                  event.currentTarget.form?.requestSubmit();
+                  sendText(event.currentTarget.value);
                 }
               }}
               rows={1}
               placeholder={copy.messagePlaceholder}
               autoComplete="off"
-              className="scroll-pane max-h-24 min-h-11 min-w-0 flex-1 resize-none rounded-ctrl border border-hairline-strong bg-page px-3.5 py-2.5 fs-caption text-ink-900 placeholder:text-mist-550 hover:border-mist-400 focus:border-aqua-600"
+              className="scroll-pane max-h-24 min-h-11 w-full resize-none rounded-ctrl border border-hairline-strong bg-mist-50 px-3.5 py-2.5 fs-caption text-ink-900 shadow-inner placeholder:text-mist-550 hover:border-mist-400 focus:border-aqua-600 focus:bg-page"
             />
-            <button
-              type="submit"
-              disabled={!draft.trim() || replying}
-              aria-label={copy.send}
-              className="press brand-gradient grid h-11 w-11 shrink-0 place-items-center rounded-ctrl text-white shadow-e2 transition-[opacity,transform] disabled:cursor-not-allowed disabled:opacity-40"
-            >
-              <HiOutlinePaperAirplane
-                aria-hidden
-                className="h-[1.15rem] w-[1.15rem] flip-rtl"
-              />
-            </button>
-          </form>
-          <p className="mt-2 text-center fs-micro text-mist-600">
-            {copy.previewNotice}
-          </p>
+          </div>
         </footer>
       </div>
 
@@ -293,13 +275,25 @@ export function LiveHelp() {
         aria-haspopup="dialog"
         aria-expanded={open}
         aria-controls={panelId}
-        className="press brand-gradient grid h-14 w-14 place-items-center rounded-chip text-white shadow-e3 transition-[transform,box-shadow] duration-300 ease-out-expo hover:-translate-y-0.5"
+        className="press relative grid h-16 w-16 place-items-center bg-transparent text-aqua-600 transition-[color,transform,filter] duration-300 ease-out-expo [filter:drop-shadow(0_5px_8px_rgb(8_36_59/0.24))] hover:-translate-y-1 hover:text-ink-900 hover:[filter:drop-shadow(0_8px_12px_rgb(8_36_59/0.28))]"
       >
-        {open ? (
-          <HiXMark aria-hidden className="h-6 w-6" />
-        ) : (
-          <HiChatBubbleOvalLeftEllipsis aria-hidden className="h-6 w-6" />
-        )}
+        <Image
+          aria-hidden
+          src="/brand/live-help-24-7.png"
+          alt=""
+          width={512}
+          height={512}
+          sizes="72px"
+          className={`h-[4.5rem] w-[4.5rem] max-w-none object-contain transition-[transform,opacity] duration-300 ease-out-expo ${
+            open ? "scale-50 rotate-90 opacity-0" : "scale-100 rotate-0 opacity-100"
+          }`}
+        />
+        <HiXMark
+          aria-hidden
+          className={`absolute h-7 w-7 transition-[transform,opacity] duration-300 ease-out-expo ${
+            open ? "scale-100 rotate-0 opacity-100" : "scale-50 -rotate-90 opacity-0"
+          }`}
+        />
       </button>
     </div>
   );
