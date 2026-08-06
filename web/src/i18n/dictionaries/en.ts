@@ -128,7 +128,7 @@ const en = {
       titleBottom: "for trust.",
       subtitle:
         "Food-grade disposable tableware with reliable bulk supply and nationwide delivery.",
-      ctaPrimary: "Explore the catalogue",
+      ctaPrimary: "Enter the shop",
       ctaSecondary: "About the company",
       badge: "Food-grade certified",
       posterSlider: {
@@ -137,8 +137,8 @@ const en = {
         distributionEyebrow: "Nationwide reach",
         distributionTitle: "Distribution across the country",
         distributionBody:
-          "Reliable supply and delivery for businesses in all 31 provinces of Iran.",
-        distributionCta: "Talk to sales",
+          "We deliver reliable wholesale orders to businesses throughout Iran, covering all 31 provinces.",
+        branchesCta: "See our branches",
         mapAlt: "Map of Iran showing all 31 province boundaries",
         previous: "Previous poster",
         next: "Next poster",
@@ -328,6 +328,24 @@ const en = {
         { value: "9,000", label: "Pallet warehouse positions" },
       ],
     },
+    branches: {
+      eyebrow: "Our network",
+      title: "Branches close to every market.",
+      subtitle:
+        "Regional distribution hubs connect our Ahvaz headquarters with customers across Iran.",
+      mapAlt: "Map of Iran showing TarianaOxin branch locations",
+      note: "Select a province or branch point to explore the nationwide network.",
+      locations: [
+        "Ahvaz — Headquarters",
+        "Tehran",
+        "Mashhad",
+        "Isfahan",
+        "Shiraz",
+        "Tabriz",
+        "Rasht",
+        "Bandar Abbas",
+      ],
+    },
     cta: {
       title: "Want to visit the plant?",
       body: "We host client audits and facility visits by appointment throughout the year.",
@@ -425,6 +443,26 @@ const en = {
         { name: "Quality & claims", detail: "quality@tarianaoxin.com" },
       ],
     },
+  },
+
+  liveHelp: {
+    launcher: "Open live chat",
+    agentName: "Tara",
+    agentStatus: "AI support assistant · Online",
+    greeting:
+      "Hi! I’m Tara, TarianaOxin’s AI assistant. Ask me about products, bulk pricing or an order.",
+    suggestions: [
+      "Help me choose a product",
+      "How does bulk pricing work?",
+      "I need help with an order",
+    ],
+    messageLabel: "Your message",
+    messagePlaceholder: "Message Tara…",
+    send: "Send message",
+    typing: "Tara is typing",
+    previewNotice: "Demo chat · messages stay on this page",
+    previewReply:
+      "Thanks for your message. This chat interface is ready — connect the AI service to answer customers here.",
   },
 
   footer: {

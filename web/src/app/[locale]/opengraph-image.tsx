@@ -28,7 +28,7 @@ export default async function OpengraphImage({
 }) {
   const { locale } = await params;
   const iso = (isLocale(locale) ? locale : defaultLocale).toUpperCase();
-  const logo = await logoDataUri();
+  const logo = await logoDataUri("light");
 
   return new ImageResponse(
     (
@@ -61,7 +61,6 @@ export default async function OpengraphImage({
               alt=""
               width={86}
               height={86}
-              style={{ borderRadius: 10 }}
             />
             <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
               <div

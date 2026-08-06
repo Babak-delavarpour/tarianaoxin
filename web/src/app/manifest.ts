@@ -18,14 +18,26 @@ export default function manifest(): MetadataRoute.Manifest {
     categories: ["business", "shopping"],
     icons: [
       {
-        src: "/brand/tarianaoxin-to-concept.png",
-        sizes: "1254x1254",
+        src: "/icon-192.png",
+        sizes: "192x192",
         type: "image/png",
         purpose: "any",
       },
       {
-        src: "/brand/tarianaoxin-to-concept.png",
-        sizes: "1254x1254",
+        src: "/icon-512.png",
+        sizes: "512x512",
+        type: "image/png",
+        purpose: "any",
+      },
+      {
+        src: "/icon-maskable-192.png",
+        sizes: "192x192",
+        type: "image/png",
+        purpose: "maskable",
+      },
+      {
+        src: "/icon-maskable-512.png",
+        sizes: "512x512",
         type: "image/png",
         purpose: "maskable",
       },

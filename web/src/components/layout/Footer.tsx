@@ -43,7 +43,7 @@ export function Footer() {
         { label: t.nav.about, path: "/about" },
         { label: t.footer.links.quality, path: "/about#quality" },
         { label: t.footer.links.careers, path: "/contact" },
-        { label: t.footer.links.distributors, path: "/contact" },
+        { label: t.footer.links.distributors, path: "/about#branches" },
       ],
     },
     {

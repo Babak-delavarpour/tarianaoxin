@@ -123,13 +123,17 @@ export function Header() {
     return () => mq.removeEventListener("change", sync);
   }, [menuOpen]);
 
-  const links = [
+  const allLinks = [
     { label: t.nav.home, path: "/" },
     { label: t.nav.about, path: "/about" },
     { label: t.nav.products, path: "/products" },
     { label: t.nav.shop, path: "/shop" },
     { label: t.nav.contact, path: "/contact" },
   ];
+  const links =
+    locale === "fa"
+      ? allLinks
+      : allLinks.filter((link) => link.path !== "/shop");
 
   const isActive = (path: string) => {
     const full = href(path);
@@ -337,36 +341,41 @@ export function Header() {
             </nav>
 
             <div className="flex items-center gap-1">
-              <LanguageSwitcher />
-              <AccountDialog tone={tone} />
+              {locale === "fa" ? (
+                <>
+                  <AccountDialog tone={tone} />
 
-              <button
-                type="button"
-                onClick={open}
-                aria-label={t.common.cart}
-                className={`hover-rule relative flex h-11 w-11 items-center justify-center rounded-ctrl ${
-                  solid
-                    ? "text-ink-800 hover:bg-mist-100 hover:text-ink-900"
-                    : "text-onink-100 hover:bg-white/10 hover:text-white"
-                }`}
-              >
-                <HiOutlineShoppingBag className="h-[1.3rem] w-[1.3rem]" />
-                {count > 0 ? (
-                  <span
-                    aria-hidden
-                    className={`fs-micro absolute -top-0.5 -end-0.5 flex h-5 min-w-5 items-center justify-center rounded-chip bg-aqua-700 px-1 font-bold text-white ring-2 ${
-                      solid ? "ring-page" : "ring-ink-950"
+                  <button
+                    type="button"
+                    onClick={open}
+                    aria-label={t.common.cart}
+                    className={`hover-rule relative flex h-11 w-11 items-center justify-center rounded-ctrl ${
+                      solid
+                        ? "text-ink-800 hover:bg-mist-100 hover:text-ink-900"
+                        : "text-onink-100 hover:bg-white/10 hover:text-white"
                     }`}
                   >
-                    <span className="num">{num(count)}</span>
+                    <HiOutlineShoppingBag className="h-[1.3rem] w-[1.3rem]" />
+                    {count > 0 ? (
+                      <span
+                        aria-hidden
+                        className={`fs-micro absolute -top-0.5 -end-0.5 flex h-5 min-w-5 items-center justify-center rounded-chip bg-aqua-700 px-1 font-bold text-white ring-2 ${
+                          solid ? "ring-page" : "ring-ink-950"
+                        }`}
+                      >
+                        <span className="num">{num(count)}</span>
+                      </span>
+                    ) : null}
+                  </button>
+                  {/* The count is announced here, once, rather than from a
+                      badge that only exists after the first item is added. */}
+                  <span role="status" aria-live="polite" className="sr-only">
+                    {`${t.common.cart}: ${num(count)}`}
                   </span>
-                ) : null}
-              </button>
-              {/* The count is announced here, once, rather than from a badge
-                  that only exists after the first item is added. */}
-              <span role="status" aria-live="polite" className="sr-only">
-                {`${t.common.cart}: ${num(count)}`}
-              </span>
+                </>
+              ) : null}
+
+              <LanguageSwitcher tone={tone} />
 
               <button
                 type="button"

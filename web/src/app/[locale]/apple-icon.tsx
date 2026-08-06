@@ -15,7 +15,7 @@ export function generateStaticParams() {
  * redirects any extension-less root path into a locale — a root `/apple-icon`
  * would never resolve.
  *
- * The installed icon uses the exact approved generated PNG.
+ * The installed icon uses the transparent brand mark.
  */
 export default async function AppleIcon() {
   const logo = await logoDataUri();
@@ -30,7 +30,7 @@ export default async function AppleIcon() {
         style={{
           width: "100%",
           height: "100%",
-          objectFit: "cover",
+          objectFit: "contain",
         }}
       />
     ),

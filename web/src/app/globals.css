@@ -1041,6 +1041,25 @@
   stroke-width: 2.4;
 }
 
+.iran-province-map [data-branch] {
+  cursor: pointer;
+  outline: none;
+}
+
+.iran-province-map [data-branch] circle:first-child {
+  transition:
+    stroke 180ms ease,
+    stroke-width 180ms ease,
+    filter 180ms ease;
+}
+
+.iran-province-map [data-branch]:hover circle:first-child,
+.iran-province-map [data-branch]:focus-visible circle:first-child {
+  filter: drop-shadow(0 5px 8px rgb(4 22 36 / 0.55));
+  stroke: #6bd3e5;
+  stroke-width: 4;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

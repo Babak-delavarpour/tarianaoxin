@@ -21,7 +21,7 @@ import { useI18n } from "@/i18n/I18nProvider";
  * Latin-locked in `dir="ltr"` — which is also the one place raw
  * `uppercase` is legal on this site.
  */
-export function LanguageSwitcher() {
+export function LanguageSwitcher({ tone }: { tone: "dark" | "light" }) {
   const { locale, dir, t } = useI18n();
   const pathname = usePathname() || "/";
   const [open, setOpen] = useState(false);
@@ -78,6 +78,8 @@ export function LanguageSwitcher() {
     return localePath(next, path);
   };
 
+  const onInk = tone === "light";
+
   return (
     <div ref={wrapRef} className="relative flex h-11 items-center">
       <button
@@ -87,7 +89,11 @@ export function LanguageSwitcher() {
         aria-expanded={open}
         aria-haspopup="menu"
         aria-label={t.common.language}
-        className="hover-rule fs-micro flex h-11 items-center justify-center gap-2 rounded-ctrl border border-hairline-inverse bg-ink-950/85 px-2.5 font-semibold leading-none text-onink-100 shadow-e1 hover:border-aqua-400/35 hover:bg-ink-900 hover:text-white"
+        className={`hover-rule fs-micro flex h-11 items-center justify-center gap-2 rounded-ctrl border bg-transparent px-2.5 font-semibold leading-none shadow-none ${
+          onInk
+            ? "border-hairline-inverse text-onink-100 hover:border-aqua-400/45 hover:text-white"
+            : "border-hairline text-ink-800 hover:border-aqua-600/45 hover:text-ink-900"
+        }`}
       >
         <HiOutlineGlobeAlt aria-hidden className="h-[1.15rem] w-[1.15rem]" />
         <span className="hidden min-w-0 sm:inline">{localeMeta[locale].name}</span>

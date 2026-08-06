@@ -134,9 +134,6 @@ export function HeroPosterSlider() {
                   className="h-4 w-4 shrink-0 flip-rtl"
                 />
               </ButtonLink>
-              <ButtonLink href={href("/about")} size="lg" variant="onink">
-                {hero.ctaSecondary}
-              </ButtonLink>
             </div>
 
             <span className="fs-caption inline-flex items-center gap-2 text-onink-300">
@@ -226,15 +223,19 @@ export function HeroPosterSlider() {
             </p>
 
             <div className="flex w-full flex-col gap-3 min-[26rem]:w-auto min-[26rem]:flex-row min-[26rem]:items-center">
-              <ButtonLink href={href("/contact")} size="lg">
-                {copy.distributionCta}
+              <ButtonLink href={href("/shop")} size="lg">
+                {hero.ctaPrimary}
                 <HiArrowUpRight
                   aria-hidden
                   className="h-4 w-4 shrink-0 flip-rtl"
                 />
               </ButtonLink>
-              <ButtonLink href={href("/shop")} size="lg" variant="onink">
-                {hero.ctaPrimary}
+              <ButtonLink
+                href={href("/about#branches")}
+                size="lg"
+                variant="onink"
+              >
+                {copy.branchesCta}
               </ButtonLink>
             </div>
           </div>

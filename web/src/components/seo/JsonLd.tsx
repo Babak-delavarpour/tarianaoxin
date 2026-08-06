@@ -122,9 +122,9 @@ function organizationNode(locale: Locale) {
     description: t.meta.description,
     logo: {
       "@type": "ImageObject",
-      url: `${SITE_URL}/brand/tarianaoxin-to-concept.png`,
-      width: 1254,
-      height: 1254,
+      url: `${SITE_URL}/brand/tarianaoxin-logo-512.png`,
+      width: 512,
+      height: 512,
     },
     image: `${SITE_URL}${localePath(locale, "/opengraph-image")}`,
     email: ORG.email,

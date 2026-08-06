@@ -8,24 +8,29 @@ import type { Locale } from "@/i18n/config";
  */
 type Tone = "dark" | "light";
 
-const LOGO_IMAGE = "/brand/tarianaoxin-to-concept.png";
+const LOGO_IMAGE: Record<Tone, string> = {
+  dark: "/brand/tarianaoxin-logo.svg",
+  light: "/brand/tarianaoxin-logo-light.svg",
+};
 
-/** The approved generated PNG is the single visual source of truth. */
+/** The supplied SVG mark, recoloured for the site's light and dark surfaces. */
 export function LogoMark({
   className = "h-10 w-10",
+  tone = "dark",
 }: {
   className?: string;
   tone?: Tone;
 }) {
   return (
     <Image
-      src={LOGO_IMAGE}
+      src={LOGO_IMAGE[tone]}
       alt=""
-      width={1254}
-      height={1254}
+      width={1065}
+      height={1065}
       sizes="56px"
       className={className}
       aria-hidden="true"
+      unoptimized
     />
   );
 }
@@ -62,13 +67,13 @@ export function Logo({
   const wordStep = compact ? "fs-h4" : "fs-h3";
 
   return (
-    <span className={`inline-flex items-center gap-3 ${className}`}>
+    <span className={`inline-flex items-center gap-2.5 ${className}`}>
       <LogoMark
         tone={tone}
         className={
           compact
-            ? "h-11 w-11 shrink-0 rounded-[0.35rem]"
-            : "h-14 w-14 shrink-0 rounded-[0.45rem]"
+            ? "h-9 w-9 shrink-0 rounded-[0.3rem]"
+            : "h-12 w-12 shrink-0 rounded-[0.4rem]"
         }
       />
       {/* Compact is the chrome lockup: mark + wordmark, no descriptor, and

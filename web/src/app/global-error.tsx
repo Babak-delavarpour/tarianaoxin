@@ -20,16 +20,15 @@ const ONINK_100 = "#d6e4ef";
 const ONINK_300 = "#94adc1";
 const AQUA_300 = "#6bd3e5";
 
-/* The approved PNG, kept independent of Next's image runtime in this boundary. */
+/* Kept independent of Next's image runtime in this boundary. */
 function Mark() {
   return (
     <img
-      src="/brand/tarianaoxin-to-concept.png"
+      src="/brand/tarianaoxin-logo-light.svg"
       alt=""
       width="48"
       height="48"
       aria-hidden="true"
-      style={{ borderRadius: "0.4rem" }}
     />
   );
 }

@@ -17,6 +17,7 @@ import { CartProvider } from "@/components/shop/CartProvider";
 import { CartDrawer } from "@/components/shop/CartDrawer";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { LiveHelp } from "@/components/support/LiveHelp";
 
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
@@ -63,11 +64,42 @@ export async function generateMetadata({
     icons: {
       icon: [
         {
-          url: "/brand/tarianaoxin-to-concept.png",
+          url: "/favicon.ico",
+          sizes: "any",
+        },
+        {
+          url: "/favicon.svg",
+          type: "image/svg+xml",
+          sizes: "any",
+        },
+        {
+          url: "/favicon-16x16.png",
           type: "image/png",
-          sizes: "1254x1254",
+          sizes: "16x16",
+        },
+        {
+          url: "/favicon-32x32.png",
+          type: "image/png",
+          sizes: "32x32",
+        },
+        {
+          url: "/favicon-48x48.png",
+          type: "image/png",
+          sizes: "48x48",
         },
       ],
+      shortcut: "/favicon.ico",
+      apple: [
+        {
+          url: "/apple-touch-icon.png",
+          type: "image/png",
+          sizes: "180x180",
+        },
+      ],
+    },
+    other: {
+      "msapplication-TileColor": "#08243b",
+      "msapplication-config": "/browserconfig.xml",
     },
   };
 }
@@ -111,6 +143,7 @@ export default async function LocaleLayout({
             <main id="main">{children}</main>
             <Footer />
             <CartDrawer />
+            <LiveHelp />
           </CartProvider>
         </I18nProvider>
       </body>

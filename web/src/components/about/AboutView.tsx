@@ -1,5 +1,7 @@
 "use client";
 
+import { useMemo } from "react";
+
 import {
   Chapter,
   Container,
@@ -9,7 +11,22 @@ import { Reveal, RevealGroup } from "@/components/ui/Reveal";
 import { CtaBand } from "@/components/home/CtaBand";
 import { Quality } from "@/components/home/Quality";
 import { HeritageStamp } from "@/components/brand/HeritageStamp";
+import {
+  IranProvinceMap,
+  type BranchMarker,
+} from "@/components/home/IranProvinceMap";
 import { useI18n } from "@/i18n/I18nProvider";
+
+const BRANCH_POINTS = [
+  { id: "ahvaz", x: 198, y: 382 },
+  { id: "tehran", x: 286, y: 198 },
+  { id: "mashhad", x: 565, y: 174 },
+  { id: "isfahan", x: 310, y: 323 },
+  { id: "shiraz", x: 334, y: 464 },
+  { id: "tabriz", x: 104, y: 92 },
+  { id: "rasht", x: 211, y: 109 },
+  { id: "bandar-abbas", x: 449, y: 566 },
+] as const;
 
 /**
  * ABOUT — MEASURED.
@@ -21,10 +38,11 @@ import { useI18n } from "@/i18n/I18nProvider";
  *   1 masthead  INK   · SPLIT           (copy + capability plinth)
  *   2 story     BOARD · LEDGER rows     (three ruled clauses, editorial)
  *   3 facility  INK   · drawn elevation + title block
- *   4 <Quality> PAPER · LEDGER columns  (owned by another agent)
- *   5 <CtaBand> INK   · BAND            (owned by another agent)
+ *   4 branches  BOARD · mapped network  (locations + interactive points)
+ *   5 <Quality> PAPER · LEDGER columns
+ *   6 <CtaBand> INK   · BAND
  *
- * Value sequence: ink → board → ink → paper → ink.
+ * Value sequence: ink → board → ink → board → paper → ink.
  */
 
 /**
@@ -132,6 +150,14 @@ function PlantElevation() {
 export function AboutView() {
   const { t, num, locale } = useI18n();
   const a = t.about;
+  const branchMarkers = useMemo<BranchMarker[]>(
+    () =>
+      BRANCH_POINTS.map((point, index) => ({
+        ...point,
+        name: a.branches.locations[index],
+      })),
+    [a.branches.locations],
+  );
 
   return (
     <>
@@ -286,10 +312,64 @@ export function AboutView() {
         </Container>
       </Chapter>
 
-      {/* ═══ 4 · CERTIFICATION — PAPER · LEDGER columns ═══════════ */}
+      {/* ═══ 4 · BRANCHES — BOARD · mapped network ═══════════════ */}
+      <Chapter
+        id="branches"
+        tone="board"
+        pad="base"
+        seam="both"
+        className="scroll-mt-[var(--nav-h)]"
+      >
+        <Container>
+          <SectionHeading
+            eyebrow={a.branches.eyebrow}
+            title={a.branches.title}
+            subtitle={a.branches.subtitle}
+            reveal="fade"
+          />
+
+          <Reveal variant="scale" className="stack-block">
+            <figure className="overflow-hidden rounded-panel border border-hairline-inverse bg-inverse-2 shadow-e2">
+              <div
+                aria-hidden
+                className="tick-rule h-4 w-full border-b border-hairline-inverse"
+              />
+
+              <div className="grid lg:grid-cols-[minmax(0,1fr)_20rem]">
+                <div className="border-b border-hairline-inverse px-3 py-5 sm:px-7 lg:border-b-0 lg:border-e">
+                  <IranProvinceMap
+                    label={a.branches.mapAlt}
+                    branches={branchMarkers}
+                  />
+                </div>
+
+                <figcaption className="flex flex-col justify-center gap-6 p-6 sm:p-8">
+                  <p className="fs-body text-onink-200">{a.branches.note}</p>
+                  <ol className="grid grid-cols-2 gap-x-5 gap-y-3 border-t border-hairline-inverse pt-5 lg:grid-cols-1">
+                    {a.branches.locations.map((location) => (
+                      <li
+                        key={location}
+                        className="fs-caption flex items-center gap-3 font-semibold text-white"
+                      >
+                        <span
+                          aria-hidden
+                          className="h-2.5 w-2.5 shrink-0 rounded-chip bg-sand-500 ring-2 ring-white/70"
+                        />
+                        <span>{location}</span>
+                      </li>
+                    ))}
+                  </ol>
+                </figcaption>
+              </div>
+            </figure>
+          </Reveal>
+        </Container>
+      </Chapter>
+
+      {/* ═══ 5 · CERTIFICATION — PAPER · LEDGER columns ═══════════ */}
       <Quality />
 
-      {/* ═══ 5 · CLOSE — INK · BAND ══════════════════════════════ */}
+      {/* ═══ 6 · CLOSE — INK · BAND ══════════════════════════════ */}
       <CtaBand
         title={a.cta.title}
         body={a.cta.body}

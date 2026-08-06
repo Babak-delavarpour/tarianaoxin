@@ -80,13 +80,22 @@ type Tooltip = {
   y: number;
 };
 
+export type BranchMarker = {
+  id: string;
+  name: string;
+  x: number;
+  y: number;
+};
+
+const NO_BRANCHES: readonly BranchMarker[] = [];
+
 function localizedProvinceName(name: string, locale: Locale) {
   return locale === "en" ? name : provinceNames[locale][name] || name;
 }
 
-function provincePath(target: EventTarget | null) {
+function mapItem(target: EventTarget | null) {
   if (!(target instanceof Element)) return null;
-  return target.closest<SVGPathElement>("[data-province]");
+  return target.closest<SVGGraphicsElement>("[data-province], [data-branch]");
 }
 
 function tooltipX(x: number, width: number) {
@@ -94,7 +103,13 @@ function tooltipX(x: number, width: number) {
   return Math.max(edge, Math.min(width - edge, x));
 }
 
-export function IranProvinceMap({ label }: { label: string }) {
+export function IranProvinceMap({
+  label,
+  branches = NO_BRANCHES,
+}: {
+  label: string;
+  branches?: readonly BranchMarker[];
+}) {
   const { locale } = useI18n();
   const mapRef = useRef<HTMLDivElement>(null);
   const [markup, setMarkup] = useState("");
@@ -125,6 +140,38 @@ export function IranProvinceMap({ label }: { label: string }) {
           path.querySelector("title")?.remove();
         });
 
+        if (branches.length) {
+          const namespace = "http://www.w3.org/2000/svg";
+          const markerLayer = document.createElementNS(namespace, "g");
+          markerLayer.setAttribute("aria-label", label);
+
+          branches.forEach((branch) => {
+            const marker = document.createElementNS(namespace, "g");
+            marker.dataset.branch = branch.id;
+            marker.dataset.displayName = branch.name;
+            marker.setAttribute("transform", `translate(${branch.x} ${branch.y})`);
+            marker.setAttribute("tabindex", "0");
+            marker.setAttribute("focusable", "true");
+            marker.setAttribute("role", "img");
+            marker.setAttribute("aria-label", branch.name);
+
+            const halo = document.createElementNS(namespace, "circle");
+            halo.setAttribute("r", "13");
+            halo.setAttribute("fill", "#041624");
+            halo.setAttribute("stroke", "#ffffff");
+            halo.setAttribute("stroke-width", "2.5");
+
+            const point = document.createElementNS(namespace, "circle");
+            point.setAttribute("r", "5");
+            point.setAttribute("fill", "#dc9d51");
+
+            marker.append(halo, point);
+            markerLayer.appendChild(marker);
+          });
+
+          svg.appendChild(markerLayer);
+        }
+
         setMarkup(svg.outerHTML);
       })
       .catch((error: unknown) => {
@@ -134,29 +181,41 @@ export function IranProvinceMap({ label }: { label: string }) {
       });
 
     return () => controller.abort();
-  }, [label, locale]);
+  }, [branches, label, locale]);
 
-  const showAtPointer = (path: SVGPathElement, clientX: number, clientY: number) => {
+  const showAtPointer = (
+    item: SVGGraphicsElement,
+    clientX: number,
+    clientY: number,
+  ) => {
     const bounds = mapRef.current?.getBoundingClientRect();
     if (!bounds) return;
     setTooltip({
-      name: path.dataset.displayName || path.dataset.province || "",
+      name:
+        item.dataset.displayName ||
+        item.dataset.province ||
+        item.dataset.branch ||
+        "",
       x: tooltipX(clientX - bounds.left, bounds.width),
       y: clientY - bounds.top - 10,
     });
   };
 
-  const showAtProvince = (path: SVGPathElement) => {
+  const showAtItem = (item: SVGGraphicsElement) => {
     const bounds = mapRef.current?.getBoundingClientRect();
-    const provinceBounds = path.getBoundingClientRect();
+    const itemBounds = item.getBoundingClientRect();
     if (!bounds) return;
     setTooltip({
-      name: path.dataset.displayName || path.dataset.province || "",
+      name:
+        item.dataset.displayName ||
+        item.dataset.province ||
+        item.dataset.branch ||
+        "",
       x: tooltipX(
-        provinceBounds.left + provinceBounds.width / 2 - bounds.left,
+        itemBounds.left + itemBounds.width / 2 - bounds.left,
         bounds.width,
       ),
-      y: provinceBounds.top - bounds.top - 8,
+      y: itemBounds.top - bounds.top - 8,
     });
   };
 
@@ -165,23 +224,23 @@ export function IranProvinceMap({ label }: { label: string }) {
       ref={mapRef}
       className="iran-province-map relative h-[17rem] w-full sm:h-[27rem]"
       onPointerMove={(event) => {
-        const path = provincePath(event.target);
-        if (path) showAtPointer(path, event.clientX, event.clientY);
+        const item = mapItem(event.target);
+        if (item) showAtPointer(item, event.clientX, event.clientY);
       }}
       onPointerDown={(event) => {
-        const path = provincePath(event.target);
-        if (path) showAtPointer(path, event.clientX, event.clientY);
+        const item = mapItem(event.target);
+        if (item) showAtPointer(item, event.clientX, event.clientY);
       }}
       onPointerOut={(event) => {
-        const current = provincePath(event.target);
-        const next = provincePath(event.relatedTarget);
+        const current = mapItem(event.target);
+        const next = mapItem(event.relatedTarget);
         if (current !== next) setTooltip(null);
       }}
       onPointerLeave={() => setTooltip(null)}
       onPointerCancel={() => setTooltip(null)}
       onFocusCapture={(event) => {
-        const path = provincePath(event.target);
-        if (path) showAtProvince(path);
+        const item = mapItem(event.target);
+        if (item) showAtItem(item);
       }}
       onBlurCapture={() => setTooltip(null)}
     >
