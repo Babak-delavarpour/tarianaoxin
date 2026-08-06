@@ -208,7 +208,7 @@ export function CartDrawer() {
                         </button>
                       </div>
 
-                      <span className="num fs-caption font-bold text-ink-900">
+                      <span className="num fs-price-compact font-bold text-ink-900">
                         {price(lineTotal)}
                       </span>
                     </div>
@@ -244,7 +244,7 @@ export function CartDrawer() {
                   <dt className="fs-h4 font-semibold text-ink-900">
                     {t.common.total}
                   </dt>
-                  <dd className="num fs-h4 font-bold text-ink-900">
+                  <dd className="num fs-price font-bold text-ink-900">
                     {price(total)}
                   </dd>
                 </div>

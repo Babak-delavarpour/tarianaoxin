@@ -1,12 +1,10 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
   HiMagnifyingGlass,
   HiOutlineAdjustmentsHorizontal,
   HiXMark,
-  HiChevronRight,
   HiArrowUpRight,
 } from "react-icons/hi2";
 import { Chapter, Container } from "@/components/ui/Section";
@@ -282,7 +280,7 @@ export function ShopView({
           <span className="num fs-micro font-semibold text-mist-600">
             {price(priceBounds.min)}
           </span>
-          <span className="num fs-caption font-bold text-ink-900">
+          <span className="num fs-price-compact font-bold text-ink-900">
             {price(maxPrice)}
           </span>
         </div>
@@ -359,24 +357,8 @@ export function ShopView({
         />
 
         <Container className="relative">
-          <nav
-            aria-label={t.common.breadcrumb}
-            className="eyebrow flex items-center gap-2.5 text-onink-300"
-          >
-            <Link href={href("/")} className="hover-rule hover:text-aqua-300">
-              {t.nav.home}
-            </Link>
-            <HiChevronRight
-              aria-hidden
-              className="h-3 w-3 shrink-0 text-onink-400 flip-rtl"
-            />
-            <span aria-current="page" className="text-aqua-300">
-              {t.nav.shop}
-            </span>
-          </nav>
-
           <div
-            className={`mt-4 grid gap-6 ${
+            className={`grid gap-6 ${
               locale === "fa"
                 ? ""
                 : "lg:grid-cols-[1fr_0.8fr] lg:items-end lg:gap-10"

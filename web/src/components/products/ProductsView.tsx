@@ -226,7 +226,7 @@ export function ProductsView() {
                               <span className="fs-h4 font-semibold text-ink-900 transition-colors duration-200 group-hover:text-aqua-700">
                                 {p.name[locale]}
                               </span>
-                              <span className="fs-caption shrink-0 font-semibold tabular-nums text-ink-900">
+                              <span className="fs-price-compact shrink-0 font-semibold tabular-nums text-ink-900">
                                 {price(p.price)}
                               </span>
                             </span>

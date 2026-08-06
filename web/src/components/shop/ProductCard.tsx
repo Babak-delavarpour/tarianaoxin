@@ -174,7 +174,7 @@ export function ProductCard({ product }: { product: Product }) {
         <div className="mt-auto border-t border-hairline pt-4">
           <span className="eyebrow block text-mist-600">{t.common.perPack}</span>
           <span className="mt-1.5 flex flex-wrap items-baseline gap-x-2.5 gap-y-1">
-            <span className="num fs-h3 font-bold text-ink-900">
+            <span className="num fs-price font-bold text-ink-900">
               {price(product.price)}
             </span>
             {product.compareAt ? (

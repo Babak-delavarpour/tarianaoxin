@@ -195,7 +195,7 @@ export function CartView() {
                           </button>
                         </div>
 
-                        <span className="num min-w-[5.5rem] text-end fs-h4 font-bold text-ink-900">
+                        <span className="num fs-price min-w-[5.5rem] text-end font-bold text-ink-900">
                           {price(lineTotal)}
                         </span>
 
@@ -260,7 +260,7 @@ export function CartView() {
                       <dt className="fs-h4 font-semibold text-ink-900">
                         {t.common.total}
                       </dt>
-                      <dd className="num fs-h3 font-bold text-ink-900">
+                      <dd className="num fs-price-display font-bold text-ink-900">
                         {price(total)}
                       </dd>
                     </div>

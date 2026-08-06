@@ -179,6 +179,33 @@ export function Header() {
   /* Locale digits, padded through num() so fa/ar never show a Latin 0. */
   const pad2 = (n: number) => (n < 10 ? `${num(0)}${num(n)}` : num(n));
 
+  const utilityHours = (
+    <span
+      className={`items-center gap-2 ${
+        locale === "fa" ? "inline-flex" : "hidden xl:inline-flex"
+      }`}
+    >
+      <HiOutlineClock
+        aria-hidden
+        className="h-3.5 w-3.5 shrink-0 text-aqua-400"
+      />
+      <span className="eyebrow text-onink-300">{t.contact.info.hours}</span>
+    </span>
+  );
+
+  const utilityPhone = (
+    <a
+      href={`tel:${PHONE_TEL}`}
+      className="hover-rule inline-flex h-full items-center gap-2 text-onink-200 hover:text-white"
+    >
+      <HiOutlinePhone
+        aria-hidden
+        className="h-3.5 w-3.5 shrink-0 text-aqua-400"
+      />
+      <span className="num eyebrow">{PHONE_DISPLAY}</span>
+    </a>
+  );
+
   return (
     <>
       <header
@@ -211,34 +238,24 @@ export function Header() {
             }`}
           >
             <div className="shell flex h-9 items-center gap-6">
-              <span className="hidden items-center gap-2 xl:inline-flex">
-                <HiOutlineClock
-                  aria-hidden
-                  className="h-3.5 w-3.5 shrink-0 text-aqua-400"
-                />
-                <span className="eyebrow text-onink-300">
-                  {t.contact.info.hours}
-                </span>
-              </span>
-
-              <a
-                href={`tel:${PHONE_TEL}`}
-                className="hover-rule inline-flex h-full items-center gap-2 text-onink-200 hover:text-white"
-              >
-                <HiOutlinePhone
-                  aria-hidden
-                  className="h-3.5 w-3.5 shrink-0 text-aqua-400"
-                />
-                <span className="num eyebrow">{PHONE_DISPLAY}</span>
-              </a>
-
-              <Link
-                href={href("/contact")}
-                className="hover-rule ms-auto inline-flex h-full items-center gap-1.5 text-onink-200 hover:text-white"
-              >
-                <span className="eyebrow">{t.common.getQuote}</span>
-                <HiArrowUpRight aria-hidden className="h-3 w-3 flip-rtl" />
-              </Link>
+              {locale === "fa" ? (
+                <div className="ms-auto flex h-full items-center gap-6">
+                  {utilityPhone}
+                  {utilityHours}
+                </div>
+              ) : (
+                <>
+                  {utilityHours}
+                  {utilityPhone}
+                  <Link
+                    href={href("/contact")}
+                    className="hover-rule ms-auto inline-flex h-full items-center gap-1.5 text-onink-200 hover:text-white"
+                  >
+                    <span className="eyebrow">{t.common.getQuote}</span>
+                    <HiArrowUpRight aria-hidden className="h-3 w-3 flip-rtl" />
+                  </Link>
+                </>
+              )}
             </div>
           </div>
 

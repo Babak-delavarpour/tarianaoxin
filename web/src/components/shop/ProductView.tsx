@@ -236,11 +236,11 @@ export function ProductView({ slug }: { slug: string }) {
                   {t.common.perPack}
                 </span>
                 <div className="mt-2.5 flex flex-wrap items-baseline gap-x-3.5 gap-y-2">
-                  <span className="num fs-h2 font-bold text-ink-900">
+                  <span className="num fs-price-display font-bold text-ink-900">
                     {price(product.price)}
                   </span>
                   {product.compareAt ? (
-                    <s className="num fs-lead text-mist-550 line-through">
+                    <s className="num fs-price text-mist-550 line-through">
                       {price(product.compareAt)}
                     </s>
                   ) : null}
@@ -281,7 +281,7 @@ export function ProductView({ slug }: { slug: string }) {
                   <span className="fs-caption font-semibold text-mist-600">
                     {t.common.subtotal}
                   </span>
-                  <span className="num fs-h4 font-bold text-ink-900">
+                  <span className="num fs-price font-bold text-ink-900">
                     {price(product.price * qty)}
                   </span>
                 </div>
