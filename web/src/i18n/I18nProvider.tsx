@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useMemo } from "react";
 import type { Locale } from "./config";
-import { localeDirection } from "./config";
+import { localeDirection, localePath } from "./config";
 import type { Dictionary } from "./dictionaries/en";
 
 type I18nValue = {
@@ -10,7 +10,7 @@ type I18nValue = {
   dir: "ltr" | "rtl";
   isRtl: boolean;
   t: Dictionary;
-  /** Prefixes an app path with the active locale. */
+  /** Builds a public app path for the active locale. */
   href: (path: string) => string;
   /** Formats a number using the locale's native digits. */
   num: (value: number) => string;
@@ -47,8 +47,7 @@ export function I18nProvider({
       dir,
       isRtl: dir === "rtl",
       t: dictionary,
-      href: (path: string) =>
-        `/${locale}${path === "/" ? "" : path.startsWith("/") ? path : `/${path}`}`,
+      href: (path: string) => localePath(locale, path),
       num,
       price: (v: number) =>
         locale === "fa"

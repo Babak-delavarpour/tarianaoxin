@@ -1,15 +1,17 @@
-import { Outfit, Vazirmatn, Cairo } from "next/font/google";
+import { Outfit, Vazirmatn, Lalezar, Cairo } from "next/font/google";
+import localFont from "next/font/local";
 import type { Locale } from "@/i18n/config";
 
 /**
- * All three faces are loaded as CSS variables on the locale root;
- * `[data-locale]` in globals.css decides which one `--font-locale` resolves
- * to. Shared so the locale layout and the standalone 404 shell stay in sync.
+ * Locale typography is loaded as CSS variables on the document root;
+ * `[data-locale]` in globals.css assigns body, heading and display roles.
+ * Persian deliberately uses three faces, while English and Arabic keep their
+ * existing single-family systems. Shared so the locale layout and standalone
+ * 404 shell stay in sync.
  *
- * All three are variable fonts, so the full 100–900 axis ships in one file —
- * which the type registers need: `font-extrabold` (800) is used by the home
- * hero h1 and by `fs-numeral`, and `font-semibold` (600) carries every card
- * and row title.
+ * The body and heading families are variable fonts, so their full weight axes
+ * ship efficiently. Lalezar is intentionally limited to its native 400 weight
+ * in the large display registers, where synthetic bolding is disabled in CSS.
  *
  * `fallback` names only faces that actually exist on the target platforms —
  * a fallback that never resolves silently drops to the browser default and
@@ -29,6 +31,37 @@ const vazirmatn = Vazirmatn({
   fallback: ["Tahoma", "Segoe UI", "Noto Naskh Arabic", "Arial", "sans-serif"],
 });
 
+const estedad = localFont({
+  src: "./font-assets/Estedad-Variable.woff2",
+  variable: "--font-estedad",
+  weight: "100 900",
+  style: "normal",
+  display: "swap",
+  preload: false,
+  fallback: [
+    "Tahoma",
+    "Segoe UI",
+    "Noto Naskh Arabic",
+    "Arial",
+    "sans-serif",
+  ],
+});
+
+const lalezar = Lalezar({
+  weight: "400",
+  subsets: ["arabic", "latin"],
+  variable: "--font-lalezar",
+  display: "swap",
+  preload: false,
+  fallback: [
+    "Tahoma",
+    "Segoe UI",
+    "Noto Naskh Arabic",
+    "Arial",
+    "sans-serif",
+  ],
+});
+
 const cairo = Cairo({
   subsets: ["arabic", "latin"],
   variable: "--font-cairo",
@@ -36,7 +69,7 @@ const cairo = Cairo({
   fallback: ["Tahoma", "Segoe UI", "Noto Naskh Arabic", "Arial", "sans-serif"],
 });
 
-export const fontVariables = `${outfit.variable} ${vazirmatn.variable} ${cairo.variable}`;
+export const fontVariables = `${outfit.variable} ${vazirmatn.variable} ${estedad.variable} ${lalezar.variable} ${cairo.variable}`;
 
 /**
  * Apply the active face directly as well as through the CSS variable. This

@@ -1,6 +1,12 @@
 import type { Metadata } from "next";
 
-import { locales, localeMeta, defaultLocale, type Locale } from "@/i18n/config";
+import {
+  locales,
+  localeMeta,
+  defaultLocale,
+  localePath,
+  type Locale,
+} from "@/i18n/config";
 import { getDictionary } from "@/i18n";
 import { getCategory, type Product } from "@/lib/catalog";
 
@@ -21,10 +27,9 @@ export const ORG = {
   country: "IR",
 } as const;
 
-/** `/fa/shop/tea-glass-90` → absolute, always with a locale segment. */
+/** Converts a locale-aware public path to an absolute URL. */
 export function localeUrl(locale: Locale, path = "") {
-  const clean = path === "/" ? "" : path;
-  return `${SITE_URL}/${locale}${clean}`;
+  return `${SITE_URL}${localePath(locale, path)}`;
 }
 
 /**
@@ -121,7 +126,7 @@ function organizationNode(locale: Locale) {
       width: 512,
       height: 512,
     },
-    image: `${SITE_URL}/${locale}/opengraph-image`,
+    image: `${SITE_URL}${localePath(locale, "/opengraph-image")}`,
     email: ORG.email,
     telephone: ORG.telephone,
     address: {
@@ -229,7 +234,7 @@ export function ProductJsonLd({
         sku: product.sku,
         mpn: product.sku,
         url,
-        image: `${SITE_URL}/${locale}/opengraph-image`,
+        image: `${SITE_URL}${localePath(locale, "/opengraph-image")}`,
         inLanguage: localeMeta[locale].htmlLang,
         category: category?.name[locale],
         material: product.material[locale],

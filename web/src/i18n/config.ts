@@ -23,3 +23,26 @@ export const localeMeta: Record<
 export function isLocale(value: string): value is Locale {
   return (locales as readonly string[]).includes(value);
 }
+
+/**
+ * Builds the public URL for a locale. Persian owns the clean, unprefixed
+ * routes; secondary languages keep an explicit locale segment.
+ */
+export function localePath(locale: Locale, path = "/") {
+  const suffix =
+    path === "" || path === "/"
+      ? ""
+      : path.startsWith("/")
+        ? path
+        : `/${path}`;
+  const prefix = locale === defaultLocale ? "" : `/${locale}`;
+  return `${prefix}${suffix}` || "/";
+}
+
+/** Converts an internal `/fa/...` rewrite path back to its public form. */
+export function publicPathname(pathname: string) {
+  const prefix = `/${defaultLocale}`;
+  if (pathname === prefix) return "/";
+  if (pathname.startsWith(`${prefix}/`)) return pathname.slice(prefix.length);
+  return pathname;
+}

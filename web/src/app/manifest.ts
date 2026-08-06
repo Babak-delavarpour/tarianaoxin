@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 
-import { defaultLocale } from "@/i18n/config";
+import { defaultLocale, localePath } from "@/i18n/config";
 import en from "@/i18n/dictionaries/en";
 
 export default function manifest(): MetadataRoute.Manifest {
@@ -9,7 +9,7 @@ export default function manifest(): MetadataRoute.Manifest {
     short_name: en.brand.name,
     description: en.meta.description,
     // Farsi is the primary language, so an installed app opens there.
-    start_url: `/${defaultLocale}`,
+    start_url: localePath(defaultLocale),
     scope: "/",
     display: "standalone",
     theme_color: "#08243b",

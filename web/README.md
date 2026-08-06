@@ -15,7 +15,7 @@ submission locally.
 | Language    | TypeScript                                    |
 | Styling     | Tailwind CSS v4 + a custom design system layer|
 | Icons       | `react-icons` (Heroicons 2, Font Awesome)     |
-| Fonts       | Outfit (Latin), Vazirmatn (فارسی), Cairo (عربي)|
+| Fonts       | Outfit (Latin), Vazirmatn + Estedad + Lalezar (فارسی), Cairo (عربي)|
 
 ## Running it
 
@@ -28,7 +28,7 @@ submission locally.
 NODE_ENV=development npm install --include=dev
 
 # develop
-npm run dev            # http://localhost:3000 → redirects to /fa by default
+npm run dev            # http://localhost:3000 → Farsi, with no redirect
 
 # production build + serve
 NODE_ENV=production npx next build
@@ -42,17 +42,16 @@ prefix and text direction:
 
 | Locale | Path  | Direction | Display face | Role                |
 | ------ | ----- | --------- | ------------ | ------------------- |
-| `fa`   | `/fa` | RTL       | Vazirmatn    | **default/fallback**|
+| `fa`   | `/`    | RTL       | Vazirmatn / Estedad / Lalezar | **default/fallback**|
 | `en`   | `/en` | LTR       | Outfit       |                     |
 | `ar`   | `/ar` | RTL       | Cairo        |                     |
 
-`src/proxy.ts` negotiates `Accept-Language` and redirects any unprefixed path to
-the best match — a browser asking for English gets `/en`, Arabic gets `/ar`, and
-**anything else, including an unrecognised language or no header at all, lands
-on `/fa`**. The 404 page and the error boundary are Farsi too.
-
-To send *every* visitor to Farsi regardless of their browser, delete the
-`negotiate()` call in `src/proxy.ts` and use `defaultLocale` directly.
+`src/proxy.ts` internally rewrites every unprefixed path to its Farsi route,
+regardless of the browser's `Accept-Language` header. The browser therefore
+keeps clean Persian URLs such as `/`, `/about`, and `/shop`, while visitors can
+select English (`/en`) or Arabic (`/ar`) from the language switcher. Legacy
+`/fa` URLs permanently redirect to their clean equivalents. The 404 page and
+the error boundary are Farsi too.
 
 `src/app/[locale]/layout.tsx` is the app's root layout, so `dir`, `lang` and
 `data-locale` are on `<html>` in the server-rendered markup rather than being
@@ -63,6 +62,11 @@ shared, locale-agnostic shell would leak RTL rules onto the English pages.
 Numbers are localised too — `useI18n().num()` and `.price()` render Persian and
 Arabic-Indic digits. Anything that must stay Latin (SKUs, phone numbers, ISO
 codes) carries the `.num` class or an explicit `dir="ltr"`.
+
+Persian typography uses three complementary roles: Vazirmatn for body copy and
+controls, Estedad for section/card headings, and Lalezar for the large
+hero and page-title registers. English remains Outfit-only and Arabic remains
+Cairo-only.
 
 Adding a language means: add it to `src/i18n/config.ts`, drop a dictionary in
 `src/i18n/dictionaries/`, and add its strings to `src/lib/catalog.ts`. The

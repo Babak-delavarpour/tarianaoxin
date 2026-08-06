@@ -16,6 +16,7 @@ import { Logo } from "@/components/brand/Logo";
 import { ButtonLink } from "@/components/ui/Button";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { useI18n } from "@/i18n/I18nProvider";
+import { publicPathname } from "@/i18n/config";
 import { useCart } from "@/components/shop/CartProvider";
 
 /** One number, one format. Latin-locked, so it always carries dir/.num. */
@@ -42,6 +43,7 @@ const FOCUSABLE =
 export function Header() {
   const { t, href, locale, num } = useI18n();
   const pathname = usePathname() || "";
+  const publicPath = publicPathname(pathname);
   const { count, open } = useCart();
 
   const [scrolled, setScrolled] = useState(false);
@@ -130,7 +132,7 @@ export function Header() {
 
   const isActive = (path: string) => {
     const full = href(path);
-    return path === "/" ? pathname === full : pathname.startsWith(full);
+    return path === "/" ? publicPath === full : publicPath.startsWith(full);
   };
 
   const activeIndex = links.findIndex((l) => isActive(l.path));

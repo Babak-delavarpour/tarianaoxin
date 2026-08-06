@@ -5,6 +5,7 @@ import {
   localeMeta,
   defaultLocale,
   localeDirection,
+  localePath,
 } from "@/i18n/config";
 import fa from "@/i18n/dictionaries/fa";
 import { fontVariables } from "./fonts";
@@ -113,7 +114,7 @@ export default function NotFound() {
               {destinations.map((d) => (
                 <li key={d.path} className="bg-inverse-2">
                   <Link
-                    href={`/${defaultLocale}${d.path}`}
+                    href={localePath(defaultLocale, d.path)}
                     className="hover-rule flex h-full items-center justify-between gap-3 px-5 py-4 fs-caption font-semibold text-white hover:bg-white/[0.06] hover:text-aqua-300"
                   >
                     {d.label}
@@ -138,7 +139,7 @@ export default function NotFound() {
               {locales.map((l) => (
                 <Link
                   key={l}
-                  href={`/${l}`}
+                  href={localePath(l)}
                   lang={localeMeta[l].htmlLang}
                   dir={localeDirection[l]}
                   className="hover-rule fs-caption inline-flex items-center gap-2.5 rounded-ctrl border border-hairline-inverse-strong bg-white/[0.06] px-5 py-3 font-semibold text-white hover:border-aqua-400 hover:bg-white/[0.12]"

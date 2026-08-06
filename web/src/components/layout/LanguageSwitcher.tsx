@@ -4,7 +4,13 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { HiOutlineGlobeAlt, HiChevronDown, HiCheck } from "react-icons/hi2";
-import { locales, localeMeta, isLocale } from "@/i18n/config";
+import {
+  locales,
+  localeMeta,
+  isLocale,
+  localePath,
+  type Locale,
+} from "@/i18n/config";
 import { useI18n } from "@/i18n/I18nProvider";
 
 /**
@@ -65,11 +71,11 @@ export function LanguageSwitcher({ tone = "dark" }: { tone?: "dark" | "light" })
   };
 
   // Swap only the locale segment so the visitor stays on the same page.
-  const swap = (next: string) => {
+  const swap = (next: Locale) => {
     const segments = pathname.split("/").filter(Boolean);
-    if (segments.length && isLocale(segments[0])) segments[0] = next;
-    else segments.unshift(next);
-    return `/${segments.join("/")}`;
+    if (segments.length && isLocale(segments[0])) segments.shift();
+    const path = segments.length ? `/${segments.join("/")}` : "/";
+    return localePath(next, path);
   };
 
   const onInk = tone === "light";

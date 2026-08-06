@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { defaultLocale, isLocale } from "@/i18n/config";
+import { defaultLocale, isLocale, localePath } from "@/i18n/config";
 
 /**
  * The app's only root layout lives under [locale], so this boundary has to
@@ -49,12 +49,12 @@ export default function GlobalError({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
-  const [home, setHome] = useState(`/${defaultLocale}`);
+  const [home, setHome] = useState(localePath(defaultLocale));
 
   /* Keep the reader in the language they were already browsing. */
   useEffect(() => {
     const segment = window.location.pathname.split("/")[1] ?? "";
-    if (isLocale(segment)) setHome(`/${segment}`);
+    if (isLocale(segment)) setHome(localePath(segment));
   }, []);
 
   const control: React.CSSProperties = {

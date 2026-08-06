@@ -2,7 +2,14 @@ import type { Metadata, Viewport } from "next";
 import { notFound } from "next/navigation";
 import "../globals.css";
 
-import { locales, localeDirection, localeMeta, isLocale } from "@/i18n/config";
+import {
+  locales,
+  defaultLocale,
+  localeDirection,
+  localeMeta,
+  localePath,
+  isLocale,
+} from "@/i18n/config";
 import { getDictionary } from "@/i18n";
 import { I18nProvider } from "@/i18n/I18nProvider";
 import { fontVariables, localeFontClassName } from "@/app/fonts";
@@ -38,9 +45,12 @@ export async function generateMetadata({
     description: t.meta.description,
     applicationName: "Tarianaoxin",
     alternates: {
-      canonical: `/${locale}`,
+      canonical: localePath(locale),
       languages: Object.fromEntries(
-        locales.map((l) => [localeMeta[l].htmlLang, `/${l}`]),
+        [
+          ...locales.map((l) => [localeMeta[l].htmlLang, localePath(l)]),
+          ["x-default", localePath(defaultLocale)],
+        ],
       ),
     },
     openGraph: {
