@@ -1,11 +1,6 @@
 "use client";
 
-import Link from "next/link";
-import { HiChevronRight } from "react-icons/hi2";
-import { Container, Divider, Eyebrow } from "@/components/ui/Section";
-import { useI18n } from "@/i18n/I18nProvider";
-
-export type Crumb = { label: string; path?: string };
+import { Container } from "@/components/ui/Section";
 
 /** Rotates the one static wash per route so five pages do not open on the
  *  same slab. Position and hue both move — never the number of layers. */
@@ -28,11 +23,8 @@ const accents = {
  * edge unless the page asks to fade into the chapter below.
  */
 export function PageHero({
-  eyebrow,
   title,
   subtitle,
-  crumb,
-  crumbs,
   accent = "cool",
   media,
   fadeTo,
@@ -43,10 +35,6 @@ export function PageHero({
   eyebrow: string;
   title: string;
   subtitle?: string;
-  /** Single trailing crumb — the shorthand every route currently uses. */
-  crumb?: string;
-  /** Full trail, when a route is more than one level deep. */
-  crumbs?: (string | Crumb)[];
   accent?: keyof typeof accents;
   /** Optional trailing-column object. Its presence changes the layout. */
   media?: React.ReactNode;
@@ -57,12 +45,6 @@ export function PageHero({
   compact?: boolean;
   children?: React.ReactNode;
 }) {
-  const { t, href } = useI18n();
-
-  const trail: Crumb[] = (
-    crumbs ?? (crumb ? [crumb] : [])
-  ).map((c) => (typeof c === "string" ? { label: c } : c));
-
   const tight = (pad ?? (compact ? "tight" : "base")) === "tight";
 
   return (
@@ -95,56 +77,12 @@ export function PageHero({
       </div>
 
       <Container className="relative">
-        <nav aria-label={t.common.breadcrumb}>
-          <ol className="flex flex-wrap items-center gap-x-2.5 gap-y-1">
-            <li>
-              <Link
-                href={href("/")}
-                className="hover-rule eyebrow text-onink-300 hover:text-white"
-              >
-                {t.nav.home}
-              </Link>
-            </li>
-            {trail.map((c, i) => {
-              const last = i === trail.length - 1;
-              return (
-                <li key={`${c.label}-${i}`} className="flex items-center gap-2.5">
-                  <HiChevronRight
-                    aria-hidden
-                    className="h-3 w-3 shrink-0 text-onink-400 flip-rtl"
-                  />
-                  {c.path && !last ? (
-                    <Link
-                      href={href(c.path)}
-                      className="hover-rule eyebrow text-onink-300 hover:text-white"
-                    >
-                      {c.label}
-                    </Link>
-                  ) : (
-                    <span
-                      className="eyebrow text-white"
-                      aria-current={last ? "page" : undefined}
-                    >
-                      {c.label}
-                    </span>
-                  )}
-                </li>
-              );
-            })}
-          </ol>
-        </nav>
-
-        {/* Masthead rule: chrome above it, content below. Together with the
-            tick scale on the bottom edge it frames the chapter. */}
-        <Divider tone="light" className="mt-4" />
-
         <div
-          className={`mt-[clamp(1.75rem,3.5vw,3rem)] grid gap-10 ${
+          className={`grid gap-10 ${
             media ? "lg:grid-cols-[1fr_0.82fr] lg:items-end lg:gap-14" : ""
           }`}
         >
           <div className="enter flex flex-col items-start gap-5">
-            <Eyebrow tone="light">{eyebrow}</Eyebrow>
             <h1 className="fs-h1 max-w-[18ch] font-bold text-white">{title}</h1>
             {subtitle ? (
               <p className="fs-lead max-w-[56ch] text-onink-200">{subtitle}</p>

@@ -9,10 +9,11 @@ import {
   HiChevronRight,
   HiArrowUpRight,
 } from "react-icons/hi2";
-import { Chapter, Container, Eyebrow } from "@/components/ui/Section";
+import { Chapter, Container } from "@/components/ui/Section";
 import { RevealGroup } from "@/components/ui/Reveal";
 import { Button, ButtonLink } from "@/components/ui/Button";
 import { ProductCard } from "./ProductCard";
+import { ShopLanding } from "./ShopLanding";
 import {
   categories,
   products,
@@ -27,11 +28,24 @@ type Sort = "featured" | "asc" | "desc" | "new";
 const FOCUSABLE =
   'a[href],button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])';
 
-export function ShopView() {
+export function ShopView({
+  initialCategory,
+  initialQuery = "",
+}: {
+  initialCategory?: string;
+  initialQuery?: string;
+}) {
   const { t, locale, href, num, price } = useI18n();
+  const initialCategoryId = categories.some(
+    (item) => item.id === initialCategory,
+  )
+    ? (initialCategory as CategoryId)
+    : "all";
 
-  const [query, setQuery] = useState("");
-  const [category, setCategory] = useState<CategoryId | "all">("all");
+  const [query, setQuery] = useState(initialQuery);
+  const [category, setCategory] = useState<CategoryId | "all">(
+    initialCategoryId,
+  );
   const [badges, setBadges] = useState<Badge[]>([]);
   const [inStockOnly, setInStockOnly] = useState(false);
   const [maxPrice, setMaxPrice] = useState(priceBounds.max);
@@ -88,9 +102,30 @@ export function ShopView() {
       prev.includes(b) ? prev.filter((x) => x !== b) : [...prev, b],
     );
 
+  const selectCategory = (nextCategory: CategoryId | "all") => {
+    setCategory(nextCategory);
+    const url = new URL(window.location.href);
+    if (nextCategory === "all") url.searchParams.delete("cat");
+    else url.searchParams.set("cat", nextCategory);
+    window.history.replaceState({}, "", `${url.pathname}${url.search}`);
+  };
+
+  const openCategory = (nextCategory: CategoryId) => {
+    setQuery("");
+    selectCategory(nextCategory);
+    window.setTimeout(() => {
+      document.getElementById("shop-results")?.scrollIntoView({
+        behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
+          ? "auto"
+          : "smooth",
+        block: "start",
+      });
+    }, 0);
+  };
+
   const reset = () => {
     setQuery("");
-    setCategory("all");
+    selectCategory("all");
     setBadges([]);
     setInStockOnly(false);
     setMaxPrice(priceBounds.max);
@@ -144,7 +179,7 @@ export function ShopView() {
             {
               key: `c-${category}`,
               label: categories.find((c) => c.id === category)?.name[locale] ?? "",
-              clear: () => setCategory("all"),
+              clear: () => selectCategory("all"),
             },
           ]
         : []),
@@ -170,6 +205,7 @@ export function ShopView() {
     ];
 
   const activeCount = activeFilters.length;
+  const showCatalog = query.trim().length > 0 || category !== "all";
 
   /* ── The filter instrument. Rendered twice: docked in the sidebar
         from `lg` up, and inside the bottom sheet below it. ───────── */
@@ -203,7 +239,7 @@ export function ShopView() {
                 <button
                   key={c.id}
                   type="button"
-                  onClick={() => setCategory(c.id)}
+                  onClick={() => selectCategory(c.id)}
                   aria-pressed={on}
                   className={`hover-rule flex min-h-11 items-center justify-between gap-3 border-b border-s-2 py-2.5 pe-1 ps-3 text-start fs-caption ${
                     on
@@ -307,7 +343,7 @@ export function ShopView() {
       {/* ═══ INK MASTHEAD — compact, with the search promoted into it ═══ */}
       <section
         data-tone="ink"
-        className="mesh-dark nav-clear relative isolate overflow-hidden pb-[clamp(2.75rem,5vw,4.5rem)]"
+        className="mesh-dark relative isolate overflow-hidden pt-[calc(var(--nav-h)+clamp(1rem,2vw,1.5rem))] pb-[clamp(1.5rem,2.5vw,2.25rem)]"
       >
         <div
           aria-hidden
@@ -339,21 +375,32 @@ export function ShopView() {
             </span>
           </nav>
 
-          <div className="mt-8 grid gap-9 lg:grid-cols-[1fr_0.8fr] lg:items-end lg:gap-14">
-            <div className="enter flex flex-col gap-4">
-              <Eyebrow tone="light">{t.shop.hero.eyebrow}</Eyebrow>
-              <h1 className="fs-h1 max-w-[16ch] font-bold text-white">
-                {t.shop.hero.title}
-              </h1>
-              <p className="fs-lead max-w-[56ch] text-onink-200">
-                {t.shop.hero.subtitle}
-              </p>
-            </div>
+          <div
+            className={`mt-4 grid gap-6 ${
+              locale === "fa"
+                ? ""
+                : "lg:grid-cols-[1fr_0.8fr] lg:items-end lg:gap-10"
+            }`}
+          >
+            {locale !== "fa" && (
+              <div className="enter flex flex-col gap-4">
+                <h1 className="fs-h1 max-w-[16ch] font-bold text-white">
+                  {t.shop.hero.title}
+                </h1>
+                <p className="fs-lead max-w-[56ch] text-onink-200">
+                  {t.shop.hero.subtitle}
+                </p>
+              </div>
+            )}
 
-            <div className="enter-fade">
+            <div
+              className={`enter-fade w-full max-w-xl ${
+                locale === "fa" ? "mx-auto" : ""
+              }`}
+            >
               <label
                 htmlFor="shop-search"
-                className="eyebrow mb-3 block text-onink-300"
+                className="sr-only"
               >
                 {t.common.search}
               </label>
@@ -367,8 +414,8 @@ export function ShopView() {
                   type="search"
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
-                  placeholder={t.common.searchPlaceholder}
-                  className="hover-rule h-14 w-full rounded-ctrl border border-hairline-inverse-strong bg-white/[0.06] ps-12 pe-4 fs-body text-white placeholder:text-onink-300 focus:border-aqua-400 focus:bg-white/[0.12]"
+                  placeholder={t.common.search}
+                  className="hover-rule h-12 w-full rounded-ctrl border border-hairline-inverse-strong bg-white/[0.06] ps-12 pe-4 fs-body text-white placeholder:text-onink-300 focus:border-aqua-400 focus:bg-white/[0.12]"
                 />
               </div>
             </div>
@@ -376,9 +423,9 @@ export function ShopView() {
         </Container>
       </section>
 
-      {/* ═══ BOARD — the catalogue itself. White cards on a tinted
-             ground so the only elevated object in the system reads. ═══ */}
-      <Chapter tone="board" pad="tight">
+      {showCatalog ? (
+        /* ═══ BOARD — filters and catalogue appear after intent. ═══ */
+        <Chapter id="shop-results" tone="board" pad="tight">
         <Container>
           <div className="grid gap-10 lg:grid-cols-[16.5rem_1fr] lg:gap-12">
             {/* Docked filters */}
@@ -513,7 +560,10 @@ export function ShopView() {
             </div>
           </div>
         </Container>
-      </Chapter>
+        </Chapter>
+      ) : (
+        <ShopLanding onCategorySelect={openCategory} />
+      )}
 
       {/* ═══ Mobile filter sheet ═══ */}
       <div

@@ -26,10 +26,13 @@ export async function generateMetadata({
 
 export default async function ShopPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ locale: string }>;
+  searchParams: Promise<{ cat?: string; q?: string }>;
 }) {
   const { locale } = await params;
+  const search = await searchParams;
 
   return (
     <>
@@ -42,7 +45,7 @@ export default async function ShopPage({
           />
         </>
       )}
-      <ShopView />
+      <ShopView initialCategory={search.cat} initialQuery={search.q} />
     </>
   );
 }

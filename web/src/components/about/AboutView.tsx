@@ -1,11 +1,8 @@
 "use client";
 
-import Link from "next/link";
-import { HiChevronRight } from "react-icons/hi2";
 import {
   Chapter,
   Container,
-  Eyebrow,
   SectionHeading,
 } from "@/components/ui/Section";
 import { Reveal, RevealGroup } from "@/components/ui/Reveal";
@@ -133,8 +130,137 @@ function PlantElevation() {
   );
 }
 
+/** Persian heritage seal for the parent brand behind Tariana Oxin. */
+function HeritageStamp() {
+  const brandName =
+    "پخش یک‌بارمصرف دلاورپور — تلاشگران تاریانا اکسین";
+  const rimOrnaments = Array.from({ length: 24 });
+
+  return (
+    <figure
+      dir="rtl"
+      className="flex flex-col items-center gap-5 text-center"
+      aria-label={brandName}
+    >
+      <div className="heritage-stamp relative grid aspect-square w-[clamp(14rem,24vw,17rem)] rotate-[-1.5deg] place-items-center text-aqua-200 drop-shadow-[0_20px_32px_rgba(0,0,0,0.24)]">
+        <svg
+          viewBox="0 0 300 300"
+          aria-hidden="true"
+          className="absolute inset-0 h-full w-full overflow-visible"
+        >
+          <g fill="none" strokeLinejoin="round">
+            <circle
+              cx="150"
+              cy="150"
+              r="144"
+              stroke="#6bd3e5"
+              strokeWidth="2.4"
+              opacity="0.9"
+            />
+            <circle
+              cx="150"
+              cy="150"
+              r="138"
+              stroke="#d8b96f"
+              strokeWidth="0.9"
+              opacity="0.72"
+            />
+
+            {rimOrnaments.map((_, index) => (
+              <path
+                key={index}
+                d="M150 8 L154 15 L150 23 L146 15 Z"
+                transform={`rotate(${index * 15} 150 150)`}
+                stroke={index % 2 === 0 ? "#6bd3e5" : "#d8b96f"}
+                strokeWidth="1"
+                opacity={index % 2 === 0 ? "0.88" : "0.62"}
+              />
+            ))}
+
+            <circle
+              cx="150"
+              cy="150"
+              r="121"
+              stroke="#6bd3e5"
+              strokeWidth="1"
+              strokeDasharray="2 7"
+              opacity="0.62"
+            />
+
+            {/* A restrained iwan arch anchors the Persian geometry. */}
+            <path
+              d="M86 214 V132 C86 94 113 64 150 43 C187 64 214 94 214 132 V214"
+              stroke="#6bd3e5"
+              strokeWidth="1.2"
+              opacity="0.26"
+            />
+            <path
+              d="M96 211 V136 C96 105 117 78 150 58 C183 78 204 105 204 136 V211"
+              stroke="#d8b96f"
+              strokeWidth="0.8"
+              opacity="0.25"
+            />
+
+            {/* Mirrored leaf forms reference Persian arabesque ornament. */}
+            <path
+              d="M77 177 C55 165 52 139 70 125 C67 143 79 152 94 148 C92 161 86 171 77 177 Z"
+              stroke="#d8b96f"
+              strokeWidth="1"
+              opacity="0.5"
+            />
+            <path
+              d="M223 177 C245 165 248 139 230 125 C233 143 221 152 206 148 C208 161 214 171 223 177 Z"
+              stroke="#d8b96f"
+              strokeWidth="1"
+              opacity="0.5"
+            />
+          </g>
+        </svg>
+
+        <span
+          aria-hidden
+          className="grain-layer absolute inset-2 rounded-full opacity-[0.06]"
+        />
+
+        <div
+          aria-hidden
+          className="relative z-10 flex max-w-[78%] flex-col items-center"
+        >
+          <span className="text-[0.68rem] font-bold text-aqua-100/90 sm:text-xs">
+            پخش یک‌بارمصرف
+          </span>
+          <strong className="font-display mt-1.5 text-[2.7rem] leading-none font-normal text-white sm:text-[3.2rem]">
+            دلاورپور
+          </strong>
+
+          <span className="my-2.5 flex w-32 items-center gap-2.5" aria-hidden>
+            <i className="h-px flex-1 bg-aqua-300/45" />
+            <svg viewBox="0 0 24 24" className="h-3.5 w-3.5 fill-[#d8b96f]">
+              <path d="M12 0 15 8 24 12 15 16 12 24 9 16 0 12 9 8Z" />
+            </svg>
+            <i className="h-px flex-1 bg-aqua-300/45" />
+          </span>
+
+          <span className="text-[0.76rem] leading-relaxed font-extrabold text-white sm:text-[0.84rem]">
+            تلاشگران تاریانا اکسین
+          </span>
+          <span className="mt-2 text-[0.58rem] font-semibold text-[#d8b96f] sm:text-[0.65rem]">
+            بنیان ۱۳۷۵
+          </span>
+        </div>
+      </div>
+
+      <figcaption className="flex items-center gap-3 text-[0.68rem] font-semibold text-onink-300">
+        <span aria-hidden className="h-px w-7 bg-aqua-400/35" />
+        نشان برند
+        <span aria-hidden className="h-px w-7 bg-aqua-400/35" />
+      </figcaption>
+    </figure>
+  );
+}
+
 export function AboutView() {
-  const { t, href, num } = useI18n();
+  const { t, num, locale } = useI18n();
   const a = t.about;
   const lastMilestone = a.timeline.items.length - 1;
 
@@ -157,27 +283,6 @@ export function AboutView() {
 
         <Container className="relative grid gap-[clamp(2.5rem,5vw,4rem)] lg:grid-cols-[1fr_0.82fr] lg:items-end lg:gap-[clamp(2.5rem,5vw,5rem)]">
           <div className="enter flex flex-col items-start gap-5">
-            <nav
-              aria-label={t.common.breadcrumb}
-              className="eyebrow flex items-center gap-2 text-onink-300"
-            >
-              <Link
-                href={href("/")}
-                className="tap-target hover-rule hover:text-aqua-300"
-              >
-                {t.nav.home}
-              </Link>
-              <HiChevronRight
-                aria-hidden
-                className="h-3 w-3 shrink-0 text-onink-300 flip-rtl"
-              />
-              <span aria-current="page" className="text-aqua-300">
-                {t.nav.about}
-              </span>
-            </nav>
-
-            <Eyebrow tone="light">{a.hero.eyebrow}</Eyebrow>
-
             <h1 className="fs-h1 max-w-[18ch] font-bold text-white">
               {a.hero.title}
             </h1>
@@ -187,37 +292,43 @@ export function AboutView() {
             </p>
           </div>
 
-          {/* capability plinth — the plant's real numbers, stated once */}
-          <figure className="enter-fade w-full overflow-hidden rounded-panel border border-hairline-inverse bg-inverse-2">
-            <div
-              aria-hidden
-              className="tick-rule h-4 w-full border-b border-hairline-inverse"
-            />
-            <dl className="plate-rule-ink grid-cols-2">
-              {a.facility.specs.map((spec) => (
+          <div className="enter-fade flex w-full flex-col items-center gap-7">
+            {locale === "fa" && <HeritageStamp />}
+
+            {locale !== "fa" && (
+              /* capability plinth — the plant's real numbers, stated once */
+              <figure className="w-full overflow-hidden rounded-panel border border-hairline-inverse bg-inverse-2">
                 <div
-                  key={spec.label}
-                  className="flex flex-col-reverse gap-1.5 bg-inverse-2 px-4 py-5 sm:px-5 sm:py-6"
-                >
-                  {/* label first in the DOM, value first to the eye */}
-                  <dt className="fs-caption text-onink-300">{spec.label}</dt>
-                  <dd className="fs-h3 font-bold tabular-nums text-white">
-                    {spec.value}
-                  </dd>
-                </div>
-              ))}
-            </dl>
-            <figcaption className="flex items-center justify-between gap-4 border-t border-hairline-inverse px-5 py-3.5">
-              <span className="eyebrow text-onink-300">
-                {a.facility.eyebrow}
-              </span>
-              <span aria-hidden className="flex shrink-0 gap-1">
-                <i className="block h-1.5 w-1.5 rounded-chip bg-aqua-400/80" />
-                <i className="block h-1.5 w-1.5 rounded-chip bg-onink-400/60" />
-                <i className="block h-1.5 w-1.5 rounded-chip bg-onink-400/60" />
-              </span>
-            </figcaption>
-          </figure>
+                  aria-hidden
+                  className="tick-rule h-4 w-full border-b border-hairline-inverse"
+                />
+                <dl className="plate-rule-ink grid-cols-2">
+                  {a.facility.specs.map((spec) => (
+                    <div
+                      key={spec.label}
+                      className="flex flex-col-reverse gap-1.5 bg-inverse-2 px-4 py-5 sm:px-5 sm:py-6"
+                    >
+                      {/* label first in the DOM, value first to the eye */}
+                      <dt className="fs-caption text-onink-300">{spec.label}</dt>
+                      <dd className="fs-h3 font-bold tabular-nums text-white">
+                        {spec.value}
+                      </dd>
+                    </div>
+                  ))}
+                </dl>
+                <figcaption className="flex items-center justify-between gap-4 border-t border-hairline-inverse px-5 py-3.5">
+                  <span className="eyebrow text-onink-300">
+                    {a.facility.eyebrow}
+                  </span>
+                  <span aria-hidden className="flex shrink-0 gap-1">
+                    <i className="block h-1.5 w-1.5 rounded-chip bg-aqua-400/80" />
+                    <i className="block h-1.5 w-1.5 rounded-chip bg-onink-400/60" />
+                    <i className="block h-1.5 w-1.5 rounded-chip bg-onink-400/60" />
+                  </span>
+                </figcaption>
+              </figure>
+            )}
+          </div>
         </Container>
       </section>
 

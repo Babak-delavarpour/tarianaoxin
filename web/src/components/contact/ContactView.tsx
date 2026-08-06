@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Link from "next/link";
 import {
   HiOutlineMapPin,
   HiOutlinePhone,
@@ -10,13 +9,11 @@ import {
   HiCheckCircle,
   HiPaperAirplane,
   HiOutlineArrowTopRightOnSquare,
-  HiChevronRight,
 } from "react-icons/hi2";
 import {
   Chapter,
   Container,
   Divider,
-  Eyebrow,
   SectionHeading,
 } from "@/components/ui/Section";
 import { Reveal } from "@/components/ui/Reveal";
@@ -52,7 +49,7 @@ const fieldBase =
 const labelClass = "fs-caption font-semibold text-mist-600";
 
 export function ContactView() {
-  const { t, href } = useI18n();
+  const { t } = useI18n();
   const c = t.contact;
 
   const [sent, setSent] = useState(false);
@@ -124,27 +121,6 @@ export function ContactView() {
 
         <Container className="relative grid gap-[clamp(2.5rem,5vw,4rem)] lg:grid-cols-[1fr_0.9fr] lg:items-end lg:gap-[clamp(2.5rem,5vw,5rem)]">
           <div className="enter flex flex-col items-start gap-5">
-            <nav
-              aria-label={t.common.breadcrumb}
-              className="eyebrow flex items-center gap-2 text-onink-300"
-            >
-              <Link
-                href={href("/")}
-                className="tap-target hover-rule hover:text-aqua-300"
-              >
-                {t.nav.home}
-              </Link>
-              <HiChevronRight
-                aria-hidden
-                className="h-3 w-3 shrink-0 text-onink-300 flip-rtl"
-              />
-              <span aria-current="page" className="text-aqua-300">
-                {t.nav.contact}
-              </span>
-            </nav>
-
-            <Eyebrow tone="light">{c.hero.eyebrow}</Eyebrow>
-
             <h1 className="fs-h1 max-w-[16ch] font-bold text-white">
               {c.hero.title}
             </h1>

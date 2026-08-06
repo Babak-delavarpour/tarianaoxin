@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { HiArrowUpRight, HiChevronRight } from "react-icons/hi2";
+import { HiArrowUpRight } from "react-icons/hi2";
 import {
   Chapter,
   Container,
@@ -55,27 +55,6 @@ export function ProductsView() {
 
         <Container className="relative grid gap-[clamp(2.5rem,5vw,4rem)] lg:grid-cols-[1fr_0.86fr] lg:items-end lg:gap-[clamp(2.5rem,5vw,5rem)]">
           <div className="enter flex flex-col items-start gap-5">
-            <nav
-              aria-label={t.common.breadcrumb}
-              className="eyebrow flex items-center gap-2 text-onink-300"
-            >
-              <Link
-                href={href("/")}
-                className="tap-target hover-rule hover:text-aqua-300"
-              >
-                {t.nav.home}
-              </Link>
-              <HiChevronRight
-                aria-hidden
-                className="h-3 w-3 shrink-0 text-onink-300 flip-rtl"
-              />
-              <span aria-current="page" className="text-aqua-300">
-                {t.nav.products}
-              </span>
-            </nav>
-
-            <Eyebrow tone="light">{t.products.hero.eyebrow}</Eyebrow>
-
             <h1 className="fs-h1 max-w-[16ch] font-bold text-white">
               {t.products.hero.title}
             </h1>

@@ -128,15 +128,6 @@ export function ProductView({ slug }: { slug: string }) {
           </nav>
 
           <div className="enter mt-8 flex flex-col gap-5">
-            {category ? (
-              <Link
-                href={href(`/products#${category.slug}`)}
-                className="w-fit hover-rule"
-              >
-                <Eyebrow tone="light">{category.name[locale]}</Eyebrow>
-              </Link>
-            ) : null}
-
             <h1 className="fs-h1 max-w-[20ch] font-bold text-white">
               {product.name[locale]}
             </h1>
