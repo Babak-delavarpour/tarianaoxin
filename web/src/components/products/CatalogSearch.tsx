@@ -70,8 +70,6 @@ export function CatalogSearch() {
     return () => document.removeEventListener("pointerdown", onPointerDown);
   }, [open]);
 
-  useEffect(() => setActiveIndex(-1), [query]);
-
   const optionIndex = (key: string) =>
     options.findIndex((option) => option.key === key);
   const optionId = (index: number) => `catalog-search-option-${index}`;
@@ -142,6 +140,7 @@ export function CatalogSearch() {
             value={query}
             onChange={(event) => {
               setQuery(event.target.value);
+              setActiveIndex(-1);
               setOpen(true);
             }}
             onFocus={() => setOpen(true)}
@@ -162,6 +161,7 @@ export function CatalogSearch() {
               type="button"
               onClick={() => {
                 setQuery("");
+                setActiveIndex(-1);
                 setOpen(true);
                 inputRef.current?.focus();
               }}

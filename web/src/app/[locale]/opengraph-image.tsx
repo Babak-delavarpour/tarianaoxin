@@ -1,3 +1,5 @@
+/* eslint-disable @next/next/no-img-element -- ImageResponse requires a plain image element. */
+
 import { ImageResponse } from "next/og";
 
 import { locales, isLocale, defaultLocale } from "@/i18n/config";

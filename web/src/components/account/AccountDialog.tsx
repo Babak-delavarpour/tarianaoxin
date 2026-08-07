@@ -7,6 +7,7 @@ import {
   HiCheck,
   HiEye,
   HiEyeSlash,
+  HiOutlineInformationCircle,
   HiOutlineEnvelope,
   HiOutlineLockClosed,
   HiOutlineUser,
@@ -61,12 +62,14 @@ export function AccountDialog({ tone }: { tone: "dark" | "light" }) {
   const [open, setOpen] = useState(false);
   const [mode, setMode] = useState<Mode>("signin");
   const [showPassword, setShowPassword] = useState(false);
+  const [submittedMode, setSubmittedMode] = useState<Mode | null>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     if (!open) return;
+    const trigger = triggerRef.current;
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     closeRef.current?.focus();
@@ -99,11 +102,15 @@ export function AccountDialog({ tone }: { tone: "dark" | "light" }) {
     return () => {
       document.removeEventListener("keydown", onKeyDown);
       document.body.style.overflow = previousOverflow;
-      triggerRef.current?.focus();
+      trigger?.focus();
     };
   }, [open]);
 
-  useEffect(() => setShowPassword(false), [mode]);
+  const changeMode = (nextMode: Mode) => {
+    setMode(nextMode);
+    setShowPassword(false);
+    setSubmittedMode(null);
+  };
 
   const onInk = tone === "light";
   const title =
@@ -134,12 +141,35 @@ export function AccountDialog({ tone }: { tone: "dark" | "light" }) {
     </button>
   );
 
+  const submitPreview = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setSubmittedMode(mode);
+  };
+
+  const previewStatus =
+    submittedMode === mode ? (
+      <p
+        role="status"
+        aria-live="polite"
+        className="fs-caption flex items-start gap-2 rounded-ctrl border border-aqua-200 bg-aqua-50 px-3.5 py-3 font-semibold text-aqua-900"
+      >
+        <HiOutlineInformationCircle
+          aria-hidden
+          className="mt-0.5 h-4.5 w-4.5 shrink-0 text-aqua-700"
+        />
+        {t.auth.previewStatus}
+      </p>
+    ) : null;
+
   return (
     <>
       <button
         ref={triggerRef}
         type="button"
-        onClick={() => setOpen(true)}
+        onClick={() => {
+          setSubmittedMode(null);
+          setOpen(true);
+        }}
         aria-label={t.auth.account}
         aria-haspopup="dialog"
         aria-expanded={open}
@@ -248,7 +278,7 @@ export function AccountDialog({ tone }: { tone: "dark" | "light" }) {
                       type="button"
                       role="tab"
                       aria-selected={selected}
-                      onClick={() => setMode(item)}
+                      onClick={() => changeMode(item)}
                       className={`hover-rule min-h-10 rounded-ctrl px-3 fs-caption font-semibold ${
                         selected
                           ? "bg-page text-ink-900 shadow-e1"
@@ -263,7 +293,7 @@ export function AccountDialog({ tone }: { tone: "dark" | "light" }) {
             ) : (
               <button
                 type="button"
-                onClick={() => setMode("signin")}
+                onClick={() => changeMode("signin")}
                 className="hover-rule fs-caption mt-5 inline-flex min-h-10 items-center gap-2 rounded-ctrl font-semibold text-aqua-700 hover:text-ink-900"
               >
                 <HiArrowLeft aria-hidden className="h-4 w-4 flip-rtl" />
@@ -283,7 +313,7 @@ export function AccountDialog({ tone }: { tone: "dark" | "light" }) {
 
             {mode === "signin" ? (
               <form
-                onSubmit={(event) => event.preventDefault()}
+                onSubmit={submitPreview}
                 className="mt-6 flex flex-col gap-4"
               >
                 <Field
@@ -314,7 +344,7 @@ export function AccountDialog({ tone }: { tone: "dark" | "light" }) {
                   </label>
                   <button
                     type="button"
-                    onClick={() => setMode("forgot")}
+                    onClick={() => changeMode("forgot")}
                     className="hover-rule fs-caption min-h-10 font-semibold text-aqua-700 hover:text-ink-900"
                   >
                     {t.auth.forgotPassword}
@@ -324,11 +354,12 @@ export function AccountDialog({ tone }: { tone: "dark" | "light" }) {
                   {t.auth.signIn}
                   <HiArrowUpRight aria-hidden className="h-4 w-4 flip-rtl" />
                 </Button>
+                {previewStatus}
                 <p className="fs-caption text-center text-mist-600">
                   {t.auth.noAccount}{" "}
                   <button
                     type="button"
-                    onClick={() => setMode("register")}
+                    onClick={() => changeMode("register")}
                     className="hover-rule font-semibold text-aqua-700 hover:text-ink-900"
                   >
                     {t.auth.register}
@@ -337,7 +368,7 @@ export function AccountDialog({ tone }: { tone: "dark" | "light" }) {
               </form>
             ) : mode === "register" ? (
               <form
-                onSubmit={(event) => event.preventDefault()}
+                onSubmit={submitPreview}
                 className="mt-6 flex flex-col gap-4"
               >
                 <Field
@@ -373,11 +404,12 @@ export function AccountDialog({ tone }: { tone: "dark" | "light" }) {
                   {t.auth.register}
                   <HiArrowUpRight aria-hidden className="h-4 w-4 flip-rtl" />
                 </Button>
+                {previewStatus}
                 <p className="fs-caption text-center text-mist-600">
                   {t.auth.haveAccount}{" "}
                   <button
                     type="button"
-                    onClick={() => setMode("signin")}
+                    onClick={() => changeMode("signin")}
                     className="hover-rule font-semibold text-aqua-700 hover:text-ink-900"
                   >
                     {t.auth.signIn}
@@ -386,7 +418,7 @@ export function AccountDialog({ tone }: { tone: "dark" | "light" }) {
               </form>
             ) : (
               <form
-                onSubmit={(event) => event.preventDefault()}
+                onSubmit={submitPreview}
                 className="mt-6 flex flex-col gap-5"
               >
                 <Field
@@ -402,6 +434,7 @@ export function AccountDialog({ tone }: { tone: "dark" | "light" }) {
                   {t.auth.sendResetLink}
                   <HiArrowUpRight aria-hidden className="h-4 w-4 flip-rtl" />
                 </Button>
+                {previewStatus}
               </form>
             )}
           </section>

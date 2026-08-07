@@ -19,6 +19,8 @@ submission locally.
 
 ## Running it
 
+Node.js 20.9 or newer is required.
+
 > **Important:** this machine has `NODE_ENV=production` exported globally, which
 > makes `npm install` skip devDependencies and makes `next build` fail while
 > prerendering the internal error pages. Use the commands below verbatim.
@@ -33,6 +35,9 @@ npm run dev            # http://localhost:3000 → Farsi, with no redirect
 # production build + serve
 NODE_ENV=production npx next build
 NODE_ENV=production npx next start
+
+# full release gate (lint + type-check + production build)
+npm run check
 ```
 
 ## Languages

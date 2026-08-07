@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { defaultLocale, isLocale, localePath } from "@/i18n/config";
+/* eslint-disable @next/next/no-img-element -- Next's image runtime is unavailable inside the root error boundary. */
+
+import { defaultLocale, localePath } from "@/i18n/config";
 
 /**
  * The app's only root layout lives under [locale], so this boundary has to
@@ -40,13 +41,7 @@ export default function GlobalError({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
-  const [home, setHome] = useState(localePath(defaultLocale));
-
-  /* Keep the reader in the language they were already browsing. */
-  useEffect(() => {
-    const segment = window.location.pathname.split("/")[1] ?? "";
-    if (isLocale(segment)) setHome(localePath(segment));
-  }, []);
+  const home = localePath(defaultLocale);
 
   const control: React.CSSProperties = {
     display: "inline-flex",

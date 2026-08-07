@@ -2,23 +2,31 @@
   "name": "tarianaoxin-web",
   "version": "1.0.0",
   "private": true,
+  "engines": {
+    "node": ">=20.9.0"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "typecheck": "tsc --noEmit",
+    "check": "npm run lint && npm run typecheck && npm run build"
   },
   "dependencies": {
-    "next": "^16.2.12",
-    "react": "^19.2.0",
-    "react-dom": "^19.2.0",
+    "next": "^16.3.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
     "react-icons": "5.5.0"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "4.1.13",
     "@types/node": "22.10.2",
-    "@types/react": "19.1.13",
-    "@types/react-dom": "19.1.9",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.4",
+    "eslint": "^9.0.0",
+    "eslint-config-next": "^16.3.0",
     "tailwindcss": "4.1.13",
     "typescript": "5.7.2"
   }

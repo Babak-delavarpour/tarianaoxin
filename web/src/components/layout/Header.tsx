@@ -65,8 +65,6 @@ export function Header() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  useEffect(() => setMenuOpen(false), [pathname]);
-
   /* ── the sheet: scroll lock, Esc, focus trap, focus restore ───── */
   useEffect(() => {
     if (!menuOpen) return;
@@ -445,6 +443,7 @@ export function Header() {
                   <li key={l.path}>
                     <Link
                       href={href(l.path)}
+                      onClick={closeMenu}
                       aria-current={active ? "page" : undefined}
                       className={`hover-rule fs-h4 grid grid-cols-[2.25rem_1fr_auto] items-center gap-3 border-s-2 px-5 py-4 font-semibold ${
                         active

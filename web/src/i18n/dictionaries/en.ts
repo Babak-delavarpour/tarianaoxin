@@ -110,6 +110,8 @@ const en = {
     haveAccount: "Already have an account?",
     backToSignIn: "Back to sign in",
     sendResetLink: "Send reset link",
+    previewStatus:
+      "The account preview is ready. Connect the authentication service to enable this action.",
     terms: "By creating an account, you agree to our terms and privacy policy.",
     panelTitle: "Your supply account",
     panelBody: "One secure place for faster ordering and simpler account management.",
@@ -429,7 +431,8 @@ const en = {
       messagePlaceholder: "Tell us the SKUs and monthly quantities you need…",
       submit: "Send message",
       sending: "Sending…",
-      success: "Thank you — your message has been recorded. Our team will be in touch.",
+      success:
+        "The demo form was submitted successfully. Connect the delivery service before launch to receive messages.",
     },
     info: {
       title: "Contact information",
@@ -500,7 +503,8 @@ const en = {
       body: "Company news, manufacturing updates and industry insights, sent no more than once a month.",
       placeholder: "Your work email",
       submit: "Subscribe",
-      success: "You're on the list.",
+      success:
+        "Demo subscription saved. Connect the newsletter service before launch.",
     },
     links: {
       about: "About us",

@@ -46,6 +46,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
+    let cancelled = false;
+    let storedLines: CartLine[] = [];
     try {
       // Start this storefront version with a clean cart. Items added from
       // this point onward still persist normally under the versioned key.
@@ -55,21 +57,28 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       if (raw) {
         const parsed: unknown = JSON.parse(raw);
         if (Array.isArray(parsed)) {
-          setLines(
-            parsed.filter(
-              (l): l is CartLine =>
-                !!l &&
-                typeof l === "object" &&
-                typeof (l as CartLine).id === "string" &&
-                typeof (l as CartLine).qty === "number",
-            ),
+          storedLines = parsed.filter(
+            (l): l is CartLine =>
+              !!l &&
+              typeof l === "object" &&
+              typeof (l as CartLine).id === "string" &&
+              typeof (l as CartLine).qty === "number",
           );
         }
       }
     } catch {
       /* corrupted storage is not worth a crash */
     }
-    setHydrated(true);
+
+    queueMicrotask(() => {
+      if (cancelled) return;
+      setLines(storedLines);
+      setHydrated(true);
+    });
+
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   useEffect(() => {

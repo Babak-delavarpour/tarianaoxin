@@ -18,6 +18,7 @@ import { CartDrawer } from "@/components/shop/CartDrawer";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { LiveHelp } from "@/components/support/LiveHelp";
+import { SITE_URL } from "@/components/seo/JsonLd";
 
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
@@ -39,6 +40,7 @@ export async function generateMetadata({
   const t = getDictionary(locale);
 
   return {
+    metadataBase: new URL(SITE_URL),
     title: {
       default: t.meta.title,
       template: `%s · ${t.brand.name}`,

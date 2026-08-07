@@ -54,8 +54,13 @@ function useShown(ref: React.RefObject<HTMLElement | null>) {
     if (!el) return;
 
     if (prefersReducedMotion() || typeof IntersectionObserver === "undefined") {
-      setShown(true);
-      return;
+      let cancelled = false;
+      queueMicrotask(() => {
+        if (!cancelled) setShown(true);
+      });
+      return () => {
+        cancelled = true;
+      };
     }
 
     const io = new IntersectionObserver((entries) => {

@@ -90,10 +90,12 @@ export function HeroPosterSlider() {
   const onKeyDown = (event: React.KeyboardEvent) => {
     if (event.key === "ArrowLeft") {
       event.preventDefault();
-      isRtl ? next() : previous();
+      if (isRtl) next();
+      else previous();
     } else if (event.key === "ArrowRight") {
       event.preventDefault();
-      isRtl ? previous() : next();
+      if (isRtl) previous();
+      else next();
     }
   };
 

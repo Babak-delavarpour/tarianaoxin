@@ -8,12 +8,7 @@ import {
   HiOutlineEnvelope,
   HiCheckCircle,
 } from "react-icons/hi2";
-import {
-  FaInstagram,
-  FaLinkedinIn,
-  FaWhatsapp,
-  FaTelegramPlane,
-} from "react-icons/fa";
+import { FaWhatsapp } from "react-icons/fa";
 import { Logo } from "@/components/brand/Logo";
 import { Container } from "@/components/ui/Section";
 import { Button } from "@/components/ui/Button";
@@ -64,11 +59,10 @@ export function Footer() {
     },
   ];
 
+  // Only publish verified destinations. Generic social-network home pages
+  // look active but send visitors away from the brand.
   const socials = [
-    { Icon: FaInstagram, label: "Instagram", url: "https://instagram.com" },
-    { Icon: FaWhatsapp, label: "WhatsApp", url: `https://wa.me/989160611093` },
-    { Icon: FaTelegramPlane, label: "Telegram", url: "https://telegram.org" },
-    { Icon: FaLinkedinIn, label: "LinkedIn", url: "https://linkedin.com" },
+    { Icon: FaWhatsapp, label: "WhatsApp", url: "https://wa.me/989160611093" },
   ];
 
   const contact = [
