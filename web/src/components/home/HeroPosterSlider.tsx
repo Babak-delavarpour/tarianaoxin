@@ -52,9 +52,10 @@ const PRODUCT_OFFSETS = [
 ];
 
 export function HeroPosterSlider() {
-  const { t, href, isRtl, num } = useI18n();
+  const { t, href, isRtl, locale, num } = useI18n();
   const hero = t.home.hero;
   const copy = hero.posterSlider;
+  const commerceEnabled = locale === "fa";
   const wrapRef = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
   const [paused, setPaused] = useState(false);
@@ -149,8 +150,13 @@ export function HeroPosterSlider() {
             </p>
 
             <div className="flex w-full flex-col gap-3 min-[26rem]:w-auto min-[26rem]:flex-row min-[26rem]:items-center">
-              <ButtonLink href={href("/shop")} size="lg">
-                {hero.ctaPrimary}
+              <ButtonLink
+                href={href(commerceEnabled ? "/shop" : "/products")}
+                size="lg"
+              >
+                {commerceEnabled
+                  ? hero.ctaPrimary
+                  : t.common.exploreProducts}
                 <HiArrowUpRight
                   aria-hidden
                   className="h-4 w-4 shrink-0 flip-rtl"
@@ -272,8 +278,13 @@ export function HeroPosterSlider() {
             </div>
 
             <div className="flex w-full flex-col gap-3 min-[26rem]:w-auto min-[26rem]:flex-row min-[26rem]:items-center">
-              <ButtonLink href={href("/shop")} size="lg">
-                {hero.ctaPrimary}
+              <ButtonLink
+                href={href(commerceEnabled ? "/shop" : "/products")}
+                size="lg"
+              >
+                {commerceEnabled
+                  ? hero.ctaPrimary
+                  : t.common.exploreProducts}
                 <HiArrowUpRight
                   aria-hidden
                   className="h-4 w-4 shrink-0 flip-rtl"

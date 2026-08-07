@@ -36,7 +36,7 @@ const BRANCH_POINTS = [
  * hairlines, ruled plates and value contrast.
  *
  *   1 masthead  INK   · SPLIT           (copy + capability plinth)
- *   2 story     BOARD · LEDGER rows     (three ruled clauses, editorial)
+ *   2 story     BOARD · EDITORIAL RAIL  (heading + three balanced chapters)
  *   3 facility  INK   · drawn elevation + title block
  *   4 branches  BOARD · mapped network  (locations + interactive points)
  *   5 <Quality> PAPER · LEDGER columns
@@ -148,7 +148,7 @@ function PlantElevation() {
 }
 
 export function AboutView() {
-  const { t, num, locale } = useI18n();
+  const { t, num } = useI18n();
   const a = t.about;
   const branchMarkers = useMemo<BranchMarker[]>(
     () =>
@@ -188,76 +188,47 @@ export function AboutView() {
           </div>
 
           <div className="enter-fade flex w-full flex-col items-center gap-7">
-            {locale === "fa" && <HeritageStamp caption="نشان برند" />}
-
-            {locale !== "fa" && (
-              /* capability plinth — the plant's real numbers, stated once */
-              <figure className="w-full overflow-hidden rounded-panel border border-hairline-inverse bg-inverse-2">
-                <div
-                  aria-hidden
-                  className="tick-rule h-4 w-full border-b border-hairline-inverse"
-                />
-                <dl className="plate-rule-ink grid-cols-2">
-                  {a.facility.specs.map((spec) => (
-                    <div
-                      key={spec.label}
-                      className="flex flex-col-reverse gap-1.5 bg-inverse-2 px-4 py-5 sm:px-5 sm:py-6"
-                    >
-                      {/* label first in the DOM, value first to the eye */}
-                      <dt className="fs-caption text-onink-300">{spec.label}</dt>
-                      <dd className="fs-h3 font-bold tabular-nums text-white">
-                        {spec.value}
-                      </dd>
-                    </div>
-                  ))}
-                </dl>
-                <figcaption className="flex items-center justify-between gap-4 border-t border-hairline-inverse px-5 py-3.5">
-                  <span className="eyebrow text-onink-300">
-                    {a.facility.eyebrow}
-                  </span>
-                  <span aria-hidden className="flex shrink-0 gap-1">
-                    <i className="block h-1.5 w-1.5 rounded-chip bg-aqua-400/80" />
-                    <i className="block h-1.5 w-1.5 rounded-chip bg-onink-400/60" />
-                    <i className="block h-1.5 w-1.5 rounded-chip bg-onink-400/60" />
-                  </span>
-                </figcaption>
-              </figure>
-            )}
+            <HeritageStamp caption={a.hero.stampCaption} />
           </div>
         </Container>
       </section>
 
-      {/* ═══ 2 · STORY — BOARD · LEDGER rows ══════════════════════ */}
+      {/* ═══ 2 · STORY — BOARD · EDITORIAL RAIL ═══════════════════ */}
       <Chapter tone="board" pad="base" seam="both">
-        <Container>
+        <Container className="grid gap-[clamp(2.75rem,6vw,6.5rem)] lg:grid-cols-[minmax(15rem,0.72fr)_minmax(0,1.28fr)] lg:items-start">
           <SectionHeading
             eyebrow={a.story.eyebrow}
             title={a.story.title}
             reveal="fade"
+            className="lg:sticky lg:top-[calc(var(--nav-h)+2rem)] lg:pt-1"
+            titleClassName="max-w-[18ch] text-pretty"
           />
 
           <RevealGroup
             as="ol"
             variant="fade"
-            className="stack-block border-t border-hairline-strong"
+            className="border-t border-hairline-strong"
           >
-            {[a.story.body1, a.story.body2, a.story.body3].map((clause, i) => (
+            {[
+              { title: a.story.title1, body: a.story.body1 },
+              { title: a.story.title2, body: a.story.body2 },
+              { title: a.story.title3, body: a.story.body3 },
+            ].map((chapter, i) => (
               <li
-                key={i}
-                className="grid gap-3 border-b border-hairline py-7 sm:grid-cols-[6rem_1fr] sm:gap-8 sm:py-8 lg:grid-cols-[10rem_1fr] lg:gap-16"
+                key={chapter.title}
+                className="grid grid-cols-[2.75rem_minmax(0,1fr)] gap-4 border-b border-hairline py-[clamp(1.75rem,3vw,2.75rem)] sm:grid-cols-[4rem_minmax(0,1fr)] sm:gap-7"
               >
-                <span className="eyebrow num pt-1 text-mist-600">
+                <span className="num fs-caption flex h-10 w-10 items-center justify-center rounded-chip border border-aqua-600/25 bg-aqua-500/10 font-bold text-aqua-800 sm:h-12 sm:w-12">
                   {`${num(0)}${num(i + 1)}`}
                 </span>
-                <p
-                  className={
-                    i === 0
-                      ? "fs-h3 max-w-[42ch] font-semibold text-ink-900"
-                      : "fs-body max-w-[64ch] text-ink-800"
-                  }
-                >
-                  {clause}
-                </p>
+                <div className="min-w-0">
+                  <h3 className="fs-h4 font-bold text-ink-900">
+                    {chapter.title}
+                  </h3>
+                  <p className="fs-lead mt-2.5 max-w-[62ch] text-ink-700">
+                    {chapter.body}
+                  </p>
+                </div>
               </li>
             ))}
           </RevealGroup>

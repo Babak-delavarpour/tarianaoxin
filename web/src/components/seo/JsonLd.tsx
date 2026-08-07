@@ -43,6 +43,15 @@ export function languageAlternates(path = "") {
   return languages;
 }
 
+/** Commerce is currently published only in Persian. */
+export function commerceLanguageAlternates(path: string) {
+  const url = localeUrl(defaultLocale, path);
+  return {
+    [localeMeta[defaultLocale].htmlLang]: url,
+    "x-default": url,
+  };
+}
+
 /**
  * The single place page-level `generateMetadata` builds its object, so
  * canonical, hreflang and Open Graph can never drift apart.
@@ -60,13 +69,16 @@ export function pageMetadata({
 }): Metadata {
   const t = getDictionary(locale);
   const url = localeUrl(locale, path);
+  const isCommercePath = path === "/shop" || path.startsWith("/shop/");
 
   return {
     title,
     description,
     alternates: {
       canonical: url,
-      languages: languageAlternates(path),
+      languages: isCommercePath
+        ? commerceLanguageAlternates(path)
+        : languageAlternates(path),
     },
     openGraph: {
       type: "website",

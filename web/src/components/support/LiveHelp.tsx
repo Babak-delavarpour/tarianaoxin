@@ -291,8 +291,8 @@ export function LiveHelp() {
           alt=""
           width={512}
           height={512}
-          sizes="72px"
-          className={`h-[4.5rem] w-[4.5rem] max-w-none object-contain transition-[transform,opacity] duration-300 ease-out-expo ${
+          sizes="88px"
+          className={`h-[5.5rem] w-[5.5rem] max-w-none object-contain transition-[transform,opacity] duration-300 ease-out-expo ${
             open ? "scale-50 rotate-90 opacity-0" : "scale-100 rotate-0 opacity-100"
           }`}
         />

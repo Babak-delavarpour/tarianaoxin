@@ -46,6 +46,7 @@ export function Header() {
   const pathname = usePathname() || "";
   const publicPath = publicPathname(pathname);
   const { count, open } = useCart();
+  const commerceEnabled = locale === "fa";
 
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -130,10 +131,9 @@ export function Header() {
     { label: t.nav.shop, path: "/shop" },
     { label: t.nav.contact, path: "/contact" },
   ];
-  const links =
-    locale === "fa"
-      ? allLinks
-      : allLinks.filter((link) => link.path !== "/shop");
+  const links = commerceEnabled
+    ? allLinks
+    : allLinks.filter((link) => link.path !== "/shop");
 
   const isActive = (path: string) => {
     const full = href(path);
@@ -185,11 +185,7 @@ export function Header() {
   const pad2 = (n: number) => (n < 10 ? `${num(0)}${num(n)}` : num(n));
 
   const utilityHours = (
-    <span
-      className={`items-center gap-2 ${
-        locale === "fa" ? "inline-flex" : "hidden xl:inline-flex"
-      }`}
-    >
+    <span className="inline-flex items-center gap-2">
       <HiOutlineClock
         aria-hidden
         className="h-3.5 w-3.5 shrink-0 text-aqua-400"
@@ -243,24 +239,10 @@ export function Header() {
             }`}
           >
             <div className="shell flex h-9 items-center gap-6">
-              {locale === "fa" ? (
-                <div className="ms-auto flex h-full items-center gap-6">
-                  {utilityPhone}
-                  {utilityHours}
-                </div>
-              ) : (
-                <>
-                  {utilityHours}
-                  {utilityPhone}
-                  <Link
-                    href={href("/contact")}
-                    className="hover-rule ms-auto inline-flex h-full items-center gap-1.5 text-onink-200 hover:text-white"
-                  >
-                    <span className="eyebrow">{t.common.getQuote}</span>
-                    <HiArrowUpRight aria-hidden className="h-3 w-3 flip-rtl" />
-                  </Link>
-                </>
-              )}
+              <div className="ms-auto flex h-full items-center gap-6">
+                {utilityPhone}
+                {utilityHours}
+              </div>
             </div>
           </div>
 
@@ -341,7 +323,7 @@ export function Header() {
             </nav>
 
             <div className="flex items-center gap-1">
-              {locale === "fa" ? (
+              {commerceEnabled ? (
                 <>
                   <AccountDialog tone={tone} />
 
@@ -497,15 +479,17 @@ export function Header() {
               <HiOutlinePhone aria-hidden className="h-4 w-4 text-aqua-700" />
               <span className="num">{PHONE_DISPLAY}</span>
             </a>
-            <ButtonLink
-              href={href("/contact")}
-              variant="solid"
-              size="lg"
-              className="w-full"
-            >
-              {t.common.getQuote}
-              <HiArrowUpRight aria-hidden className="h-4 w-4 flip-rtl" />
-            </ButtonLink>
+            {commerceEnabled ? (
+              <ButtonLink
+                href={href("/contact")}
+                variant="solid"
+                size="lg"
+                className="w-full"
+              >
+                {t.common.getQuote}
+                <HiArrowUpRight aria-hidden className="h-4 w-4 flip-rtl" />
+              </ButtonLink>
+            ) : null}
           </div>
         </div>
       </div>

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { isLocale } from "@/i18n/config";
+import { redirect } from "next/navigation";
+import { isLocale, localePath } from "@/i18n/config";
 import { getDictionary } from "@/i18n";
 import { CartView } from "@/components/shop/CartView";
 import { pageMetadata } from "@/components/seo/JsonLd";
@@ -11,6 +12,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   if (!isLocale(locale)) return {};
+  if (locale !== "fa") return { robots: { index: false, follow: false } };
   const t = getDictionary(locale);
   return {
     ...pageMetadata({
@@ -24,6 +26,15 @@ export async function generateMetadata({
   };
 }
 
-export default function CartPage() {
+export default async function CartPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  if (isLocale(locale) && locale !== "fa") {
+    redirect(localePath(locale, "/products"));
+  }
+
   return <CartView />;
 }

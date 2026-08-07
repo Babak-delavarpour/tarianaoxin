@@ -19,7 +19,7 @@ import { useI18n } from "@/i18n/I18nProvider";
  * a sane container width and room for its resting/hover elevation.
  */
 export function FeaturedProducts() {
-  const { t, href } = useI18n();
+  const { t, href, locale } = useI18n();
   const f = t.home.featured;
 
   const railRef = useRef<HTMLDivElement>(null);
@@ -59,6 +59,8 @@ export function FeaturedProducts() {
       behavior: calm ? "auto" : "smooth",
     });
   };
+
+  if (locale !== "fa") return null;
 
   return (
     <Chapter tone="paper" pad="tight" seam="top">

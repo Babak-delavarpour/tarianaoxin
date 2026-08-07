@@ -10,7 +10,9 @@ import { useI18n } from "@/i18n/I18nProvider";
  * home dictionary to it.
  */
 export function HomeCta() {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
+  if (locale !== "fa") return null;
+
   return (
     <CtaBand
       title={t.home.cta.title}

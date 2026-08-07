@@ -1,13 +1,12 @@
 import type { MetadataRoute } from "next";
 
-import { locales } from "@/i18n/config";
+import { defaultLocale, locales, localeMeta } from "@/i18n/config";
 import { products } from "@/lib/catalog";
 import { localeUrl, languageAlternates } from "@/components/seo/JsonLd";
 
 /** Locale-agnostic paths, ordered by importance. `/cart` is deliberately absent. */
 const staticPaths = [
   { path: "", priority: 1, changeFrequency: "weekly" },
-  { path: "/shop", priority: 0.9, changeFrequency: "weekly" },
   { path: "/products", priority: 0.8, changeFrequency: "monthly" },
   { path: "/about", priority: 0.6, changeFrequency: "yearly" },
   { path: "/contact", priority: 0.6, changeFrequency: "yearly" },
@@ -16,8 +15,19 @@ const staticPaths = [
 export default function sitemap(): MetadataRoute.Sitemap {
   const lastModified = new Date();
 
-  const paths = [
-    ...staticPaths,
+  const informationalEntries = staticPaths.flatMap(
+    ({ path, priority, changeFrequency }) =>
+      locales.map((locale) => ({
+        url: localeUrl(locale, path),
+        lastModified,
+        changeFrequency,
+        priority,
+        alternates: { languages: languageAlternates(path) },
+      })),
+  );
+
+  const commercePaths = [
+    { path: "/shop", priority: 0.9, changeFrequency: "weekly" as const },
     ...products.map((p) => ({
       path: `/shop/${p.slug}`,
       priority: 0.7,
@@ -25,15 +35,20 @@ export default function sitemap(): MetadataRoute.Sitemap {
     })),
   ];
 
-  // Every locale gets its own entry, each carrying the full hreflang set so
-  // Google can cluster the three language versions of the same document.
-  return paths.flatMap(({ path, priority, changeFrequency }) =>
-    locales.map((locale) => ({
-      url: localeUrl(locale, path),
+  const commerceEntries = commercePaths.map(
+    ({ path, priority, changeFrequency }) => ({
+      url: localeUrl(defaultLocale, path),
       lastModified,
       changeFrequency,
       priority,
-      alternates: { languages: languageAlternates(path) },
-    })),
+      alternates: {
+        languages: {
+          [localeMeta[defaultLocale].htmlLang]: localeUrl(defaultLocale, path),
+          "x-default": localeUrl(defaultLocale, path),
+        },
+      },
+    }),
   );
+
+  return [...informationalEntries, ...commerceEntries];
 }

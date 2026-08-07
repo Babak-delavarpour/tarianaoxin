@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { isLocale } from "@/i18n/config";
+import { redirect } from "next/navigation";
+import { isLocale, localePath } from "@/i18n/config";
 import { getDictionary } from "@/i18n";
 import { ShopView } from "@/components/shop/ShopView";
 import {
@@ -15,6 +16,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   if (!isLocale(locale)) return {};
+  if (locale !== "fa") return { robots: { index: false, follow: false } };
   const t = getDictionary(locale);
   return pageMetadata({
     locale,
@@ -32,6 +34,9 @@ export default async function ShopPage({
   searchParams: Promise<{ cat?: string; q?: string }>;
 }) {
   const { locale } = await params;
+  if (isLocale(locale) && locale !== "fa") {
+    redirect(localePath(locale, "/products"));
+  }
   const search = await searchParams;
 
   return (

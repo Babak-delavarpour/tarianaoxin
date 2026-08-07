@@ -9,7 +9,7 @@ export function HeritageStamp({
   prominent = false,
 }: HeritageStampProps) {
   const brandName =
-    "پخش یک‌بارمصرف دلاورپور — تلاشگران تاریانا اکسین";
+    "پخش ظروف یک‌بارمصرف دلاورپور — تلاشگران تاریانا اکسین";
   const rimOrnaments = Array.from({ length: 24 });
 
   return (
@@ -95,9 +95,9 @@ export function HeritageStamp({
           className="relative z-10 flex max-w-[86%] flex-col items-center"
         >
           <span className="text-[0.68rem] font-bold text-aqua-100/90 sm:text-xs">
-            پخش یک‌بارمصرف
+            پخش ظروف یک‌بارمصرف
           </span>
-          <strong className="font-display mt-1.5 text-[3.05rem] leading-none font-normal text-white sm:text-[3.65rem]">
+          <strong className="heritage-stamp__name mt-1.5 text-[3.05rem] leading-none font-normal text-white sm:text-[3.65rem]">
             دلاورپور
           </strong>
 
@@ -113,7 +113,7 @@ export function HeritageStamp({
             تلاشگران تاریانا اکسین
           </span>
           <span className="mt-2 text-[0.58rem] font-semibold text-[#d8b96f] sm:text-[0.65rem]">
-            بنیان ۱۳۷۵
+            تأسیس ۱۳۷۵
           </span>
         </div>
       </div>

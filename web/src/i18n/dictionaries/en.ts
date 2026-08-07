@@ -2,13 +2,13 @@ const en = {
   meta: {
     title: "TarianaOxin — Disposable Tableware Manufacturing & Distribution",
     description:
-      "TarianaOxin manufactures and distributes premium disposable tableware — cups, plates, cutlery, containers and eco lines — for hospitality, catering and retail across the region.",
+      "TarianaOxin manufactures and distributes high-quality disposable tableware, including cups, plates, cutlery, lidded containers and more sustainable products, for restaurants, caterers and retailers throughout Iran.",
   },
 
   brand: {
     name: "TarianaOxin",
     native: "تاریانا اکسین",
-    tagline: "Single-use. Never single-standard.",
+    tagline: "Single-use. Always up to standard.",
     legal: "TarianaOxin Industrial & Trading Co.",
   },
 
@@ -32,8 +32,8 @@ const en = {
     exploreProducts: "Explore products",
     downloadCatalog: "Download catalogue",
     from: "From",
-    perPack: "per pack",
-    currency: "$",
+    perPack: "Price per pack",
+    currency: "toman",
     inStock: "In stock",
     lowStock: "Low stock",
     outOfStock: "Out of stock",
@@ -122,124 +122,124 @@ const en = {
 
   home: {
     hero: {
-      eyebrow: "Manufacturing & nationwide distribution",
-      titleTop: "Disposable tableware",
-      titleAccent: "engineered",
-      titleBottom: "for trust.",
+      eyebrow: "Manufacturing and distribution throughout Iran",
+      titleTop: "Reliable supply",
+      titleAccent: "of disposable tableware",
+      titleBottom: "for your business",
       subtitle:
-        "Food-grade disposable tableware with reliable bulk supply and nationwide delivery.",
-      ctaPrimary: "Enter the shop",
-      ctaSecondary: "About the company",
-      badge: "Food-grade certified",
+        "Consistently high-quality disposable tableware for bulk orders, with delivery throughout Iran.",
+      ctaPrimary: "Visit the shop",
+      ctaSecondary: "Get to know us",
+      badge: "Made from food-grade raw materials",
       posterSlider: {
-        ariaLabel: "Featured posters",
-        productsLabel: "Product range",
+        ariaLabel: "TarianaOxin promotional posters",
+        productsLabel: "Product selection",
         distributionEyebrow: "Nationwide reach",
-        distributionTitle: "Distribution across the country",
+        distributionTitle: "Distribution throughout Iran",
         distributionBody:
-          "We deliver reliable wholesale orders to businesses throughout Iran, covering all 31 provinces.",
+          "With reliable supply and a nationwide distribution network, we deliver bulk orders to businesses in all 31 provinces.",
         shippingMethodsLabel: "Nationwide shipping methods",
         shippingMethods: ["Iran Post", "Tipax", "Freight"],
-        branchesCta: "See our branches",
-        mapAlt: "Map of Iran showing all 31 province boundaries",
+        branchesCta: "View branches and distribution centres",
+        mapAlt: "Map of Iran showing the boundaries of all 31 provinces",
         previous: "Previous poster",
         next: "Next poster",
         goTo: "Show poster",
       },
     },
     marquee: [
-      "Food-grade materials",
-      "ISO 9001 process control",
-      "24h dispatch",
+      "Food-grade raw materials",
+      "ISO 9001-compliant process control",
+      "Dispatch in under 24 hours",
       "Nationwide distribution",
-      "OEM & private label",
-      "Recyclable lines",
+      "Manufacturing under your own brand",
+      "Recyclable products",
     ],
     about: {
-      eyebrow: "Who we are",
-      title: "A factory, a fleet, and a standard we refuse to lower.",
+      eyebrow: "About TarianaOxin",
+      title: "Integrated manufacturing, reliable distribution and lasting quality",
       body1:
-        "TarianaOxin began as a family distribution business and grew into an integrated producer of disposable tableware. Today we control the full chain — raw material sourcing, injection and thermoforming, hygienic packing and last-mile delivery.",
+        "TarianaOxin began as a family-run distribution business and has grown into an integrated manufacturer of disposable tableware. Today, every stage of our supply chain—from sourcing raw materials and injection moulding to thermoforming, hygienic packaging and order fulfilment—is managed under our direct supervision.",
       body2:
-        "That control is why our clients — restaurant chains, caterers, airlines and wholesalers — get the same product, the same weight and the same finish in every carton, every month.",
+        "This integrated oversight gives every customer—from restaurant chains and caterers to airlines and wholesalers—the confidence that each order will arrive with the same consistent weight and quality.",
       points: [
-        "Certified food-grade polymers only",
-        "In-house tooling and mould maintenance",
-        "Batch traceability on every carton",
-        "Dedicated cold and dry logistics fleet",
+        "Exclusive use of certified food-grade polymers",
+        "In-house mould design and maintenance",
+        "Every production batch traceable through the code on its cartons",
+        "Dedicated ambient and refrigerated transport fleet",
       ],
     },
     categories: {
-      eyebrow: "Product families",
-      title: "Everything a table needs, once.",
+      eyebrow: "Product categories",
+      title: "Everything you need for food service, all in one range",
       subtitle:
-        "Eight production lines covering the full service cycle — from the first cup of tea to the takeaway lid.",
+        "Eight product categories covering every stage of service, from the first cup of tea to lidded takeaway containers.",
     },
     featured: {
-      eyebrow: "From the shop",
-      title: "Best-selling packs",
+      eyebrow: "Featured in our shop",
+      title: "Best-selling products",
       subtitle:
-        "Wholesale cartons and retail packs, ready to ship from the Ahvaz warehouse.",
+        "Retail packs and wholesale cartons, ready to ship from our Ahvaz warehouse.",
     },
     process: {
-      eyebrow: "How it is made",
-      title: "Four stages. Zero improvisation.",
+      eyebrow: "Manufacturing process",
+      title: "Four stages of precise, integrated control",
       subtitle:
-        "Every carton that leaves our floor has passed the same four gates.",
+        "Every product passes through four controlled stages before leaving the production line.",
       steps: [
         {
-          title: "Material intake",
-          body: "Certified virgin polymers and paperboard are lab-checked for grade, melt index and migration limits before the silo.",
+          title: "Raw material inspection",
+          body: "Certified virgin polymers and paperboard are tested in our laboratory for grade, melt-flow index and material migration before entering production.",
         },
         {
           title: "Forming",
-          body: "Injection, thermoforming and paper-cup lines run under controlled temperature with automated wall-thickness monitoring.",
+          body: "Injection moulding, thermoforming and paper-cup production take place at controlled temperatures, with wall thickness monitored automatically.",
         },
         {
           title: "Hygienic packing",
-          body: "Product moves from the mould to sealed sleeves without human contact, then into printed, batch-coded cartons.",
+          body: "Products move from the mould to packaging without direct hand contact, then into cartons marked with a production-batch traceability code.",
         },
         {
-          title: "Dispatch",
-          body: "Orders are picked, verified against the packing list and loaded to our own fleet — most within 24 hours.",
+          title: "Order preparation and dispatch",
+          body: "Orders are prepared and checked against the item list, then loaded onto our dedicated fleet and usually dispatched in under 24 hours.",
         },
       ],
     },
     why: {
       eyebrow: "Why TarianaOxin",
-      title: "The reasons buyers stay for years.",
+      title: "Why do customers stay with us for years?",
       items: [
         {
-          title: "Consistent grammage",
-          body: "Wall thickness and weight held to a tight tolerance, so your cost per unit never drifts between orders.",
+          title: "Consistent weight and grammage",
+          body: "Wall thickness and product weight are kept within tight tolerances, so usage and unit costs remain predictable from one order to the next.",
         },
         {
-          title: "Real stock, real dates",
-          body: "Live warehouse depth on core SKUs. If we confirm a date, the truck moves on that date.",
+          title: "Transparent stock and scheduling",
+          body: "Stock levels for core products are kept current, and once we confirm a dispatch date, your order leaves that day.",
         },
         {
-          title: "Private label ready",
-          body: "In-house printing and tooling for branded cups, lids and cartons from moderate volumes.",
+          title: "Manufacturing under your own brand",
+          body: "Custom printing and mould-making are available for cups, lids and cartons, even at moderate volumes.",
         },
         {
           title: "Food safety first",
-          body: "Migration testing, food-contact certification and full documentation supplied with every shipment.",
+          body: "Migration test results, food-contact certificates and complete documentation are supplied with every shipment.",
         },
         {
-          title: "Eco alternatives",
-          body: "Kraft, bagasse and recyclable PP lines for clients moving away from conventional plastics.",
+          title: "More sustainable options",
+          body: "Kraft, bagasse and recyclable polypropylene products are available for businesses looking to reduce their use of conventional plastics.",
         },
         {
-          title: "One account manager",
-          body: "A single named contact for pricing, orders and claims — no ticket queues, no hand-offs.",
+          title: "Your dedicated account manager",
+          body: "One named account manager supports you from pricing and order placement through to follow-up and service requests, without repeated hand-offs.",
         },
       ],
     },
     quality: {
-      eyebrow: "Compliance",
-      title: "Documented, tested, certified.",
+      eyebrow: "Quality and standards",
+      title: "Documented, tested and certified",
       subtitle:
-        "We supply the paperwork buyers and auditors ask for — before they ask.",
+        "We provide purchasing teams and auditors with the documents they need, without unnecessary delays.",
       items: [
         { code: "ISO 9001", label: "Quality management system" },
         { code: "ISO 22000", label: "Food safety management" },
@@ -248,32 +248,32 @@ const en = {
       ],
     },
     testimonials: {
-      eyebrow: "Client voices",
-      title: "Trusted where volume meets deadline.",
+      eyebrow: "What our customers say",
+      title: "Trusted for large, time-sensitive orders",
       items: [
         {
           quote:
-            "We run 42 branches. TarianaOxin is the only supplier whose cup weight has not changed in four years — that predictability is worth more than a cheaper quote.",
+            "We have 42 branches. TarianaOxin is the only supplier whose cup weight has remained consistent for four years. That consistency is worth more to us than a lower quote.",
           name: "Reza Mostafavi",
-          role: "Supply Chain Director, national café chain",
+          role: "Supply Chain Director at a nationwide café group",
         },
         {
           quote:
-            "Their private-label line let us launch branded packaging at a volume no one else would accept. Artwork to first pallet took nineteen days.",
+            "Their private-label service helped us launch custom packaging at a volume other suppliers would not accept. It took just nineteen days from artwork approval to the first pallet.",
           name: "Layla Haddad",
-          role: "Founder, catering group",
+          role: "Founder of a catering group",
         },
         {
           quote:
-            "Documentation is always complete. In three audits we have never had to chase a single certificate from them.",
+            "The documentation is always complete and ready. Across three audits, we have never had to follow up for a certificate.",
           name: "Hooman Karimi",
-          role: "QA Manager, hospitality group",
+          role: "Quality Assurance Manager at a hospitality group",
         },
       ],
     },
     cta: {
-      title: "Need a quotation for volume?",
-      body: "Send us your SKU list and monthly quantities. Most quotes come back the same working day.",
+      title: "Need a quote for a bulk order?",
+      body: "Send us your product list and monthly requirements; we respond to most enquiries within the same working day.",
       primary: "Request a quote",
       secondary: "Browse the shop",
     },
@@ -282,61 +282,65 @@ const en = {
   about: {
     hero: {
       eyebrow: "About us",
-      title: "Three decades of tables, served.",
+      stampCaption: "Brand seal",
+      title: "Three decades alongside Iranian businesses",
       subtitle:
-        "What started as a single distribution counter in Ahvaz is now a vertically integrated producer serving thirty-one provinces.",
+        "TarianaOxin began as a small distribution centre in Ahvaz and has grown into an integrated manufacturer with a network serving all 31 provinces of Iran.",
     },
     story: {
       eyebrow: "Our story",
-      title: "From a counter to a production floor.",
+      title: "From trusted distribution to integrated production",
+      title1: "Starting in Ahvaz",
       body1:
-        "The business began with a simple observation: buyers of disposable tableware were being asked to choose between price and reliability. Cartons arrived light, lids did not fit, and dates slipped.",
+        "TarianaOxin's story began at a small distribution centre in Ahvaz, guided by one simple belief: a fair price should never require customers to compromise on quality or confidence. From day one, that principle shaped every product we selected and every order we fulfilled.",
+      title2: "Moving into production",
       body2:
-        "We started by distributing only what we would use ourselves. When the market grew faster than our suppliers could hold standard, we built our own lines — first cutlery, then cups, then containers.",
+        "As the market grew, we chose not to leave quality dependent on others' decisions or capabilities. We began manufacturing cutlery, then expanded into cups and lidded containers—each new line created in response to a real customer need.",
+      title3: "One integrated operation",
       body3:
-        "TarianaOxin today runs its own moulds, its own printing and its own fleet. The promise has not changed since the counter: what is on the label is what is in the carton.",
+        "Today, mould design and maintenance, manufacturing, printing, packaging and distribution through our own fleet all come together at TarianaOxin. Yet the principle remains unchanged: what we promise must be exactly what our customers receive.",
     },
     timeline: {
       eyebrow: "Milestones",
       title: "How we got here",
       items: [
-        { year: "1996", title: "The first counter", body: "Delavarpour opens a disposable tableware distribution counter in central Ahvaz." },
-        { year: "2004", title: "Regional distribution", body: "Coverage extends across Khuzestan with the first owned delivery vehicles." },
-        { year: "2011", title: "First production line", body: "Injection moulding for cutlery begins under the TarianaOxin brand." },
-        { year: "2016", title: "Cups & containers", body: "Thermoforming and paper-cup lines commissioned; ISO 9001 certification achieved." },
-        { year: "2021", title: "Eco series", body: "Kraft and bagasse lines launched for clients transitioning away from conventional plastics." },
-        { year: "2024", title: "Nationwide", body: "Distribution network reaches thirty-one provinces with regional stock hubs." },
+        { year: "1996", title: "Operations begin", body: "The first disposable tableware distribution centre opens in central Ahvaz under Delavarpour's management." },
+        { year: "2004", title: "Regional distribution expands", body: "The distribution network grows to cover all of Khuzestan, and the first dedicated vehicles join the fleet." },
+        { year: "2011", title: "First production line", body: "Injection-moulded cutlery production begins under the TarianaOxin brand." },
+        { year: "2016", title: "Production expands", body: "Thermoforming and paper-cup lines are commissioned, and the company achieves ISO 9001 certification." },
+        { year: "2021", title: "More sustainable products", body: "Kraft and bagasse production lines launch to serve customers seeking alternatives to conventional plastics." },
+        { year: "2024", title: "All 31 provinces covered", body: "With the opening of regional warehouses, the distribution network expands to every province in Iran." },
       ],
     },
     values: {
-      eyebrow: "What guides us",
-      title: "Four commitments",
+      eyebrow: "Our values",
+      title: "Four lasting commitments",
       items: [
-        { title: "Honest weight", body: "The gramme count on the specification is the gramme count in the box. No silent thinning." },
-        { title: "Safety before margin", body: "Only certified food-grade input. A cheaper resin has never been a reason to change a formula." },
-        { title: "Dates are promises", body: "A confirmed dispatch date is treated as contractual, not aspirational." },
-        { title: "Lighter footprint", body: "Recyclable and compostable alternatives in every category we produce." },
+        { title: "Accurate grammage", body: "The weight stated in the product specification matches its actual weight, with no unannounced reduction in thickness." },
+        { title: "Safety before profit", body: "We use only certified food-grade raw materials, and a lower price is never a reason to change a production formula." },
+        { title: "Delivery dates are commitments", body: "Once confirmed, a dispatch date is a firm commitment." },
+        { title: "A smaller environmental footprint", body: "Across every category we manufacture, we work to offer recyclable and compostable options." },
       ],
     },
     facility: {
-      eyebrow: "The facility",
-      title: "Inside the plant",
+      eyebrow: "Factory and production infrastructure",
+      title: "A look inside our factory",
       subtitle:
-        "A 14,000 m² site combining production, quality lab, and a temperature-controlled warehouse.",
+        "A 14,000 m² facility housing production lines, a quality-control laboratory and temperature-controlled warehouses.",
       specs: [
-        { value: "14,000 m²", label: "Total site area" },
+        { value: "14,000 m²", label: "Total facility area" },
         { value: "22", label: "Production lines" },
-        { value: "3", label: "Quality checkpoints per batch" },
-        { value: "9,000", label: "Pallet warehouse positions" },
+        { value: "3", label: "Quality inspections per production batch" },
+        { value: "9,000", label: "Pallet positions in our warehouses" },
       ],
     },
     branches: {
-      eyebrow: "Our network",
-      title: "Branches close to every market.",
+      eyebrow: "Distribution network",
+      title: "Close to markets across Iran",
       subtitle:
-        "Regional distribution hubs connect our Ahvaz headquarters with customers across Iran.",
+        "Regional distribution centres connect our Ahvaz headquarters with customers throughout Iran.",
       mapAlt: "Map of Iran showing TarianaOxin branch locations",
-      note: "Select a province or branch point to explore the nationwide network.",
+      note: "Explore our branch locations and nationwide distribution coverage on the map.",
       locations: [
         "Ahvaz — Headquarters",
         "Tehran",
@@ -349,9 +353,9 @@ const en = {
       ],
     },
     cta: {
-      title: "Want to visit the plant?",
-      body: "We host client audits and facility visits by appointment throughout the year.",
-      primary: "Arrange a visit",
+      title: "Would you like to visit our factory?",
+      body: "We welcome customers throughout the year for pre-arranged factory visits and audits.",
+      primary: "Arrange a factory visit",
       secondary: "See our products",
     },
   },
@@ -468,11 +472,11 @@ const en = {
   },
 
   liveHelp: {
-    launcher: "Open 24-hour support",
-    agentName: "TarianaOxin 24 hours support",
-    agentStatus: "AI support assistant · Available 24/7",
+    launcher: "Open 24/7 support",
+    agentName: "TarianaOxin 24/7 Support",
+    agentStatus: "",
     greeting:
-      "Hi! I’m Tara, TarianaOxin’s AI assistant. Ask me about products, bulk pricing or an order.",
+      "Hello! I’m Sara, a TarianaOxin support specialist. How can I help you?",
     suggestions: [
       "Help me choose a product",
       "How does bulk pricing work?",
@@ -480,20 +484,20 @@ const en = {
     ],
     messageLabel: "Your message",
     messagePlaceholder: "Type a message · Enter to send",
-    typing: "Tara is typing",
+    typing: "Sara is typing",
     previewReply:
-      "Thanks for your message. This chat interface is ready — connect the AI service to answer customers here.",
+      "Thank you for your message. The chat interface is ready—connect the AI service to display responses to customers here.",
   },
 
   footer: {
     blurb:
-      "Producer and nationwide distributor of certified disposable tableware for hospitality, catering and retail.",
+      "Manufacturing and nationwide distribution of compliant disposable tableware for restaurants, caterers and retailers.",
     company: "Company",
     catalogue: "Catalogue",
     support: "Support",
     newsletter: {
-      title: "Trade updates",
-      body: "Price lists, new lines and stock alerts. No more than once a month.",
+      title: "Company updates",
+      body: "Company news, manufacturing updates and industry insights, sent no more than once a month.",
       placeholder: "Your work email",
       submit: "Subscribe",
       success: "You're on the list.",

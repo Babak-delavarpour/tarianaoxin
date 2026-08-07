@@ -29,7 +29,8 @@ type CartValue = {
 };
 
 const CartContext = createContext<CartValue | null>(null);
-const STORAGE_KEY = "tarianaoxin.cart";
+const STORAGE_KEY = "tarianaoxin.cart.v2";
+const LEGACY_STORAGE_KEYS = ["tarianaoxin.cart"] as const;
 
 /** Tiered volume pricing, applied on the running subtotal. */
 function discountRate(subtotal: number) {
@@ -46,6 +47,10 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     try {
+      // Start this storefront version with a clean cart. Items added from
+      // this point onward still persist normally under the versioned key.
+      LEGACY_STORAGE_KEYS.forEach((key) => window.localStorage.removeItem(key));
+
       const raw = window.localStorage.getItem(STORAGE_KEY);
       if (raw) {
         const parsed: unknown = JSON.parse(raw);

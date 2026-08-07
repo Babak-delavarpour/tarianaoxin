@@ -59,6 +59,7 @@ type CategoryStyle = CSSProperties & {
 export function ProductsView() {
   const { t, locale, href, num } = useI18n();
   const totalProducts = products.length;
+  const commerceEnabled = locale === "fa";
 
   return (
     <>
@@ -130,10 +131,21 @@ export function ProductsView() {
                     );
                   })}
                 </div>
-                <CatalogSearch />
-                <p className="px-2 pt-3 pb-1 text-center fs-micro text-onink-300">
-                  {t.common.searchPlaceholder}
-                </p>
+                {commerceEnabled ? (
+                  <>
+                    <CatalogSearch />
+                    <p className="px-2 pt-3 pb-1 text-center fs-micro text-onink-300">
+                      {t.common.searchPlaceholder}
+                    </p>
+                  </>
+                ) : (
+                  <p className="px-3 py-4 text-center fs-caption font-semibold text-onink-100">
+                    <span className="num text-aqua-300">
+                      {num(categories.length)}
+                    </span>{" "}
+                    {t.common.categories}
+                  </p>
+                )}
               </div>
             </Reveal>
           </div>
@@ -162,10 +174,98 @@ export function ProductsView() {
                 "--category-soft": visual.soft,
                 backgroundImage: `radial-gradient(circle at ${accentEdge} 0%, ${visual.soft} 0, transparent 43%)`,
               };
+              const cardClass = `relative flex h-full overflow-hidden rounded-[1.75rem] border border-hairline bg-page text-start shadow-e1 ${
+                commerceEnabled
+                  ? "lift group transition-[border-color,box-shadow,transform] duration-300 hover:border-[var(--category-color)]"
+                  : ""
+              } ${
+                featured
+                  ? "min-h-[25rem] flex-col p-6 sm:p-8 lg:min-h-[36rem]"
+                  : wide
+                    ? "min-h-[17rem] flex-col p-5 sm:min-h-[15rem] sm:flex-row sm:items-center sm:gap-7 sm:p-7"
+                    : "min-h-[17rem] flex-col p-5 sm:p-6"
+              }`;
+
+              const cardContent = (
+                <>
+                  <span
+                    aria-hidden
+                    className={`pointer-events-none absolute -end-14 -top-14 rounded-full bg-[var(--category-soft)] transition-transform duration-500 ease-out-expo group-hover:scale-110 ${
+                      featured ? "h-64 w-64" : "h-40 w-40"
+                    }`}
+                  />
+
+                  <span
+                    className={`relative grid shrink-0 place-items-center rounded-[1.25rem] bg-[var(--category-soft)] text-[var(--category-color)] transition-[background-color,color,transform] duration-300 group-hover:-rotate-3 group-hover:scale-105 group-hover:bg-[var(--category-color)] group-hover:text-white ${
+                      featured ? "h-20 w-20 sm:h-24 sm:w-24" : "h-14 w-14"
+                    }`}
+                  >
+                    <Icon
+                      aria-hidden
+                      className={featured ? "h-10 w-10 sm:h-12 sm:w-12" : "h-7 w-7"}
+                      strokeWidth={1.8}
+                    />
+                  </span>
+
+                  <span
+                    className={`relative flex min-w-0 flex-1 flex-col ${
+                      featured
+                        ? "mt-auto pt-10 sm:pt-14"
+                        : wide
+                          ? "mt-7 sm:mt-0"
+                          : "mt-8"
+                    }`}
+                  >
+                    <span className="num fs-micro font-bold text-[var(--category-color)]">
+                      {`${num(0)}${num(index + 1)}`}
+                    </span>
+                    <h3
+                      className={`mt-2 font-bold text-ink-900 transition-colors duration-200 group-hover:text-[var(--category-color)] ${
+                        featured ? "fs-h2 max-w-[16ch]" : "fs-h4"
+                      }`}
+                    >
+                      {category.name[locale]}
+                    </h3>
+                    <p
+                      className={`mt-3 text-mist-600 ${
+                        featured
+                          ? "fs-body max-w-[48ch]"
+                          : "fs-caption max-w-[44ch]"
+                      }`}
+                    >
+                      {category.blurb[locale]}
+                    </p>
+                  </span>
+
+                  <span
+                    className={`relative flex shrink-0 items-center justify-between gap-4 border-hairline ${
+                      featured
+                        ? "mt-7 border-t pt-5"
+                        : wide
+                          ? "mt-6 border-t pt-5 sm:mt-0 sm:self-stretch sm:border-s sm:border-t-0 sm:ps-7 sm:pt-0"
+                          : "mt-6 border-t pt-4"
+                    }`}
+                  >
+                    <span className="fs-micro font-semibold text-mist-600">
+                      <span className="num text-ink-900">{num(count)}</span>{" "}
+                      {t.common.results}
+                    </span>
+                    {commerceEnabled ? (
+                      <span className="grid h-10 w-10 place-items-center rounded-full bg-[var(--category-soft)] text-[var(--category-color)] transition-[background-color,color,transform] duration-300 group-hover:-translate-y-0.5 group-hover:bg-[var(--category-color)] group-hover:text-white ltr:group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5">
+                        <HiArrowUpRight
+                          aria-hidden
+                          className="h-4 w-4 flip-rtl"
+                        />
+                      </span>
+                    ) : null}
+                  </span>
+                </>
+              );
 
               return (
                 <li
                   key={category.id}
+                  id={category.slug}
                   className={`min-w-0 ${
                     featured
                       ? "sm:col-span-2 lg:col-span-2 lg:row-span-2"
@@ -174,131 +274,68 @@ export function ProductsView() {
                         : ""
                   }`}
                 >
-                  <Link
-                    href={href(`/shop?cat=${category.id}`)}
-                    aria-label={`${t.products.exploreLine}: ${category.name[locale]}`}
-                    style={cardStyle}
-                    className={`lift group relative flex h-full overflow-hidden rounded-[1.75rem] border border-hairline bg-page text-start shadow-e1 transition-[border-color,box-shadow,transform] duration-300 hover:border-[var(--category-color)] ${
-                      featured
-                        ? "min-h-[25rem] flex-col p-6 sm:p-8 lg:min-h-[36rem]"
-                        : wide
-                          ? "min-h-[17rem] flex-col p-5 sm:min-h-[15rem] sm:flex-row sm:items-center sm:gap-7 sm:p-7"
-                          : "min-h-[17rem] flex-col p-5 sm:p-6"
-                    }`}
-                  >
-                    <span
-                      aria-hidden
-                      className={`pointer-events-none absolute -end-14 -top-14 rounded-full bg-[var(--category-soft)] transition-transform duration-500 ease-out-expo group-hover:scale-110 ${
-                        featured ? "h-64 w-64" : "h-40 w-40"
-                      }`}
-                    />
-
-                    <span
-                      className={`relative grid shrink-0 place-items-center rounded-[1.25rem] bg-[var(--category-soft)] text-[var(--category-color)] transition-[background-color,color,transform] duration-300 group-hover:-rotate-3 group-hover:scale-105 group-hover:bg-[var(--category-color)] group-hover:text-white ${
-                        featured ? "h-20 w-20 sm:h-24 sm:w-24" : "h-14 w-14"
-                      }`}
+                  {commerceEnabled ? (
+                    <Link
+                      href={href(`/shop?cat=${category.id}`)}
+                      aria-label={`${t.products.exploreLine}: ${category.name[locale]}`}
+                      style={cardStyle}
+                      className={cardClass}
                     >
-                      <Icon
-                        aria-hidden
-                        className={featured ? "h-10 w-10 sm:h-12 sm:w-12" : "h-7 w-7"}
-                        strokeWidth={1.8}
-                      />
-                    </span>
-
-                    <span
-                      className={`relative flex min-w-0 flex-1 flex-col ${
-                        featured
-                          ? "mt-auto pt-10 sm:pt-14"
-                          : wide
-                            ? "mt-7 sm:mt-0"
-                            : "mt-8"
-                      }`}
+                      {cardContent}
+                    </Link>
+                  ) : (
+                    <article
+                      style={cardStyle}
+                      className={cardClass}
                     >
-                      <span className="num fs-micro font-bold text-[var(--category-color)]">
-                        {`${num(0)}${num(index + 1)}`}
-                      </span>
-                      <h3
-                        className={`mt-2 font-bold text-ink-900 transition-colors duration-200 group-hover:text-[var(--category-color)] ${
-                          featured ? "fs-h2 max-w-[16ch]" : "fs-h4"
-                        }`}
-                      >
-                        {category.name[locale]}
-                      </h3>
-                      <p
-                        className={`mt-3 text-mist-600 ${
-                          featured
-                            ? "fs-body max-w-[48ch]"
-                            : "fs-caption max-w-[44ch]"
-                        }`}
-                      >
-                        {category.blurb[locale]}
-                      </p>
-                    </span>
-
-                    <span
-                      className={`relative flex shrink-0 items-center justify-between gap-4 border-hairline ${
-                        featured
-                          ? "mt-7 border-t pt-5"
-                          : wide
-                            ? "mt-6 border-t pt-5 sm:mt-0 sm:self-stretch sm:border-s sm:border-t-0 sm:ps-7 sm:pt-0"
-                            : "mt-6 border-t pt-4"
-                      }`}
-                    >
-                      <span className="fs-micro font-semibold text-mist-600">
-                        <span className="num text-ink-900">{num(count)}</span>{" "}
-                        {t.common.results}
-                      </span>
-                      <span className="grid h-10 w-10 place-items-center rounded-full bg-[var(--category-soft)] text-[var(--category-color)] transition-[background-color,color,transform] duration-300 group-hover:-translate-y-0.5 group-hover:bg-[var(--category-color)] group-hover:text-white ltr:group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5">
-                        <HiArrowUpRight
-                          aria-hidden
-                          className="h-4 w-4 flip-rtl"
-                        />
-                      </span>
-                    </span>
-                  </Link>
+                      {cardContent}
+                    </article>
+                  )}
                 </li>
               );
             })}
           </RevealGroup>
 
-          <Reveal className="mt-[clamp(3rem,6vw,5rem)]">
-            <div className="relative overflow-hidden rounded-[2rem] bg-ink-950 px-6 py-8 text-white shadow-e2 sm:px-9 sm:py-10 lg:px-12">
-              <div
-                aria-hidden
-                className="grid-lines pointer-events-none absolute inset-0 opacity-50"
-              />
-              <div
-                aria-hidden
-                className="pointer-events-none absolute -end-20 -top-36 h-80 w-80 rounded-full bg-aqua-500/20 blur-[90px]"
-              />
+          {commerceEnabled ? (
+            <Reveal className="mt-[clamp(3rem,6vw,5rem)]">
+              <div className="relative overflow-hidden rounded-[2rem] bg-ink-950 px-6 py-8 text-white shadow-e2 sm:px-9 sm:py-10 lg:px-12">
+                <div
+                  aria-hidden
+                  className="grid-lines pointer-events-none absolute inset-0 opacity-50"
+                />
+                <div
+                  aria-hidden
+                  className="pointer-events-none absolute -end-20 -top-36 h-80 w-80 rounded-full bg-aqua-500/20 blur-[90px]"
+                />
 
-              <div className="relative grid items-center gap-7 lg:grid-cols-[auto_minmax(0,1fr)_auto] lg:gap-8">
-                <span className="grid h-16 w-16 place-items-center rounded-[1.25rem] border border-white/15 bg-white/10 text-aqua-300">
-                  <HiSparkles aria-hidden className="h-8 w-8" />
-                </span>
-                <div className="max-w-[58ch]">
-                  <h2 className="fs-h3 font-bold text-white">
-                    {t.products.customTitle}
-                  </h2>
-                  <p className="fs-caption mt-3 text-onink-200">
-                    {t.products.customBody}
-                  </p>
+                <div className="relative grid items-center gap-7 lg:grid-cols-[auto_minmax(0,1fr)_auto] lg:gap-8">
+                  <span className="grid h-16 w-16 place-items-center rounded-[1.25rem] border border-white/15 bg-white/10 text-aqua-300">
+                    <HiSparkles aria-hidden className="h-8 w-8" />
+                  </span>
+                  <div className="max-w-[58ch]">
+                    <h2 className="fs-h3 font-bold text-white">
+                      {t.products.customTitle}
+                    </h2>
+                    <p className="fs-caption mt-3 text-onink-200">
+                      {t.products.customBody}
+                    </p>
+                  </div>
+                  <ButtonLink
+                    href={href("/contact")}
+                    variant="light"
+                    size="md"
+                    className="w-full shrink-0 sm:w-fit"
+                  >
+                    {t.products.customCta}
+                    <HiArrowUpRight
+                      aria-hidden
+                      className="h-4 w-4 shrink-0 flip-rtl"
+                    />
+                  </ButtonLink>
                 </div>
-                <ButtonLink
-                  href={href("/contact")}
-                  variant="light"
-                  size="md"
-                  className="w-full shrink-0 sm:w-fit"
-                >
-                  {t.products.customCta}
-                  <HiArrowUpRight
-                    aria-hidden
-                    className="h-4 w-4 shrink-0 flip-rtl"
-                  />
-                </ButtonLink>
               </div>
-            </div>
-          </Reveal>
+            </Reveal>
+          ) : null}
         </Container>
       </Chapter>
     </>

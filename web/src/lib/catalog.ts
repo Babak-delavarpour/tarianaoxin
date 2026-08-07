@@ -53,7 +53,7 @@ export const categories: Category[] = [
     },
     blurb: {
       en: "Paper, PP and PET cups from 90 ml tea glasses to 700 ml cold drink tumblers.",
-      fa: "لیوان کاغذی، پی‌پی و پت از چای‌خوری ۹۰ میلی تا لیوان نوشیدنی سرد ۷۰۰ میلی.",
+      fa: "لیوان‌های کاغذی، پلی‌پروپیلن و پت؛ از استکان ۹۰ میلی‌لیتری چای تا لیوان ۷۰۰ میلی‌لیتری نوشیدنی سرد.",
       ar: "أكواب ورقية وبولي بروبيلين و PET من ٩٠ مل للشاي حتى ٧٠٠ مل للمشروبات الباردة.",
     },
   },
@@ -71,7 +71,7 @@ export const categories: Category[] = [
     },
     blurb: {
       en: "Rigid plates, compartment trays and soup bowls in five diameters and three weights.",
-      fa: "بشقاب مستحکم، سینی چندخانه و کاسه سوپ در پنج قطر و سه گراماژ.",
+      fa: "بشقاب‌های مقاوم، سینی‌های چندخانه و کاسه‌های سوپ در پنج اندازه و سه گراماژ مختلف.",
       ar: "أطباق صلبة وصواني مقسّمة وأوعية شوربة بخمسة أقطار وثلاثة أوزان.",
     },
   },
@@ -89,7 +89,7 @@ export const categories: Category[] = [
     },
     blurb: {
       en: "Injection-moulded forks, spoons, knives and stirrers — bulk, wrapped or in cutlery kits.",
-      fa: "قاشق، چنگال، کارد و همزن تزریقی — فله، تک‌بسته یا در پک سرویس.",
+      fa: "قاشق، چنگال، کارد و همزن‌های تزریقی؛ به‌صورت فله، بسته‌بندی تکی یا پک کامل پذیرایی.",
       ar: "شوك وملاعق وسكاكين ومحرّكات بالحقن — سائبة أو مغلّفة أو ضمن أطقم.",
     },
   },
@@ -107,7 +107,7 @@ export const categories: Category[] = [
     },
     blurb: {
       en: "Leak-resistant takeaway boxes, sauce cups and microwave-safe meal containers.",
-      fa: "ظروف بیرون‌بر ضد نشتی، سس‌خوری و ظروف غذای مناسب مایکروویو.",
+      fa: "ظروف ضدنشت بیرون‌بر، سس‌خوری و ظروف غذای مناسب استفاده در مایکروویو.",
       ar: "علب طلبات خارجية مقاومة للتسرّب وكؤوس صلصة وعلب آمنة للميكروويف.",
     },
   },
@@ -125,7 +125,7 @@ export const categories: Category[] = [
     },
     blurb: {
       en: "Catering platters, serving trays and cake bases for events and retail counters.",
-      fa: "دیس پذیرایی، سینی سرو و زیرکیکی برای مراسم و ویترین فروشگاه.",
+      fa: "دیس‌های پذیرایی، سینی سرو و زیرکیکی برای مراسم و ویترین فروشگاه‌ها.",
       ar: "أطباق تموين وصواني تقديم وقواعد كيك للمناسبات وواجهات البيع.",
     },
   },
@@ -143,7 +143,7 @@ export const categories: Category[] = [
     },
     blurb: {
       en: "Dome, flat and sip lids matched to every cup, plus paper and PP straws.",
-      fa: "درب گنبدی، تخت و نوشیدنی متناسب با هر لیوان، به‌همراه نی کاغذی و پی‌پی.",
+      fa: "انواع درِ گنبدی، تخت و نی‌خور، متناسب با هر لیوان؛ به‌همراه نی کاغذی و پلی‌پروپیلن.",
       ar: "أغطية مقبّبة ومسطّحة وبفتحة شرب مطابقة لكل كوب، مع شفّاطات ورقية وبلاستيكية.",
     },
   },
@@ -156,12 +156,12 @@ export const categories: Category[] = [
     skus: 29,
     name: {
       en: "Hygiene & Service",
-      fa: "بهداشتی و سرویس",
+      fa: "ملزومات بهداشتی و پذیرایی",
       ar: "النظافة والخدمة",
     },
     blurb: {
       en: "Napkins, table covers, food-safe gloves and aprons for front and back of house.",
-      fa: "دستمال سفره، رومیزی، دستکش بهداشتی و پیش‌بند برای سالن و آشپزخانه.",
+      fa: "دستمال سفره، رومیزی، دستکش بهداشتی و پیش‌بند مخصوص سالن و آشپزخانه.",
       ar: "مناديل وأغطية طاولات وقفازات آمنة غذائياً ومرايل للصالة والمطبخ.",
     },
   },
@@ -174,12 +174,12 @@ export const categories: Category[] = [
     skus: 33,
     name: {
       en: "Eco Line",
-      fa: "سری زیست‌سازگار",
+      fa: "محصولات زیست‌سازگار",
       ar: "الخط البيئي",
     },
     blurb: {
       en: "Kraft, bagasse and wooden alternatives — compostable, printable, ready for volume.",
-      fa: "کرافت، باگاس و چوبی — کامپوست‌پذیر، قابل چاپ و آماده تیراژ بالا.",
+      fa: "محصولات کرافت، باگاس و چوبی؛ کمپوست‌پذیر، قابل چاپ و مناسب سفارش‌های عمده.",
       ar: "كرافت وباجاس وخشب — قابلة للتحلّل والطباعة وجاهزة للكميات.",
     },
   },
@@ -233,7 +233,7 @@ export const products: Product[] = [
     },
     blurb: {
       en: "Holds heat without a sleeve. The café standard.",
-      fa: "بدون نیاز به هولدر، حرارت را نگه می‌دارد. استاندارد کافه‌ها.",
+      fa: "بدون نیاز به هولدر، گرما را حفظ می‌کند؛ انتخابی استاندارد برای کافه‌ها.",
       ar: "يحفظ الحرارة دون غلاف. معيار المقاهي.",
     },
     description: {
@@ -266,7 +266,7 @@ export const products: Product[] = [
     },
     blurb: {
       en: "Glass-clear, rigid, and it does not haze with ice.",
-      fa: "شفاف مثل شیشه، مستحکم و بدون کدر شدن با یخ.",
+      fa: "شفاف مانند شیشه، مقاوم و بدون کدر شدن در تماس با یخ.",
       ar: "شفاف كالزجاج وصلب ولا يتغيّم مع الثلج.",
     },
     description: {
@@ -364,7 +364,7 @@ export const products: Product[] = [
     },
     blurb: {
       en: "Holds a full main course flat on one hand.",
-      fa: "یک پرس کامل را روی یک دست، صاف نگه می‌دارد.",
+      fa: "یک وعده کامل غذا را حتی روی یک دست، صاف و محکم نگه می‌دارد.",
       ar: "يحمل وجبة كاملة مستوية على يد واحدة.",
     },
     description: {
@@ -456,12 +456,12 @@ export const products: Product[] = [
     addedRank: 16,
     name: {
       en: "Heavy-Duty Cutlery Set",
-      fa: "پک سرویس قاشق، چنگال و کارد سنگین",
+      fa: "ست مقاوم قاشق، چنگال و کارد",
       ar: "طقم أدوات طعام ثقيل",
     },
     blurb: {
       en: "Fork, knife, spoon and napkin — sealed, ready to hand over.",
-      fa: "چنگال، کارد، قاشق و دستمال — سیل‌شده و آماده تحویل.",
+      fa: "قاشق، چنگال، کارد و دستمال؛ بسته‌بندی‌شده و آماده ارائه به مشتری.",
       ar: "شوكة وسكين وملعقة ومنديل — مغلّفة وجاهزة للتسليم.",
     },
     description: {
@@ -521,12 +521,12 @@ export const products: Product[] = [
     addedRank: 24,
     name: {
       en: "Birch Wood Cutlery",
-      fa: "قاشق و چنگال چوب توس",
+      fa: "قاشق و چنگال چوبی از جنس توس",
       ar: "أدوات طعام من خشب البتولا",
     },
     blurb: {
       en: "Smooth-sanded birch. No splinters, no aftertaste.",
-      fa: "چوب توس سنباده‌خورده. بدون تراشه و بدون طعم اضافه.",
+      fa: "چوب توس با سطحی کاملاً صیقلی؛ بدون تراشه و بدون ایجاد طعم ناخوشایند.",
       ar: "بتولا مصقول. دون شظايا ودون طعم دخيل.",
     },
     description: {
@@ -555,12 +555,12 @@ export const products: Product[] = [
     addedRank: 20,
     name: {
       en: "Leak-Proof Takeaway Box 750 ml",
-      fa: "ظرف بیرون‌بر ضدنشتی ۷۵۰ میلی‌لیتر",
+      fa: "ظرف بیرون‌بر ضدنشت ۷۵۰ میلی‌لیتر",
       ar: "علبة طلبات مانعة للتسرّب ٧٥٠ مل",
     },
     blurb: {
       en: "Tested upside down with 750 ml of broth.",
-      fa: "با ۷۵۰ میلی‌لیتر آبگوشت وارونه تست شده.",
+      fa: "در حالت وارونه با ۷۵۰ میلی‌لیتر مایع آزمایش شده است.",
       ar: "مختبرة مقلوبة بـ٧٥٠ مل من المرق.",
     },
     description: {

@@ -64,31 +64,18 @@ export async function generateMetadata({
     icons: {
       icon: [
         {
-          url: "/favicon.ico",
-          sizes: "any",
-        },
-        {
-          url: "/favicon.svg",
+          url: "/brand/tarianaoxin-logo.svg?v=theme-1",
           type: "image/svg+xml",
           sizes: "any",
+          media: "(prefers-color-scheme: light)",
         },
         {
-          url: "/favicon-16x16.png",
-          type: "image/png",
-          sizes: "16x16",
-        },
-        {
-          url: "/favicon-32x32.png",
-          type: "image/png",
-          sizes: "32x32",
-        },
-        {
-          url: "/favicon-48x48.png",
-          type: "image/png",
-          sizes: "48x48",
+          url: "/brand/tarianaoxin-logo-light.svg?v=theme-1",
+          type: "image/svg+xml",
+          sizes: "any",
+          media: "(prefers-color-scheme: dark)",
         },
       ],
-      shortcut: "/favicon.ico",
       apple: [
         {
           url: "/apple-touch-icon.png",
@@ -142,7 +129,7 @@ export default async function LocaleLayout({
             <Header />
             <main id="main">{children}</main>
             <Footer />
-            <CartDrawer />
+            {locale === "fa" ? <CartDrawer /> : null}
             <LiveHelp />
           </CartProvider>
         </I18nProvider>
