@@ -116,6 +116,7 @@ export default async function LocaleLayout({
       lang={localeMeta[locale].htmlLang}
       dir={localeDirection[locale]}
       data-locale={locale}
+      data-scroll-behavior="smooth"
       className={fontVariables}
       suppressHydrationWarning
     >
